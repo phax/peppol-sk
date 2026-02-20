@@ -74,37 +74,37 @@ public final class PeppolSKTDD100BuilderTest
     final ISchematronResource aSCHRes = PeppolSKTDDValidator.getSchematronSK_TDD_100 ();
 
     final TaxDataType aTDD = new PeppolSKTDD100Builder ().documentTypeCode (ESKTDDDocumentTypeCode.SUBMIT)
-                                                           .documentScope (ESKTDDDocumentScope.DOMESTIC)
-                                                           .reporterRole (ESKTDDReporterRole.SENDER)
-                                                           .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
-                                                           .receivingParty (aIF.createParticipantIdentifierWithDefaultScheme ("0242:c5id"))
-                                                           .reportersRepresentative (aIF.createParticipantIdentifierWithDefaultScheme ("0242:987654"))
-                                                           .taxAuthorityID ("XX")
-                                                           // Provide all fields manually
-                                                           .reportedTransaction (rt -> rt.customizationID ("urn:peppol:pint:billing-1@ae-1")
-                                                                                         .profileID ("urn:peppol:bis:billing")
-                                                                                         .id ("invoice-1")
-                                                                                         .issueDate (PDTFactory.createLocalDate (2025,
-                                                                                                                                 Month.SEPTEMBER,
-                                                                                                                                 20))
-                                                                                         .documentTypeCode ("380")
-                                                                                         .documentCurrencyCode ("AED")
-                                                                                         .sellerTaxID ("123456789")
-                                                                                         .buyerTaxID ("987654321")
-                                                                                         .taxTotalDocumentCurrency (x -> x.taxAmount (BigHelper.toBigDecimal (240)))
-                                                                                         .lineExtensionAmount (BigHelper.toBigDecimal (1200))
-                                                                                         .taxExclusiveTotalAmount (BigHelper.toBigDecimal (1200))
-                                                                                         .taxInclusiveTotalAmount (BigHelper.toBigDecimal (1440))
-                                                                                         .payableAmount (BigHelper.toBigDecimal (1440))
-                                                                                         .addDocumentLine (x -> x.id ("1")
-                                                                                                                 .quantity (BigDecimal.TEN)
-                                                                                                                 .quantityUnit ("STK")
-                                                                                                                 .lineExtensionAmount (BigHelper.toBigDecimal (1200))
-                                                                                                                 .item (y -> y.name ("What")
-                                                                                                                              .classifiedTaxCategory (z -> z.id ("X")
-                                                                                                                                                            .taxSchemeID ("VAT")))
-                                                                                                                 .priceAmount (BigHelper.toBigDecimal (120))))
-                                                           .build ();
+                                                         .documentScope (ESKTDDDocumentScope.DOMESTIC)
+                                                         .reporterRole (ESKTDDReporterRole.SENDER)
+                                                         .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
+                                                         .receivingParty (aIF.createParticipantIdentifierWithDefaultScheme ("0242:c5id"))
+                                                         .reportersRepresentative (aIF.createParticipantIdentifierWithDefaultScheme ("0242:987654"))
+                                                         .taxAuthorityID ("XX")
+                                                         // Provide all fields manually
+                                                         .reportedTransaction (rt -> rt.customizationID ("urn:peppol:pint:billing-1@ae-1")
+                                                                                       .profileID ("urn:peppol:bis:billing")
+                                                                                       .id ("invoice-1")
+                                                                                       .issueDate (PDTFactory.createLocalDate (2025,
+                                                                                                                               Month.SEPTEMBER,
+                                                                                                                               20))
+                                                                                       .documentTypeCode ("380")
+                                                                                       .documentCurrencyCode ("AED")
+                                                                                       .sellerTaxID ("123456789")
+                                                                                       .buyerTaxID ("987654321")
+                                                                                       .taxTotalDocumentCurrency (x -> x.taxAmount (BigHelper.toBigDecimal (240)))
+                                                                                       .lineExtensionAmount (BigHelper.toBigDecimal (1200))
+                                                                                       .taxExclusiveTotalAmount (BigHelper.toBigDecimal (1200))
+                                                                                       .taxInclusiveTotalAmount (BigHelper.toBigDecimal (1440))
+                                                                                       .payableAmount (BigHelper.toBigDecimal (1440))
+                                                                                       .addDocumentLine (x -> x.id ("1")
+                                                                                                               .quantity (BigDecimal.TEN)
+                                                                                                               .quantityUnit ("STK")
+                                                                                                               .lineExtensionAmount (BigHelper.toBigDecimal (1200))
+                                                                                                               .item (y -> y.name ("What")
+                                                                                                                            .classifiedTaxCategory (z -> z.id ("X")
+                                                                                                                                                          .taxSchemeID ("VAT")))
+                                                                                                               .priceAmount (BigHelper.toBigDecimal (120))))
+                                                         .build ();
     assertNotNull (aTDD);
 
     // Serialize
@@ -132,50 +132,50 @@ public final class PeppolSKTDD100BuilderTest
     final ISchematronResource aSCHRes = PeppolSKTDDValidator.getSchematronSK_TDD_100 ();
 
     final TaxDataType aTDD = new PeppolSKTDD100Builder ().documentTypeCode (ESKTDDDocumentTypeCode.SUBMIT)
-                                                           .documentScope (ESKTDDDocumentScope.DOMESTIC)
-                                                           .reporterRole (ESKTDDReporterRole.SENDER)
-                                                           .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
-                                                           .receivingParty (aIF.createParticipantIdentifierWithDefaultScheme ("0242:c5id"))
-                                                           .reportersRepresentative (aIF.createParticipantIdentifierWithDefaultScheme ("0242:987654"))
-                                                           .taxAuthorityID ("XX")
-                                                           // Provide all fields manually
-                                                           .reportedTransaction (rt -> rt.customizationID ("urn:peppol:pint:billing-1@eu-1")
-                                                                                         .profileID ("urn:peppol:bis:billing")
-                                                                                         .id ("invoice-1")
-                                                                                         .issueDate (PDTFactory.createLocalDate (2025,
-                                                                                                                                 Month.SEPTEMBER,
-                                                                                                                                 20))
-                                                                                         .issueTime (PDTFactory.createOffsetTime (20,
-                                                                                                                                  8,
-                                                                                                                                  0,
-                                                                                                                                  ZoneOffset.UTC))
-                                                                                         .documentTypeCode ("380")
-                                                                                         .documentCurrencyCode ("AED")
-                                                                                         .taxCurrencyCode ("EUR")
-                                                                                         .sellerTaxID ("123456789")
-                                                                                         .sellerCountryCode ("DE")
-                                                                                         .buyerTaxID ("987654321")
-                                                                                         .buyerCountryCode ("AT")
-                                                                                         .taxRepresentativeID ("any123")
-                                                                                         .taxRepresentativeCountryCode ("CH")
-                                                                                         .taxTotalDocumentCurrency (x -> x.taxAmount (BigHelper.toBigDecimal (200)))
-                                                                                         .taxTotalTaxCurrency (x -> x.taxAmount (BigHelper.toBigDecimal (500)))
-                                                                                         .lineExtensionAmount (BigHelper.toBigDecimal (1200))
-                                                                                         .taxExclusiveTotalAmount (BigHelper.toBigDecimal (1200))
-                                                                                         .taxInclusiveTotalAmount (BigHelper.toBigDecimal (1700))
-                                                                                         .allowanceTotalAmount (BigDecimal.ZERO)
-                                                                                         .chargeTotalAmount (BigDecimal.ZERO)
-                                                                                         .payableRoundingAmount (BigDecimal.ZERO)
-                                                                                         .payableAmount (BigHelper.toBigDecimal (1700))
-                                                                                         .addDocumentLine (x -> x.id ("1")
-                                                                                                                 .quantity (BigDecimal.TEN)
-                                                                                                                 .quantityUnit ("STK")
-                                                                                                                 .lineExtensionAmount (BigHelper.toBigDecimal (1200))
-                                                                                                                 .item (y -> y.name ("What")
-                                                                                                                              .classifiedTaxCategory (z -> z.id ("X")
-                                                                                                                                                            .taxSchemeID ("VAT")))
-                                                                                                                 .priceAmount (BigHelper.toBigDecimal (120))))
-                                                           .build ();
+                                                         .documentScope (ESKTDDDocumentScope.DOMESTIC)
+                                                         .reporterRole (ESKTDDReporterRole.SENDER)
+                                                         .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
+                                                         .receivingParty (aIF.createParticipantIdentifierWithDefaultScheme ("0242:c5id"))
+                                                         .reportersRepresentative (aIF.createParticipantIdentifierWithDefaultScheme ("0242:987654"))
+                                                         .taxAuthorityID ("XX")
+                                                         // Provide all fields manually
+                                                         .reportedTransaction (rt -> rt.customizationID ("urn:peppol:pint:billing-1@eu-1")
+                                                                                       .profileID ("urn:peppol:bis:billing")
+                                                                                       .id ("invoice-1")
+                                                                                       .issueDate (PDTFactory.createLocalDate (2025,
+                                                                                                                               Month.SEPTEMBER,
+                                                                                                                               20))
+                                                                                       .issueTime (PDTFactory.createOffsetTime (20,
+                                                                                                                                8,
+                                                                                                                                0,
+                                                                                                                                ZoneOffset.UTC))
+                                                                                       .documentTypeCode ("380")
+                                                                                       .documentCurrencyCode ("AED")
+                                                                                       .taxCurrencyCode ("EUR")
+                                                                                       .sellerTaxID ("123456789")
+                                                                                       .sellerCountryCode ("DE")
+                                                                                       .buyerTaxID ("987654321")
+                                                                                       .buyerCountryCode ("AT")
+                                                                                       .taxRepresentativeID ("any123")
+                                                                                       .taxRepresentativeCountryCode ("CH")
+                                                                                       .taxTotalDocumentCurrency (x -> x.taxAmount (BigHelper.toBigDecimal (200)))
+                                                                                       .taxTotalTaxCurrency (x -> x.taxAmount (BigHelper.toBigDecimal (500)))
+                                                                                       .lineExtensionAmount (BigHelper.toBigDecimal (1200))
+                                                                                       .taxExclusiveTotalAmount (BigHelper.toBigDecimal (1200))
+                                                                                       .taxInclusiveTotalAmount (BigHelper.toBigDecimal (1700))
+                                                                                       .allowanceTotalAmount (BigDecimal.ZERO)
+                                                                                       .chargeTotalAmount (BigDecimal.ZERO)
+                                                                                       .payableRoundingAmount (BigDecimal.ZERO)
+                                                                                       .payableAmount (BigHelper.toBigDecimal (1700))
+                                                                                       .addDocumentLine (x -> x.id ("1")
+                                                                                                               .quantity (BigDecimal.TEN)
+                                                                                                               .quantityUnit ("STK")
+                                                                                                               .lineExtensionAmount (BigHelper.toBigDecimal (1200))
+                                                                                                               .item (y -> y.name ("What")
+                                                                                                                            .classifiedTaxCategory (z -> z.id ("X")
+                                                                                                                                                          .taxSchemeID ("VAT")))
+                                                                                                               .priceAmount (BigHelper.toBigDecimal (120))))
+                                                         .build ();
     assertNotNull (aTDD);
 
     // Serialize
@@ -214,15 +214,15 @@ public final class PeppolSKTDD100BuilderTest
       assertNotNull (aInvoice);
 
       final TaxDataType aTDD = new PeppolSKTDD100Builder ().documentTypeCode (ESKTDDDocumentTypeCode.SUBMIT)
-                                                             .documentScope (ESKTDDDocumentScope.DOMESTIC)
-                                                             .reporterRole (ESKTDDReporterRole.SENDER)
-                                                             .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
-                                                             .receivingParty (aIF.createParticipantIdentifierWithDefaultScheme ("0242:c5id"))
-                                                             .reportersRepresentative (aIF.createParticipantIdentifierWithDefaultScheme ("0242:987654"))
-                                                             .taxAuthorityID ("XX")
-                                                             // Read from pre-parsed UBL Invoice
-                                                             .reportedTransaction (rt -> rt.initFromInvoice (aInvoice))
-                                                             .build ();
+                                                           .documentScope (ESKTDDDocumentScope.DOMESTIC)
+                                                           .reporterRole (ESKTDDReporterRole.SENDER)
+                                                           .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
+                                                           .receivingParty (aIF.createParticipantIdentifierWithDefaultScheme ("0242:c5id"))
+                                                           .reportersRepresentative (aIF.createParticipantIdentifierWithDefaultScheme ("0242:987654"))
+                                                           .taxAuthorityID ("XX")
+                                                           // Read from pre-parsed UBL Invoice
+                                                           .reportedTransaction (rt -> rt.initFromInvoice (aInvoice))
+                                                           .build ();
       assertNotNull (aTDD);
 
       // Serialize
@@ -262,15 +262,15 @@ public final class PeppolSKTDD100BuilderTest
       assertNotNull (aCreditNote);
 
       final TaxDataType aTDD = new PeppolSKTDD100Builder ().documentTypeCode (ESKTDDDocumentTypeCode.SUBMIT)
-                                                             .documentScope (ESKTDDDocumentScope.DOMESTIC)
-                                                             .reporterRole (ESKTDDReporterRole.SENDER)
-                                                             .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
-                                                             .receivingParty (aIF.createParticipantIdentifierWithDefaultScheme ("0242:c5id"))
-                                                             .reportersRepresentative (aIF.createParticipantIdentifierWithDefaultScheme ("0242:987654"))
-                                                             .taxAuthorityID ("XX")
-                                                             // Read from pre-parsed UBL CreditNote
-                                                             .reportedTransaction (rt -> rt.initFromCreditNote (aCreditNote))
-                                                             .build ();
+                                                           .documentScope (ESKTDDDocumentScope.DOMESTIC)
+                                                           .reporterRole (ESKTDDReporterRole.SENDER)
+                                                           .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
+                                                           .receivingParty (aIF.createParticipantIdentifierWithDefaultScheme ("0242:c5id"))
+                                                           .reportersRepresentative (aIF.createParticipantIdentifierWithDefaultScheme ("0242:987654"))
+                                                           .taxAuthorityID ("XX")
+                                                           // Read from pre-parsed UBL CreditNote
+                                                           .reportedTransaction (rt -> rt.initFromCreditNote (aCreditNote))
+                                                           .build ();
       assertNotNull (aTDD);
 
       // Serialize and XSD validate
@@ -307,15 +307,15 @@ public final class PeppolSKTDD100BuilderTest
     assertNotNull (aInvoice);
 
     final TaxDataType aTDD = new PeppolSKTDD100Builder ().documentTypeCode (ESKTDDDocumentTypeCode.DISREGARD)
-                                                           .documentScope (ESKTDDDocumentScope.DOMESTIC)
-                                                           .reporterRole (ESKTDDReporterRole.SENDER)
-                                                           .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
-                                                           .receivingParty (aIF.createParticipantIdentifierWithDefaultScheme ("0242:c5id"))
-                                                           .reportersRepresentative (aIF.createParticipantIdentifierWithDefaultScheme ("0242:987654"))
-                                                           .taxAuthorityID ("XX")
-                                                           // It's not really an invalid invoice
-                                                           .reportedTransaction (rt -> rt.initFromInvoice (aInvoice))
-                                                           .build ();
+                                                         .documentScope (ESKTDDDocumentScope.DOMESTIC)
+                                                         .reporterRole (ESKTDDReporterRole.SENDER)
+                                                         .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
+                                                         .receivingParty (aIF.createParticipantIdentifierWithDefaultScheme ("0242:c5id"))
+                                                         .reportersRepresentative (aIF.createParticipantIdentifierWithDefaultScheme ("0242:987654"))
+                                                         .taxAuthorityID ("XX")
+                                                         // It's not really an invalid invoice
+                                                         .reportedTransaction (rt -> rt.initFromInvoice (aInvoice))
+                                                         .build ();
     assertNotNull (aTDD);
 
     // Serialize
@@ -339,7 +339,7 @@ public final class PeppolSKTDD100BuilderTest
   }
 
   @Test
-  @Ignore ("Not supported by v0.9.0")
+  @Ignore ("Not supported by v1.0.0")
   public void testCreateFailedInvoiceWithoutReportedDocument () throws Exception
   {
     final IIdentifierFactory aIF = PeppolIdentifierFactory.INSTANCE;
@@ -357,15 +357,15 @@ public final class PeppolSKTDD100BuilderTest
     aInvoice.setID ((IDType) null);
 
     final TaxDataType aTDD = new PeppolSKTDD100Builder ().documentTypeCode (ESKTDDDocumentTypeCode.DISREGARD)
-                                                           .documentScope (ESKTDDDocumentScope.DOMESTIC)
-                                                           .reporterRole (ESKTDDReporterRole.SENDER)
-                                                           .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
-                                                           .receivingParty (aIF.createParticipantIdentifierWithDefaultScheme ("0242:c5id"))
-                                                           .reportersRepresentative (aIF.createParticipantIdentifierWithDefaultScheme ("0242:987654"))
-                                                           .taxAuthorityID ("XX")
-                                                           // This Invoice is really broken
-                                                           .reportedTransaction (rt -> rt.initFromInvoice (aInvoice))
-                                                           .build ();
+                                                         .documentScope (ESKTDDDocumentScope.DOMESTIC)
+                                                         .reporterRole (ESKTDDReporterRole.SENDER)
+                                                         .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
+                                                         .receivingParty (aIF.createParticipantIdentifierWithDefaultScheme ("0242:c5id"))
+                                                         .reportersRepresentative (aIF.createParticipantIdentifierWithDefaultScheme ("0242:987654"))
+                                                         .taxAuthorityID ("XX")
+                                                         // This Invoice is really broken
+                                                         .reportedTransaction (rt -> rt.initFromInvoice (aInvoice))
+                                                         .build ();
     assertNotNull (aTDD);
 
     // Serialize

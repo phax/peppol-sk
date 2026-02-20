@@ -25,7 +25,7 @@ import com.helger.collection.commons.ICommonsList;
 import com.helger.io.resource.ClassPathResource;
 
 /**
- * Sanity methods to get all Peppol ViDA pilot test files
+ * Sanity methods to get all Peppol SK test files
  *
  * @author Philip Helger
  */

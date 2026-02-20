@@ -49,10 +49,11 @@ public final class PeppolSKTDDValidatorTest
   private static final Logger LOGGER = LoggerFactory.getLogger (PeppolSKTDDValidatorTest.class);
 
   @Test
-  public void testReadTDD090Good () throws Exception
+  public void testReadTDD100Good () throws Exception
   {
     final ISchematronResource aSCHRes = PeppolSKTDDValidator.getSchematronSK_TDD_100 ();
     assertNotNull (aSCHRes);
+    assertTrue (aSCHRes.getResource ().exists ());
 
     final PeppolSLTDD100Marshaller aMarshaller = new PeppolSLTDD100Marshaller ();
 
@@ -73,7 +74,7 @@ public final class PeppolSKTDDValidatorTest
   }
 
   @Test
-  public void testReadTDD090Bad () throws Exception
+  public void testReadTDD100Bad () throws Exception
   {
     final ISchematronResource aSCHRes = PeppolSKTDDValidator.getSchematronSK_TDD_100 ();
     assertNotNull (aSCHRes);

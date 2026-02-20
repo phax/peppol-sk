@@ -38,7 +38,7 @@ public final class CPeppolSKTDD
 
   private static final String PATH_1_0_0 = "/external/schemas/2026-02-20/";
   /**
-   * XML Schema resources for Peppol SK TDD XSD 0.9.0
+   * XML Schema resources for Peppol SK TDD XSD 1.0.0
    */
   public static final String TDD_XSD_1_0_0_PATH = PATH_1_0_0 + "sk-tdd-1.0.0.xsd";
 

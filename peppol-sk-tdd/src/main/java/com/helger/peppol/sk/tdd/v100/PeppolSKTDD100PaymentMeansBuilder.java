@@ -54,7 +54,7 @@ public class PeppolSKTDD100PaymentMeansBuilder implements IBuilder <PaymentMeans
   private String m_sPayeeFinancialAccountIDScheme;
   private String m_sPayeeFinancialInstitutionBranchID;
   private String m_sPayeeFinancialInstitutionBranchIDScheme;
-  // PaymentMandate has no type in 0.9.0
+  // PaymentMandate has no type in 1.0.0
 
   public PeppolSKTDD100PaymentMeansBuilder ()
   {}
