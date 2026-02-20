@@ -138,15 +138,15 @@ public class PeppolSKTDD100TaxTotalBuilder implements IBuilder <TaxTotalType>
 
   public boolean isEveryRequiredFieldSet (final boolean bDoLogOnError)
   {
-    final MutableInt aReportedDocErrs = new MutableInt (0);
-    return _isEveryRequiredFieldSet (bDoLogOnError, aReportedDocErrs);
+    final MutableInt aErrorCount = new MutableInt (0);
+    return _isEveryRequiredFieldSet (bDoLogOnError, aErrorCount);
   }
 
   @Nullable
   public TaxTotalType build ()
   {
-    final MutableInt aReportedDocErrs = new MutableInt (0);
-    if (!_isEveryRequiredFieldSet (true, aReportedDocErrs))
+    final MutableInt aErrorCount = new MutableInt (0);
+    if (!_isEveryRequiredFieldSet (true, aErrorCount))
     {
       LOGGER.error ("At least one mandatory field is not set and therefore the TDD TaxTotal cannot be build.");
       return null;

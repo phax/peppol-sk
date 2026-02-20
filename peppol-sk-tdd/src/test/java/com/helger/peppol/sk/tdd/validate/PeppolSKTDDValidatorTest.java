@@ -30,7 +30,7 @@ import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.io.file.FilenameHelper;
 import com.helger.io.resource.IReadableResource;
-import com.helger.peppol.sk.tdd.jaxb.PeppolSLTDD100Marshaller;
+import com.helger.peppol.sk.tdd.jaxb.PeppolSKTDD100Marshaller;
 import com.helger.peppol.sk.tdd.testfiles.PeppolSKTestFiles;
 import com.helger.peppol.sk.tdd.v2026_02_20.TaxDataType;
 import com.helger.schematron.ISchematronResource;
@@ -55,7 +55,7 @@ public final class PeppolSKTDDValidatorTest
     assertNotNull (aSCHRes);
     assertTrue (aSCHRes.getResource ().exists ());
 
-    final PeppolSLTDD100Marshaller aMarshaller = new PeppolSLTDD100Marshaller ();
+    final PeppolSKTDD100Marshaller aMarshaller = new PeppolSKTDD100Marshaller ();
 
     for (final IReadableResource aRes : PeppolSKTestFiles.getAllGoodTDD100Files ())
     {
@@ -79,7 +79,7 @@ public final class PeppolSKTDDValidatorTest
     final ISchematronResource aSCHRes = PeppolSKTDDValidator.getSchematronSK_TDD_100 ();
     assertNotNull (aSCHRes);
 
-    final PeppolSLTDD100Marshaller aMarshaller = new PeppolSLTDD100Marshaller ();
+    final PeppolSKTDD100Marshaller aMarshaller = new PeppolSKTDD100Marshaller ();
 
     for (final IReadableResource aRes : PeppolSKTestFiles.getAllSchematronBadTDD100Files ())
     {

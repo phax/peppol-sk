@@ -37,7 +37,7 @@ import com.helger.xml.namespace.MapBasedNamespaceContext;
  * @author Philip Helger
  */
 @NotThreadSafe
-public class PeppolSLTDD100Marshaller extends GenericJAXBMarshaller <TaxDataType>
+public class PeppolSKTDD100Marshaller extends GenericJAXBMarshaller <TaxDataType>
 {
   @NonNull
   @ReturnsMutableCopy
@@ -61,7 +61,7 @@ public class PeppolSLTDD100Marshaller extends GenericJAXBMarshaller <TaxDataType
   /**
    * Constructor
    */
-  public PeppolSLTDD100Marshaller ()
+  public PeppolSKTDD100Marshaller ()
   {
     super (TaxDataType.class, _getAllXSDs (), new ObjectFactory ()::createTaxData);
     setNamespaceContext (createNamespaceContext ());

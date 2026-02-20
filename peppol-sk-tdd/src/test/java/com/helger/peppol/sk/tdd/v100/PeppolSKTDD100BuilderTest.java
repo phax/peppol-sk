@@ -40,7 +40,7 @@ import com.helger.jaxb.GenericJAXBMarshaller;
 import com.helger.peppol.sk.tdd.codelist.ESKTDDDocumentScope;
 import com.helger.peppol.sk.tdd.codelist.ESKTDDDocumentTypeCode;
 import com.helger.peppol.sk.tdd.codelist.ESKTDDReporterRole;
-import com.helger.peppol.sk.tdd.jaxb.PeppolSLTDD100Marshaller;
+import com.helger.peppol.sk.tdd.jaxb.PeppolSKTDD100Marshaller;
 import com.helger.peppol.sk.tdd.testfiles.PeppolSKTestFiles;
 import com.helger.peppol.sk.tdd.v2026_02_20.TaxDataType;
 import com.helger.peppol.sk.tdd.validate.PeppolSKTDDValidator;
@@ -108,7 +108,7 @@ public final class PeppolSKTDD100BuilderTest
     assertNotNull (aTDD);
 
     // Serialize
-    final String sXML = new PeppolSLTDD100Marshaller ().setFormattedOutput (true).getAsString (aTDD);
+    final String sXML = new PeppolSKTDD100Marshaller ().setFormattedOutput (true).getAsString (aTDD);
     assertNotNull (sXML);
     if (false)
       LOGGER.info (sXML);
@@ -179,7 +179,7 @@ public final class PeppolSKTDD100BuilderTest
     assertNotNull (aTDD);
 
     // Serialize
-    final String sXML = new PeppolSLTDD100Marshaller ().setFormattedOutput (true).getAsString (aTDD);
+    final String sXML = new PeppolSKTDD100Marshaller ().setFormattedOutput (true).getAsString (aTDD);
     assertNotNull (sXML);
     if (false)
       LOGGER.info (sXML);
@@ -226,7 +226,7 @@ public final class PeppolSKTDD100BuilderTest
       assertNotNull (aTDD);
 
       // Serialize
-      final GenericJAXBMarshaller <TaxDataType> m = new PeppolSLTDD100Marshaller ().setFormattedOutput (true);
+      final GenericJAXBMarshaller <TaxDataType> m = new PeppolSKTDD100Marshaller ().setFormattedOutput (true);
       final String sXML = m.getAsString (aTDD);
       assertNotNull (sXML);
 
@@ -274,7 +274,7 @@ public final class PeppolSKTDD100BuilderTest
       assertNotNull (aTDD);
 
       // Serialize and XSD validate
-      final GenericJAXBMarshaller <TaxDataType> m = new PeppolSLTDD100Marshaller ().setFormattedOutput (true);
+      final GenericJAXBMarshaller <TaxDataType> m = new PeppolSKTDD100Marshaller ().setFormattedOutput (true);
       final String sXML = m.getAsString (aTDD);
       assertNotNull (sXML);
 
@@ -319,7 +319,7 @@ public final class PeppolSKTDD100BuilderTest
     assertNotNull (aTDD);
 
     // Serialize
-    final String sXML = new PeppolSLTDD100Marshaller ().setFormattedOutput (true).getAsString (aTDD);
+    final String sXML = new PeppolSKTDD100Marshaller ().setFormattedOutput (true).getAsString (aTDD);
     assertNotNull (sXML);
     assertTrue (sXML.contains ("<pxs:ReportedDocument>"));
 
@@ -369,7 +369,7 @@ public final class PeppolSKTDD100BuilderTest
     assertNotNull (aTDD);
 
     // Serialize
-    final String sXML = new PeppolSLTDD100Marshaller ().setFormattedOutput (true).getAsString (aTDD);
+    final String sXML = new PeppolSKTDD100Marshaller ().setFormattedOutput (true).getAsString (aTDD);
     assertNotNull (sXML);
     assertFalse (sXML.contains ("<pxs:ReportedDocument>"));
 
@@ -397,11 +397,11 @@ public final class PeppolSKTDD100BuilderTest
     {
       LOGGER.info ("Reading Bad Payload TDD '" + aRes.getPath () + "'");
 
-      final TaxDataType aTDD = new PeppolSLTDD100Marshaller ().read (aRes);
+      final TaxDataType aTDD = new PeppolSKTDD100Marshaller ().read (aRes);
       assertNotNull (aTDD);
 
       // Serialize
-      final String sXML = new PeppolSLTDD100Marshaller ().setFormattedOutput (true).getAsString (aTDD);
+      final String sXML = new PeppolSKTDD100Marshaller ().setFormattedOutput (true).getAsString (aTDD);
       assertNotNull (sXML);
       assertFalse (sXML.contains ("<pxs:ReportedDocument>"));
 

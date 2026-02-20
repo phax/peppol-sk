@@ -24,7 +24,7 @@ import com.helger.io.resource.ClassPathResource;
 import com.helger.peppol.sk.tdd.testfiles.PeppolSKTestFiles;
 
 /**
- * Test class for class {@link PeppolSLTDD100Marshaller}.
+ * Test class for class {@link PeppolSKTDD100Marshaller}.
  *
  * @author Philip Helger
  */
@@ -33,7 +33,7 @@ public final class PeppolSKTDD100MarshallerTest
   @Test
   public void testBasic10 ()
   {
-    final PeppolSLTDD100Marshaller m = new PeppolSLTDD100Marshaller ();
+    final PeppolSKTDD100Marshaller m = new PeppolSKTDD100Marshaller ();
     for (final ClassPathResource aRes : PeppolSKTestFiles.getAllGoodTDD100Files ())
       assertNotNull ("Failed to read " + aRes.getPath (), m.read (aRes));
     for (final ClassPathResource aRes : PeppolSKTestFiles.getAllSchematronBadTDD100Files ())

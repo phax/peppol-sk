@@ -187,7 +187,7 @@ public class PeppolSKTDD100AllowanceChargeBuilder implements IBuilder <Allowance
     return taxCategory (aBuilder);
   }
 
-  private boolean _isEveryRequiredFieldSet (final boolean bDoLogOnError, @NonNull final MutableInt aReportedDocsErrs)
+  private boolean _isEveryRequiredFieldSet (final boolean bDoLogOnError, @NonNull final MutableInt aErrorCount)
   {
     final ConditionalLogger aCondLog = new ConditionalLogger (LOGGER, bDoLogOnError);
     final String sErrorPrefix = "Error in Peppol SK TDD 1.0.0 AllowanceCharge builder: ";
@@ -198,25 +198,25 @@ public class PeppolSKTDD100AllowanceChargeBuilder implements IBuilder <Allowance
     if (m_aAmount == null)
     {
       aCondLog.error (sErrorPrefix + "Amount is missing");
-      aReportedDocsErrs.inc ();
+      aErrorCount.inc ();
     }
     // m_aBaseAmount is optional
     // m_aTaxCategory is optional
 
-    return aReportedDocsErrs.intValue () == 0;
+    return aErrorCount.intValue () == 0;
   }
 
   public boolean isEveryRequiredFieldSet (final boolean bDoLogOnError)
   {
-    final MutableInt aReportedDocErrs = new MutableInt (0);
-    return _isEveryRequiredFieldSet (bDoLogOnError, aReportedDocErrs);
+    final MutableInt aErrorCount = new MutableInt (0);
+    return _isEveryRequiredFieldSet (bDoLogOnError, aErrorCount);
   }
 
   @Nullable
   public AllowanceChargeType build ()
   {
-    final MutableInt aReportedDocErrs = new MutableInt (0);
-    if (!_isEveryRequiredFieldSet (true, aReportedDocErrs))
+    final MutableInt aErrorCount = new MutableInt (0);
+    if (!_isEveryRequiredFieldSet (true, aErrorCount))
     {
       LOGGER.error ("At least one mandatory field is not set and therefore the TDD AllowanceCharge cannot be build.");
       return null;

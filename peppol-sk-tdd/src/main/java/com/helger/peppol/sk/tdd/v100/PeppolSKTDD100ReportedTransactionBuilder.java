@@ -34,13 +34,14 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.log.ConditionalLogger;
 import com.helger.base.numeric.mutable.MutableInt;
 import com.helger.base.string.StringHelper;
+import com.helger.base.uuid.UUID5Helper;
 import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.datetime.helper.PDTFactory;
 import com.helger.datetime.web.PDTWebDateHelper;
 import com.helger.datetime.xml.XMLOffsetDate;
 import com.helger.datetime.xml.XMLOffsetTime;
-import com.helger.peppol.sk.tdd.UUID5Helper;
+import com.helger.peppol.sk.tdd.CSKTDD;
 import com.helger.peppol.sk.tdd.codelist.ESKTDDDocumentTypeCode;
 import com.helger.peppol.sk.tdd.v2026_02_20.DocumentLineType;
 import com.helger.peppol.sk.tdd.v2026_02_20.MonetaryTotalType;
@@ -288,7 +289,7 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   @NonNull
   public PeppolSKTDD100ReportedTransactionBuilder initFromCreditNote (@NonNull final CreditNoteType aCN)
   {
-    ValueEnforcer.notNull (aCN, "Invoice");
+    ValueEnforcer.notNull (aCN, "CreditNote");
 
     customizationID (aCN.getCustomizationIDValue ());
     profileID (aCN.getProfileIDValue ());
@@ -812,7 +813,7 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   }
 
   @NonNull
-  public PeppolSKTDD100ReportedTransactionBuilder taxTotalDocumentCurrency (@Nullable final Consumer <PeppolSKTDD100TaxTotalBuilder> a)
+  public PeppolSKTDD100ReportedTransactionBuilder taxTotalDocumentCurrency (@NonNull final Consumer <PeppolSKTDD100TaxTotalBuilder> a)
   {
     if (StringHelper.isEmpty (m_sDocumentCurrencyCode))
       throw new IllegalStateException ("The TaxTotal can only be built, after the DocumentCurrencyCode is set!");
@@ -1114,15 +1115,15 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
 
   public boolean isEveryRequiredFieldSet (final boolean bDoLogOnError)
   {
-    final MutableInt aReportedDocErrs = new MutableInt (0);
-    return _isEveryRequiredFieldSet (bDoLogOnError, aReportedDocErrs);
+    final MutableInt aErrorCount = new MutableInt (0);
+    return _isEveryRequiredFieldSet (bDoLogOnError, aErrorCount);
   }
 
   @Nullable
   public ReportedTransactionType build ()
   {
-    final MutableInt aReportedDocErrs = new MutableInt (0);
-    if (!_isEveryRequiredFieldSet (true, aReportedDocErrs))
+    final MutableInt aErrorCount = new MutableInt (0);
+    if (!_isEveryRequiredFieldSet (true, aErrorCount))
     {
       LOGGER.error ("At least one mandatory field is not set and therefore the TDD ReportedTransaction cannot be build.");
       return null;
@@ -1131,17 +1132,17 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
     final ReportedTransactionType ret = new ReportedTransactionType ();
 
     // ReportedDocument - optional for FAILED state
-    if (m_eDocumentTypeCode != ESKTDDDocumentTypeCode.DISREGARD || aReportedDocErrs.is0 ())
+    if (m_eDocumentTypeCode != ESKTDDDocumentTypeCode.DISREGARD || aErrorCount.is0 ())
     {
       // The UUID is calculated based on rule ID-BDID-01
       // TODO check if the concatenation is correct
-      final UUID aUUID = UUID5Helper.fromUTF8 (UUID5Helper.PEPPOL_SK_NAMESPACE,
+      final UUID aUUID = UUID5Helper.fromUTF8 (CSKTDD.PEPPOL_SK_NAMESPACE,
                                                StringHelper.getNotNull (m_sDocumentTypeCode, "") +
-                                                                                StringHelper.getNotNull (m_sID, "") +
-                                                                                StringHelper.getNotNull (PDTWebDateHelper.getAsStringXSD (m_aIssueDate),
-                                                                                                         "") +
-                                                                                StringHelper.getNotNull (m_sSellerTaxID,
-                                                                                                         ""));
+                                                                           StringHelper.getNotNull (m_sID, "") +
+                                                                           StringHelper.getNotNull (PDTWebDateHelper.getAsStringXSD (m_aIssueDate),
+                                                                                                    "") +
+                                                                           StringHelper.getNotNull (m_sSellerTaxID,
+                                                                                                    ""));
 
       final ReportedDocumentType a = new ReportedDocumentType ();
       if (StringHelper.isNotEmpty (m_sCustomizationID))

@@ -191,15 +191,15 @@ public class PeppolSKTDD100ItemBuilder implements IBuilder <ItemType>
 
   public boolean isEveryRequiredFieldSet (final boolean bDoLogOnError)
   {
-    final MutableInt aReportedDocErrs = new MutableInt (0);
-    return _isEveryRequiredFieldSet (bDoLogOnError, aReportedDocErrs);
+    final MutableInt aErrorCount = new MutableInt (0);
+    return _isEveryRequiredFieldSet (bDoLogOnError, aErrorCount);
   }
 
   @Nullable
   public ItemType build ()
   {
-    final MutableInt aReportedDocErrs = new MutableInt (0);
-    if (!_isEveryRequiredFieldSet (true, aReportedDocErrs))
+    final MutableInt aErrorCount = new MutableInt (0);
+    if (!_isEveryRequiredFieldSet (true, aErrorCount))
     {
       LOGGER.error ("At least one mandatory field is not set and therefore the TDD Item cannot be build.");
       return null;
