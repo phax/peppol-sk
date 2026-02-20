@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:pxs="urn:peppol:schema:sk-taxdata:1.0"
+  xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+  xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+  xmlns:cec="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"
+  xmlns:udt="urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2"
+  targetNamespace="urn:peppol:schema:sk-taxdata:1.0"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified">
+
+  <xs:import namespace="urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2"/>
+  <xs:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"/>
+  <xs:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"/>
+  <xs:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"/>
+
+  
+   <xs:annotation>
+    <xs:documentation>OpenPeppol TDD XML Schema</xs:documentation>
+  </xs:annotation>
+
+  <xs:complexType name="EndpointPartyType">
+    <xs:sequence>
+      <xs:element ref="cbc:EndpointID"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="TaxDataDocumentTypeCodeType">
+    <xs:simpleContent>
+      <xs:extension base="udt:CodeType" />
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="TaxDataDocumentScopeType">
+    <xs:simpleContent>
+      <xs:extension base="udt:CodeType" />
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="TaxDataDocumentReporterRoleType">
+    <xs:simpleContent>
+      <xs:extension base="udt:CodeType" />
+    </xs:simpleContent>
+  </xs:complexType>
+  
+  <xs:complexType name="ReferencedDocumentTypeCodeType">
+    <xs:simpleContent>
+      <xs:extension base="udt:CodeType" />
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="RepresentativePartyType">
+    <xs:sequence>
+      <xs:element ref="cac:PartyIdentification"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="TaxAuthorityType">
+    <xs:sequence>
+      <xs:element ref="cbc:ID"/>
+      <xs:element ref="cbc:Name" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+
+  <xs:complexType name="MonetaryTotalType">
+    <xs:sequence>
+      <xs:element ref="cbc:LineExtensionAmount" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:TaxExclusiveAmount" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:TaxInclusiveAmount" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:AllowanceTotalAmount" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:ChargeTotalAmount" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:PrepaidAmount" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:PayableRoundingAmount" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:PayableAmount" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+
+  <xs:complexType name="DocumentLineType">
+    <xs:sequence>
+      <xs:element ref="cbc:ID" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:Note" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:InvoicedQuantity" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:LineExtensionAmount" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cac:InvoicePeriod" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cac:AllowanceCharge" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="cac:Item" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cac:Price" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ReportedDocumentType">
+    <xs:sequence>
+
+      <xs:element ref="cbc:CustomizationID" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:ProfileID" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:ID" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:UUID" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:IssueDate" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:IssueTime" minOccurs="0" maxOccurs="1"/>
+
+      <xs:element name="DocumentTypeCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+      <xs:element ref="cbc:Note" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:TaxPointDate" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:DocumentCurrencyCode" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cbc:TaxCurrencyCode" minOccurs="0" maxOccurs="1"/>
+
+      <xs:element ref="cac:InvoicePeriod" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cac:BillingReference" minOccurs="0" maxOccurs="unbounded"/>
+
+      <xs:element ref="cac:AccountingSupplierParty" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cac:AccountingCustomerParty" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cac:TaxRepresentativeParty" minOccurs="0" maxOccurs="1"/>
+       <xs:element ref="cac:Delivery" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="cac:PaymentMeans" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="cac:AllowanceCharge" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="cac:TaxTotal" minOccurs="0" maxOccurs="unbounded"/>
+
+      <xs:element name="MonetaryTotal" type="pxs:MonetaryTotalType" minOccurs="0" maxOccurs="1"/>
+
+      <xs:element name="DocumentLine"
+                  type="pxs:DocumentLineType"
+                  minOccurs="1"
+                  maxOccurs="unbounded"/>
+
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ReportedTransactionType">
+    <xs:sequence>
+      <xs:element name="ReportedDocument"
+                  type="pxs:ReportedDocumentType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="TaxDataType">
+    <xs:sequence>
+
+     <xs:element ref="cbc:CustomizationID" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>TDD Specification identifier</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element ref="cbc:ProfileID" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>TDD Business process type</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element ref="cbc:ID" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>TDD number</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element ref="cbc:UUID" minOccurs="1" maxOccurs="1">
+      	<xs:annotation>
+          <xs:documentation>TDD UUID</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+       <xs:element ref="cbc:IssueDate" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>TDD issue date</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element ref="cbc:IssueTime" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>TDD issue time</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="DocumentTypeCode" type="pxs:ReferencedDocumentTypeCodeType" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>TDD type code</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+     <xs:element name="DocumentScope" type="pxs:TaxDataDocumentScopeType" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>TDD scope</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="ReporterRole" type="pxs:TaxDataDocumentReporterRoleType" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>Reporters role</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+      <xs:element name="TaxAuthority" type="pxs:TaxAuthorityType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="ReportingParty" type="cac:PartyType" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>TDD Reporter</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="ReceivingParty" type="cac:PartyType" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>TDD Receiver - usually a Tax Authority</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+       <xs:element name="ReportersRepresentative" type="cac:PartyType" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>TDD Reporters Representative</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+     
+      <xs:element name="ReportedTransaction" type="pxs:ReportedTransactionType" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>Contains the details on the transmissions this TDD refers to</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="TaxData" type="pxs:TaxDataType"/>
+
+</xs:schema>
