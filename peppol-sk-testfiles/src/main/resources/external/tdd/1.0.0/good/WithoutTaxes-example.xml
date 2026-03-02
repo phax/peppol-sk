@@ -3,22 +3,20 @@
 	<cbc:CustomizationID>urn:peppol:taxdata:sk-1</cbc:CustomizationID>
 	<cbc:ProfileID>urn:peppol:taxreporting</cbc:ProfileID>
 	<cbc:UUID>123e4567-e89b-12d3-a456-426614174000</cbc:UUID>
-	<cbc:IssueDate>2025-01-17</cbc:IssueDate>
-	<cbc:IssueTime>15:32:00.0Z</cbc:IssueTime>
+	<cbc:IssueDate>2025-01-16</cbc:IssueDate>
+	<cbc:IssueTime>15:31:00.0Z</cbc:IssueTime>
 	<pxs:TaxDataTypeCode>S</pxs:TaxDataTypeCode>
-	
 	<pxs:DocumentScope>D</pxs:DocumentScope>
 	<pxs:ReporterRole>C2</pxs:ReporterRole>
 	<pxs:TaxAuthority>
-		<cbc:ID>SE-TAX</cbc:ID>
-		<cbc:Name>Swedish Tax Authority</cbc:Name>
+		<cbc:ID>SK-TAX</cbc:ID>
+		<cbc:Name>Slovak Tax Authority</cbc:Name>
 	</pxs:TaxAuthority>
-	
 	<pxs:ReportingParty>
 		<cbc:EndpointID schemeID="0088">7300010000001</cbc:EndpointID>
 	</pxs:ReportingParty>
 	<pxs:ReceivingParty>
-		<cbc:EndpointID schemeID="0242">987654325</cbc:EndpointID>
+		<cbc:EndpointID schemeID="0242">12345678</cbc:EndpointID>
 	</pxs:ReceivingParty>
 	<pxs:ReportersRepresentative>
 		<cac:PartyIdentification>
@@ -29,49 +27,48 @@
 		<pxs:ReportedDocument>
 			<cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0</cbc:CustomizationID>
 			<cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>
-			<cbc:ID>Vat-O</cbc:ID>
+			<cbc:ID>Vat-Z</cbc:ID>
 			<cbc:UUID>aa11bb22-cc33-dd44-ee55-ff6677889900</cbc:UUID>
 			<cbc:IssueDate>2018-08-30</cbc:IssueDate>
 			<pxs:DocumentTypeCode>380</pxs:DocumentTypeCode>
-			<cbc:DocumentCurrencyCode>SEK</cbc:DocumentCurrencyCode>
+			<cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
 			<cac:AccountingSupplierParty>
 				<cac:Party>
-					<cac:PostalAddress>
-						<cac:Country>
-							<cbc:IdentificationCode>SE</cbc:IdentificationCode>
-						</cac:Country>
-					</cac:PostalAddress>
+					<cac:PartyTaxScheme>
+						<cbc:CompanyID>SK928741974</cbc:CompanyID>
+						<cac:TaxScheme>
+							<cbc:ID>VAT</cbc:ID>
+						</cac:TaxScheme>
+					</cac:PartyTaxScheme>
 				</cac:Party>
 			</cac:AccountingSupplierParty>
 			<cac:AccountingCustomerParty>
 				<cac:Party>
-					<cac:PostalAddress>
-						<cac:Country>
-							<cbc:IdentificationCode>NO</cbc:IdentificationCode>
-						</cac:Country>
-					</cac:PostalAddress>
+					<cac:PartyTaxScheme>
+						<cbc:CompanyID>DK928741974</cbc:CompanyID>
+						<cac:TaxScheme>
+							<cbc:ID>VAT</cbc:ID>
+						</cac:TaxScheme>
+					</cac:PartyTaxScheme>
 					<cac:PartyLegalEntity>
-								<cbc:RegistrationName>ABC Ltd</cbc:RegistrationName>
-							</cac:PartyLegalEntity>
+						<cbc:RegistrationName>ABC Ltd</cbc:RegistrationName>
+					</cac:PartyLegalEntity>
 				</cac:Party>
 			</cac:AccountingCustomerParty>
 			<cac:PaymentMeans>
 				<cbc:PaymentMeansCode>30</cbc:PaymentMeansCode>
 				<cac:PayeeFinancialAccount>
-					<cbc:ID>SE1212341234123412</cbc:ID>
+					<cbc:ID>SK1212341234123412</cbc:ID>
 					<cac:FinancialInstitutionBranch>
-						<cbc:ID>SEXDABCD</cbc:ID>
+						<cbc:ID>SKXDABCD</cbc:ID>
 					</cac:FinancialInstitutionBranch>
 				</cac:PayeeFinancialAccount>
 			</cac:PaymentMeans>
 			<cac:TaxTotal>
-				<cbc:TaxAmount currencyID="SEK">0.00</cbc:TaxAmount>
 				<cac:TaxSubtotal>
-					<cbc:TaxableAmount currencyID="SEK">3200.00</cbc:TaxableAmount>
-					<cbc:TaxAmount currencyID="SEK">0.00</cbc:TaxAmount>
+					<cbc:TaxableAmount currencyID="EUR">1200.00</cbc:TaxableAmount>
 					<cac:TaxCategory>
-						<cbc:ID>O</cbc:ID>
-						<cbc:TaxExemptionReason>Not subject to VAT</cbc:TaxExemptionReason>
+                        <cbc:Percent>0.00</cbc:Percent>
 						<cac:TaxScheme>
 							<cbc:ID>VAT</cbc:ID>
 						</cac:TaxScheme>
@@ -79,27 +76,19 @@
 				</cac:TaxSubtotal>
 			</cac:TaxTotal>
 			<pxs:MonetaryTotal>
-				<cbc:LineExtensionAmount currencyID="SEK">3200.00</cbc:LineExtensionAmount>
-				<cbc:TaxExclusiveAmount currencyID="SEK">3200.00</cbc:TaxExclusiveAmount>
-				<cbc:TaxInclusiveAmount currencyID="SEK">3200.00</cbc:TaxInclusiveAmount>
-				<cbc:PayableAmount currencyID="SEK">3200.00</cbc:PayableAmount>
+				<cbc:LineExtensionAmount currencyID="EUR">1200.00</cbc:LineExtensionAmount>
+				<cbc:TaxExclusiveAmount currencyID="EUR">1200.00</cbc:TaxExclusiveAmount>
+				<cbc:PayableAmount currencyID="EUR">1200.00</cbc:PayableAmount>
 			</pxs:MonetaryTotal>
 			<pxs:DocumentLine>
 				<cbc:ID>1</cbc:ID>
-				<cbc:InvoicedQuantity unitCode="EA">1</cbc:InvoicedQuantity>
-				<cbc:LineExtensionAmount currencyID="SEK">3200.00</cbc:LineExtensionAmount>
+				<cbc:InvoicedQuantity unitCode="EA">10</cbc:InvoicedQuantity>
+				<cbc:LineExtensionAmount currencyID="EUR">1200.00</cbc:LineExtensionAmount>
 				<cac:Item>
-					<cbc:Description>Weight-based tax, vehicles 3000 KGM</cbc:Description>
-					<cbc:Name>Road tax</cbc:Name>
-					<cac:ClassifiedTaxCategory>
-						<cbc:ID>O</cbc:ID>
-						<cac:TaxScheme>
-							<cbc:ID>VAT</cbc:ID>
-						</cac:TaxScheme>
-					</cac:ClassifiedTaxCategory>
+					<cbc:Name>Test item</cbc:Name>
 				</cac:Item>
 				<cac:Price>
-					<cbc:PriceAmount currencyID="SEK">3200.00</cbc:PriceAmount>
+					<cbc:PriceAmount currencyID="EUR">120.00</cbc:PriceAmount>
 				</cac:Price>
 			</pxs:DocumentLine>
 		</pxs:ReportedDocument>

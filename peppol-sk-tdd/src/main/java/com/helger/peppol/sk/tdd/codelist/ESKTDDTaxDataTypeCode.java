@@ -24,11 +24,11 @@ import com.helger.base.id.IHasID;
 import com.helger.base.lang.EnumHelper;
 
 /**
- * Peppol SK TDD Document Type Code.
+ * Peppol SK TDD Tax Data Type Code.
  *
  * @author Philip Helger
  */
-public enum ESKTDDDocumentTypeCode implements IHasID <String>
+public enum ESKTDDTaxDataTypeCode implements IHasID <String>
 {
   /** Submitting a Tax Data Document */
   SUBMIT ("S"),
@@ -39,7 +39,7 @@ public enum ESKTDDDocumentTypeCode implements IHasID <String>
 
   private final String m_sID;
 
-  ESKTDDDocumentTypeCode (@NonNull @Nonempty final String sID)
+  ESKTDDTaxDataTypeCode (@NonNull @Nonempty final String sID)
   {
     m_sID = sID;
   }
@@ -52,8 +52,8 @@ public enum ESKTDDDocumentTypeCode implements IHasID <String>
   }
 
   @Nullable
-  public static ESKTDDDocumentTypeCode getFromIDOrNull (@Nullable final String sID)
+  public static ESKTDDTaxDataTypeCode getFromIDOrNull (@Nullable final String sID)
   {
-    return EnumHelper.getFromIDOrNull (ESKTDDDocumentTypeCode.class, sID);
+    return EnumHelper.getFromIDOrNull (ESKTDDTaxDataTypeCode.class, sID);
   }
 }

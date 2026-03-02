@@ -38,11 +38,11 @@ import com.helger.io.resource.ClassPathResource;
 import com.helger.io.resource.inmemory.ReadableResourceString;
 import com.helger.jaxb.GenericJAXBMarshaller;
 import com.helger.peppol.sk.tdd.codelist.ESKTDDDocumentScope;
-import com.helger.peppol.sk.tdd.codelist.ESKTDDDocumentTypeCode;
 import com.helger.peppol.sk.tdd.codelist.ESKTDDReporterRole;
+import com.helger.peppol.sk.tdd.codelist.ESKTDDTaxDataTypeCode;
 import com.helger.peppol.sk.tdd.jaxb.PeppolSKTDD100Marshaller;
 import com.helger.peppol.sk.tdd.testfiles.PeppolSKTestFiles;
-import com.helger.peppol.sk.tdd.v2026_02_20.TaxDataType;
+import com.helger.peppol.sk.tdd.v2026_03_02.TaxDataType;
 import com.helger.peppol.sk.tdd.validate.PeppolSKTDDValidator;
 import com.helger.peppolid.factory.IIdentifierFactory;
 import com.helger.peppolid.factory.PeppolIdentifierFactory;
@@ -73,7 +73,7 @@ public final class PeppolSKTDD100BuilderTest
     final IIdentifierFactory aIF = PeppolIdentifierFactory.INSTANCE;
     final ISchematronResource aSCHRes = PeppolSKTDDValidator.getSchematronSK_TDD_100 ();
 
-    final TaxDataType aTDD = new PeppolSKTDD100Builder ().documentTypeCode (ESKTDDDocumentTypeCode.SUBMIT)
+    final TaxDataType aTDD = new PeppolSKTDD100Builder ().taxDataTypeCode (ESKTDDTaxDataTypeCode.SUBMIT)
                                                          .documentScope (ESKTDDDocumentScope.DOMESTIC)
                                                          .reporterRole (ESKTDDReporterRole.SENDER)
                                                          .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
@@ -89,7 +89,7 @@ public final class PeppolSKTDD100BuilderTest
                                                                                                                                20))
                                                                                        .documentTypeCode ("380")
                                                                                        .documentCurrencyCode ("AED")
-                                                                                       .sellerTaxID ("123456789")
+                                                                                       .sellerEndpointID ("123456789")
                                                                                        .buyerTaxID ("987654321")
                                                                                        .taxTotalDocumentCurrency (x -> x.taxAmount (BigHelper.toBigDecimal (240)))
                                                                                        .lineExtensionAmount (BigHelper.toBigDecimal (1200))
@@ -131,7 +131,7 @@ public final class PeppolSKTDD100BuilderTest
     final IIdentifierFactory aIF = PeppolIdentifierFactory.INSTANCE;
     final ISchematronResource aSCHRes = PeppolSKTDDValidator.getSchematronSK_TDD_100 ();
 
-    final TaxDataType aTDD = new PeppolSKTDD100Builder ().documentTypeCode (ESKTDDDocumentTypeCode.SUBMIT)
+    final TaxDataType aTDD = new PeppolSKTDD100Builder ().taxDataTypeCode (ESKTDDTaxDataTypeCode.SUBMIT)
                                                          .documentScope (ESKTDDDocumentScope.DOMESTIC)
                                                          .reporterRole (ESKTDDReporterRole.SENDER)
                                                          .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
@@ -152,7 +152,7 @@ public final class PeppolSKTDD100BuilderTest
                                                                                        .documentTypeCode ("380")
                                                                                        .documentCurrencyCode ("AED")
                                                                                        .taxCurrencyCode ("EUR")
-                                                                                       .sellerTaxID ("123456789")
+                                                                                       .sellerEndpointID ("123456789")
                                                                                        .sellerCountryCode ("DE")
                                                                                        .buyerTaxID ("987654321")
                                                                                        .buyerCountryCode ("AT")
@@ -213,7 +213,7 @@ public final class PeppolSKTDD100BuilderTest
       final InvoiceType aInvoice = UBL21Marshaller.invoice ().read (aRes);
       assertNotNull (aInvoice);
 
-      final TaxDataType aTDD = new PeppolSKTDD100Builder ().documentTypeCode (ESKTDDDocumentTypeCode.SUBMIT)
+      final TaxDataType aTDD = new PeppolSKTDD100Builder ().taxDataTypeCode (ESKTDDTaxDataTypeCode.SUBMIT)
                                                            .documentScope (ESKTDDDocumentScope.DOMESTIC)
                                                            .reporterRole (ESKTDDReporterRole.SENDER)
                                                            .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
@@ -261,7 +261,7 @@ public final class PeppolSKTDD100BuilderTest
       final CreditNoteType aCreditNote = UBL21Marshaller.creditNote ().read (aRes);
       assertNotNull (aCreditNote);
 
-      final TaxDataType aTDD = new PeppolSKTDD100Builder ().documentTypeCode (ESKTDDDocumentTypeCode.SUBMIT)
+      final TaxDataType aTDD = new PeppolSKTDD100Builder ().taxDataTypeCode (ESKTDDTaxDataTypeCode.SUBMIT)
                                                            .documentScope (ESKTDDDocumentScope.DOMESTIC)
                                                            .reporterRole (ESKTDDReporterRole.SENDER)
                                                            .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
@@ -306,7 +306,7 @@ public final class PeppolSKTDD100BuilderTest
     final InvoiceType aInvoice = UBL21Marshaller.invoice ().read (aRes);
     assertNotNull (aInvoice);
 
-    final TaxDataType aTDD = new PeppolSKTDD100Builder ().documentTypeCode (ESKTDDDocumentTypeCode.DISREGARD)
+    final TaxDataType aTDD = new PeppolSKTDD100Builder ().taxDataTypeCode (ESKTDDTaxDataTypeCode.DISREGARD)
                                                          .documentScope (ESKTDDDocumentScope.DOMESTIC)
                                                          .reporterRole (ESKTDDReporterRole.SENDER)
                                                          .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))
@@ -356,7 +356,7 @@ public final class PeppolSKTDD100BuilderTest
     // This one is special, because it is an XSD mandatory fields
     aInvoice.setID ((IDType) null);
 
-    final TaxDataType aTDD = new PeppolSKTDD100Builder ().documentTypeCode (ESKTDDDocumentTypeCode.DISREGARD)
+    final TaxDataType aTDD = new PeppolSKTDD100Builder ().taxDataTypeCode (ESKTDDTaxDataTypeCode.DISREGARD)
                                                          .documentScope (ESKTDDDocumentScope.DOMESTIC)
                                                          .reporterRole (ESKTDDReporterRole.SENDER)
                                                          .reportingParty (aIF.createParticipantIdentifierWithDefaultScheme ("9915:c1id"))

@@ -38,10 +38,10 @@ public final class PeppolSKTDDValidator
     return CPeppolSKTDD.class.getClassLoader ();
   }
 
-  public static final String SCH_SK_TDD_100_PATH = "external/schematron/2026-02-20/Peppol-Slovak Republic-TDD.sch";
+  public static final String SCH_SK_TDD_100_PATH = "external/schematron/2026-03-02/Peppol-Slovak Republic-TDD.sch";
 
   private static final ISchematronResource SK_TDD_100 = SchematronResourceSCH.fromClassPath (SCH_SK_TDD_100_PATH,
-                                                                                               _getCL ());
+                                                                                             _getCL ());
 
   static
   {

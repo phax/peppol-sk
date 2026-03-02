@@ -5,7 +5,7 @@
 	<cbc:UUID>123e4567-e89b-12d3-a456-426614174000</cbc:UUID>
 	<cbc:IssueDate>2025-01-15</cbc:IssueDate>
 	<cbc:IssueTime>15:30:00.0Z</cbc:IssueTime>
-	<pxs:DocumentTypeCode>S</pxs:DocumentTypeCode>
+	<pxs:TaxDataTypeCode>S</pxs:TaxDataTypeCode>
 	
 	<pxs:DocumentScope>D</pxs:DocumentScope>
 	<pxs:ReporterRole>C2</pxs:ReporterRole>
@@ -218,11 +218,6 @@
 								</cac:Item>
 								<cac:Price>
 									<cbc:PriceAmount currencyID="EUR">410</cbc:PriceAmount>
-									<cac:AllowanceCharge>
-										<cbc:ChargeIndicator>false</cbc:ChargeIndicator>
-										<cbc:Amount currencyID="EUR">40</cbc:Amount>
-										<cbc:BaseAmount currencyID="EUR">450</cbc:BaseAmount>
-									</cac:AllowanceCharge>
 								</cac:Price>
 							</pxs:DocumentLine>
 							<pxs:DocumentLine>

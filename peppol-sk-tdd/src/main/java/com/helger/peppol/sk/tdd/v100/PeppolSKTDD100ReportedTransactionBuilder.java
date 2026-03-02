@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -34,19 +35,19 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.log.ConditionalLogger;
 import com.helger.base.numeric.mutable.MutableInt;
 import com.helger.base.string.StringHelper;
+import com.helger.base.string.StringImplode;
 import com.helger.base.uuid.UUID5Helper;
 import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.datetime.helper.PDTFactory;
-import com.helger.datetime.web.PDTWebDateHelper;
 import com.helger.datetime.xml.XMLOffsetDate;
 import com.helger.datetime.xml.XMLOffsetTime;
 import com.helger.peppol.sk.tdd.CSKTDD;
-import com.helger.peppol.sk.tdd.codelist.ESKTDDDocumentTypeCode;
-import com.helger.peppol.sk.tdd.v2026_02_20.DocumentLineType;
-import com.helger.peppol.sk.tdd.v2026_02_20.MonetaryTotalType;
-import com.helger.peppol.sk.tdd.v2026_02_20.ReportedDocumentType;
-import com.helger.peppol.sk.tdd.v2026_02_20.ReportedTransactionType;
+import com.helger.peppol.sk.tdd.codelist.ESKTDDTaxDataTypeCode;
+import com.helger.peppol.sk.tdd.v2026_03_02.DocumentLineType;
+import com.helger.peppol.sk.tdd.v2026_03_02.MonetaryTotalType;
+import com.helger.peppol.sk.tdd.v2026_03_02.ReportedDocumentType;
+import com.helger.peppol.sk.tdd.v2026_03_02.ReportedTransactionType;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AddressType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AllowanceChargeType;
@@ -67,6 +68,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.ChargeT
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.CustomizationIDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.DescriptionCodeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.DocumentCurrencyCodeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.EndpointIDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.IssueDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.IssueTimeType;
@@ -92,7 +94,7 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (PeppolSKTDD100ReportedTransactionBuilder.class);
 
-  private final ESKTDDDocumentTypeCode m_eDocumentTypeCode;
+  private final ESKTDDTaxDataTypeCode m_eDocumentTypeCode;
   private String m_sCustomizationID;
   private String m_sProfileID;
   private String m_sID;
@@ -106,7 +108,8 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   private LocalDate m_aInvoicePeriodEnd;
   private String m_sInvoicePeriodDescriptionCode;
   private final ICommonsList <BillingReferenceType> m_aBillingReferences = new CommonsArrayList <> ();
-  private String m_sSellerTaxID;
+  private String m_sSellerEndpointIDSchemeID;
+  private String m_sSellerEndpointID;
   private String m_sSellerCountryCode;
   private String m_sBuyerTaxID;
   private String m_sBuyerCountryCode;
@@ -129,7 +132,7 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
 
   private final ICommonsList <DocumentLineType> m_aDocumentLines = new CommonsArrayList <> ();
 
-  public PeppolSKTDD100ReportedTransactionBuilder (@NonNull final ESKTDDDocumentTypeCode eDocumentTypeCode)
+  public PeppolSKTDD100ReportedTransactionBuilder (@NonNull final ESKTDDTaxDataTypeCode eDocumentTypeCode)
   {
     ValueEnforcer.notNull (eDocumentTypeCode, "DocumentTypeCode");
     m_eDocumentTypeCode = eDocumentTypeCode;
@@ -182,10 +185,11 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
       final PartyType aParty = aSupplier.getParty ();
       if (aParty != null)
       {
-        if (aParty.hasPartyTaxSchemeEntries ())
+        final EndpointIDType aEndpoint = aParty.getEndpointID ();
+        if (aEndpoint != null)
         {
-          final PartyTaxSchemeType aPTS = aParty.getPartyTaxSchemeAtIndex (0);
-          sellerTaxID (aPTS.getCompanyIDValue ());
+          sellerEndpointIDSchemeID (aEndpoint.getSchemeID ());
+          sellerEndpointID (aEndpoint.getValue ());
         }
 
         final AddressType aPA = aParty.getPostalAddress ();
@@ -326,10 +330,11 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
       final PartyType aParty = aSupplier.getParty ();
       if (aParty != null)
       {
-        if (aParty.hasPartyTaxSchemeEntries ())
+        final EndpointIDType aEndpoint = aParty.getEndpointID ();
+        if (aEndpoint != null)
         {
-          final PartyTaxSchemeType aPTS = aParty.getPartyTaxSchemeAtIndex (0);
-          sellerTaxID (aPTS.getCompanyIDValue ());
+          sellerEndpointIDSchemeID (aEndpoint.getSchemeID ());
+          sellerEndpointID (aEndpoint.getValue ());
         }
 
         final AddressType aPA = aParty.getPostalAddress ();
@@ -631,15 +636,28 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   }
 
   @Nullable
-  public String sellerTaxID ()
+  public String sellerEndpointIDSchemeID ()
   {
-    return m_sSellerTaxID;
+    return m_sSellerEndpointIDSchemeID;
   }
 
   @NonNull
-  public PeppolSKTDD100ReportedTransactionBuilder sellerTaxID (@Nullable final String s)
+  public PeppolSKTDD100ReportedTransactionBuilder sellerEndpointIDSchemeID (@Nullable final String s)
   {
-    m_sSellerTaxID = s;
+    m_sSellerEndpointIDSchemeID = s;
+    return this;
+  }
+
+  @Nullable
+  public String sellerEndpointID ()
+  {
+    return m_sSellerEndpointID;
+  }
+
+  @NonNull
+  public PeppolSKTDD100ReportedTransactionBuilder sellerEndpointID (@Nullable final String s)
+  {
+    m_sSellerEndpointID = s;
     return this;
   }
 
@@ -1039,7 +1057,16 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
 
     // m_aBillingReferences may be empty
 
-    // m_sSellerTaxID is optional
+    if (StringHelper.isEmpty (m_sSellerEndpointIDSchemeID))
+    {
+      aCondLog.error (sErrorPrefix + "EndpointID Scheme ID is missing");
+      aReportedDocsErrs.inc ();
+    }
+    if (StringHelper.isEmpty (m_sSellerEndpointID))
+    {
+      aCondLog.error (sErrorPrefix + "EndpointID is missing");
+      aReportedDocsErrs.inc ();
+    }
     // m_sSellerCountryCode is optional
 
     // m_sBuyerTaxID is optional
@@ -1132,26 +1159,31 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
     final ReportedTransactionType ret = new ReportedTransactionType ();
 
     // ReportedDocument - optional for FAILED state
-    if (m_eDocumentTypeCode != ESKTDDDocumentTypeCode.DISREGARD || aErrorCount.is0 ())
+    if (m_eDocumentTypeCode != ESKTDDTaxDataTypeCode.DISREGARD || aErrorCount.is0 ())
     {
       // The UUID is calculated based on rule ID-BDID-01
-      // TODO check if the concatenation is correct
-      final UUID aUUID = UUID5Helper.fromUTF8 (CSKTDD.PEPPOL_SK_NAMESPACE,
-                                               StringHelper.getNotNull (m_sDocumentTypeCode, "") +
-                                                                           StringHelper.getNotNull (m_sID, "") +
-                                                                           StringHelper.getNotNull (PDTWebDateHelper.getAsStringXSD (m_aIssueDate),
-                                                                                                    "") +
-                                                                           StringHelper.getNotNull (m_sSellerTaxID,
-                                                                                                    ""));
+      final UUID aRepDocUUID = UUID5Helper.fromUTF8 (CSKTDD.PEPPOL_SK_NAMESPACE,
+                                                     StringImplode.imploder ()
+                                                                  .filterNonEmpty ()
+                                                                  .separator (' ')
+                                                                  .source (StringHelper.getNotNull (m_sSellerEndpointIDSchemeID,
+                                                                                                    ""),
+                                                                           StringHelper.getNotNull (m_sSellerEndpointID,
+                                                                                                    ""),
+                                                                           StringHelper.getNotNull (m_sDocumentTypeCode,
+                                                                                                    ""),
+                                                                           StringHelper.getNotNull (m_sID, ""),
+                                                                           m_aIssueDate == null ? ""
+                                                                                                : DateTimeFormatter.ISO_LOCAL_DATE.format (m_aIssueDate))
+                                                                  .build ());
 
       final ReportedDocumentType a = new ReportedDocumentType ();
       if (StringHelper.isNotEmpty (m_sCustomizationID))
         a.setCustomizationID (new CustomizationIDType (m_sCustomizationID));
       if (StringHelper.isNotEmpty (m_sProfileID))
         a.setProfileID (new ProfileIDType (m_sProfileID));
-      if (StringHelper.isNotEmpty (m_sID))
-        a.setID (new IDType (m_sID));
-      a.setUUID (new UUIDType (aUUID.toString ()));
+      a.setID (new IDType (m_sID));
+      a.setUUID (new UUIDType (aRepDocUUID.toString ()));
       if (m_aIssueDate != null)
         a.setIssueDate (new IssueDateType (XMLOffsetDate.of (m_aIssueDate)));
       if (m_aIssueTime != null)
@@ -1195,14 +1227,12 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
               aParty.setPostalAddress (aPA);
             }
 
-            if (StringHelper.isNotEmpty (m_sSellerTaxID))
+            if (StringHelper.isNotEmpty (m_sSellerEndpointID))
             {
-              final PartyTaxSchemeType aPTS = new PartyTaxSchemeType ();
-              aPTS.setCompanyID (m_sSellerTaxID);
-              final TaxSchemeType aTS = new TaxSchemeType ();
-              aTS.setID ("VAT");
-              aPTS.setTaxScheme (aTS);
-              aParty.addPartyTaxScheme (aPTS);
+              final EndpointIDType aEndpointID = new EndpointIDType ();
+              aEndpointID.setSchemeID (m_sSellerEndpointIDSchemeID);
+              aEndpointID.setValue (m_sSellerEndpointID);
+              aParty.setEndpointID (aEndpointID);
             }
           }
           a2.setParty (aParty);

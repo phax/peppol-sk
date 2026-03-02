@@ -34,14 +34,14 @@ import com.helger.datetime.helper.PDTFactory;
 import com.helger.datetime.xml.XMLOffsetDate;
 import com.helger.datetime.xml.XMLOffsetTime;
 import com.helger.peppol.sk.tdd.codelist.ESKTDDDocumentScope;
-import com.helger.peppol.sk.tdd.codelist.ESKTDDDocumentTypeCode;
 import com.helger.peppol.sk.tdd.codelist.ESKTDDReporterRole;
-import com.helger.peppol.sk.tdd.v2026_02_20.ReferencedDocumentTypeCodeType;
-import com.helger.peppol.sk.tdd.v2026_02_20.ReportedTransactionType;
-import com.helger.peppol.sk.tdd.v2026_02_20.TaxAuthorityType;
-import com.helger.peppol.sk.tdd.v2026_02_20.TaxDataDocumentReporterRoleType;
-import com.helger.peppol.sk.tdd.v2026_02_20.TaxDataDocumentScopeType;
-import com.helger.peppol.sk.tdd.v2026_02_20.TaxDataType;
+import com.helger.peppol.sk.tdd.codelist.ESKTDDTaxDataTypeCode;
+import com.helger.peppol.sk.tdd.v2026_03_02.ReferencedDocumentTypeCodeType;
+import com.helger.peppol.sk.tdd.v2026_03_02.ReportedTransactionType;
+import com.helger.peppol.sk.tdd.v2026_03_02.TaxAuthorityType;
+import com.helger.peppol.sk.tdd.v2026_03_02.TaxDataDocumentReporterRoleType;
+import com.helger.peppol.sk.tdd.v2026_03_02.TaxDataDocumentScopeType;
+import com.helger.peppol.sk.tdd.v2026_03_02.TaxDataType;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.factory.IIdentifierFactory;
 import com.helger.peppolid.factory.PeppolIdentifierFactory;
@@ -73,7 +73,7 @@ public class PeppolSKTDD100Builder implements IBuilder <TaxDataType>
   private String m_sUUID;
   private LocalDate m_aIssueDate;
   private OffsetTime m_aIssueTime;
-  private ESKTDDDocumentTypeCode m_eDocumentTypeCode;
+  private ESKTDDTaxDataTypeCode m_eTaxDataTypeCode;
   private ESKTDDDocumentScope m_eDocumentScope;
   private ESKTDDReporterRole m_eReporterRole;
   private String m_sTaxAuthorityID;
@@ -133,6 +133,7 @@ public class PeppolSKTDD100Builder implements IBuilder <TaxDataType>
   @NonNull
   public PeppolSKTDD100Builder randomUUID ()
   {
+    // UUID v4 - as in ID-BDID-02
     return uuid (UUID.randomUUID ().toString ());
   }
 
@@ -190,15 +191,15 @@ public class PeppolSKTDD100Builder implements IBuilder <TaxDataType>
   }
 
   @Nullable
-  public ESKTDDDocumentTypeCode documentTypeCode ()
+  public ESKTDDTaxDataTypeCode taxDataTypeCode ()
   {
-    return m_eDocumentTypeCode;
+    return m_eTaxDataTypeCode;
   }
 
   @NonNull
-  public PeppolSKTDD100Builder documentTypeCode (@Nullable final ESKTDDDocumentTypeCode e)
+  public PeppolSKTDD100Builder taxDataTypeCode (@Nullable final ESKTDDTaxDataTypeCode e)
   {
-    m_eDocumentTypeCode = e;
+    m_eTaxDataTypeCode = e;
     return this;
   }
 
@@ -330,9 +331,9 @@ public class PeppolSKTDD100Builder implements IBuilder <TaxDataType>
   @NonNull
   public PeppolSKTDD100Builder reportedTransaction (@NonNull final Consumer <PeppolSKTDD100ReportedTransactionBuilder> aBuilderConsumer)
   {
-    if (m_eDocumentTypeCode == null)
-      throw new IllegalStateException ("The ReportedTransaction can only be built, after the DocumentTypeCode is set!");
-    final PeppolSKTDD100ReportedTransactionBuilder aBuilder = new PeppolSKTDD100ReportedTransactionBuilder (m_eDocumentTypeCode);
+    if (m_eTaxDataTypeCode == null)
+      throw new IllegalStateException ("The ReportedTransaction can only be built, after the TaxDataTypeCode is set!");
+    final PeppolSKTDD100ReportedTransactionBuilder aBuilder = new PeppolSKTDD100ReportedTransactionBuilder (m_eTaxDataTypeCode);
     aBuilderConsumer.accept (aBuilder);
     return reportedTransaction (aBuilder);
   }
@@ -369,7 +370,7 @@ public class PeppolSKTDD100Builder implements IBuilder <TaxDataType>
       aCondLog.error (sErrorPrefix + "IssueTime is missing");
       nErrs++;
     }
-    if (m_eDocumentTypeCode == null)
+    if (m_eTaxDataTypeCode == null)
     {
       aCondLog.error (sErrorPrefix + "DocumentTypeCode is missing");
       nErrs++;
@@ -522,8 +523,8 @@ public class PeppolSKTDD100Builder implements IBuilder <TaxDataType>
     ret.setIssueTime (new IssueTimeType (XMLOffsetTime.of (m_aIssueTime)));
     {
       final var aDocType = new ReferencedDocumentTypeCodeType ();
-      aDocType.setValue (m_eDocumentTypeCode.getID ());
-      ret.setDocumentTypeCode (aDocType);
+      aDocType.setValue (m_eTaxDataTypeCode.getID ());
+      ret.setTaxDataTypeCode (aDocType);
     }
     {
       final var aTDS = new TaxDataDocumentScopeType ();

@@ -5,7 +5,7 @@
 	<cbc:UUID>123e4567-e89b-12d3-a456-426614174000</cbc:UUID>
 	<cbc:IssueDate>2025-01-16</cbc:IssueDate>
 	<cbc:IssueTime>15:31:00.0Z</cbc:IssueTime>
-	<pxs:DocumentTypeCode>S</pxs:DocumentTypeCode>
+	<pxs:TaxDataTypeCode>S</pxs:TaxDataTypeCode>
 	
 	<pxs:DocumentScope>D</pxs:DocumentScope>
 	<pxs:ReporterRole>C2</pxs:ReporterRole>

@@ -106,7 +106,7 @@
               <goal>generate</goal>
             </goals>
             <configuration>
-              <schemaDirectory>${basedir}/src/main/resources/external/schemas/2026-02-20</schemaDirectory>
+              <schemaDirectory>${basedir}/src/main/resources/external/schemas/2026-03-02</schemaDirectory>
               <schemaIncludes>
                 <schemaInclude>*.xsd</schemaInclude>
               </schemaIncludes>  
