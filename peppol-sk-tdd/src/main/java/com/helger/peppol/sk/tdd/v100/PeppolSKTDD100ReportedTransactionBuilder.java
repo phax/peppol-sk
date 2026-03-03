@@ -110,6 +110,7 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   private final ICommonsList <BillingReferenceType> m_aBillingReferences = new CommonsArrayList <> ();
   private String m_sSellerEndpointIDSchemeID;
   private String m_sSellerEndpointID;
+  private String m_sSellerTaxID;
   private String m_sSellerCountryCode;
   private String m_sBuyerTaxID;
   private String m_sBuyerCountryCode;
@@ -190,6 +191,12 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
         {
           sellerEndpointIDSchemeID (aEndpoint.getSchemeID ());
           sellerEndpointID (aEndpoint.getValue ());
+        }
+
+        if (aParty.hasPartyTaxSchemeEntries ())
+        {
+          final PartyTaxSchemeType aPTS = aParty.getPartyTaxSchemeAtIndex (0);
+          sellerTaxID (aPTS.getCompanyIDValue ());
         }
 
         final AddressType aPA = aParty.getPostalAddress ();
@@ -335,6 +342,12 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
         {
           sellerEndpointIDSchemeID (aEndpoint.getSchemeID ());
           sellerEndpointID (aEndpoint.getValue ());
+        }
+
+        if (aParty.hasPartyTaxSchemeEntries ())
+        {
+          final PartyTaxSchemeType aPTS = aParty.getPartyTaxSchemeAtIndex (0);
+          sellerTaxID (aPTS.getCompanyIDValue ());
         }
 
         final AddressType aPA = aParty.getPostalAddress ();
@@ -658,6 +671,19 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   public PeppolSKTDD100ReportedTransactionBuilder sellerEndpointID (@Nullable final String s)
   {
     m_sSellerEndpointID = s;
+    return this;
+  }
+
+  @Nullable
+  public String sellerTaxID ()
+  {
+    return m_sSellerTaxID;
+  }
+
+  @NonNull
+  public PeppolSKTDD100ReportedTransactionBuilder sellerTaxID (@Nullable final String s)
+  {
+    m_sSellerTaxID = s;
     return this;
   }
 
@@ -1067,6 +1093,7 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
       aCondLog.error (sErrorPrefix + "EndpointID is missing");
       aReportedDocsErrs.inc ();
     }
+    // m_sSellerTaxID is optional
     // m_sSellerCountryCode is optional
 
     // m_sBuyerTaxID is optional
@@ -1218,6 +1245,17 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
         {
           final PartyType aParty = new PartyType ();
           {
+            // SellerEndpointID does not go into the resulting TDD
+            if (StringHelper.isNotEmpty (m_sSellerTaxID))
+            {
+              final PartyTaxSchemeType aPTS = new PartyTaxSchemeType ();
+              aPTS.setCompanyID (m_sSellerTaxID);
+              final TaxSchemeType aTS = new TaxSchemeType ();
+              aTS.setID ("VAT");
+              aPTS.setTaxScheme (aTS);
+              aParty.addPartyTaxScheme (aPTS);
+            }
+
             if (StringHelper.isNotEmpty (m_sSellerCountryCode))
             {
               final AddressType aPA = new AddressType ();
@@ -1225,14 +1263,6 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
               aC.setIdentificationCode (m_sSellerCountryCode);
               aPA.setCountry (aC);
               aParty.setPostalAddress (aPA);
-            }
-
-            if (StringHelper.isNotEmpty (m_sSellerEndpointID))
-            {
-              final EndpointIDType aEndpointID = new EndpointIDType ();
-              aEndpointID.setSchemeID (m_sSellerEndpointIDSchemeID);
-              aEndpointID.setValue (m_sSellerEndpointID);
-              aParty.setEndpointID (aEndpointID);
             }
           }
           a2.setParty (aParty);

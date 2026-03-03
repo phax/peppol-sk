@@ -49,7 +49,7 @@ to build the solution.
 
 # News and noteworthy
 
-v0.1.0 - work in progress
+v0.1.0 - 2026-03-03
 * Initial version targeting Peppol SK pilot draft TDD specs
 
 ---
