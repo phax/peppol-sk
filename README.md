@@ -50,7 +50,7 @@ to build the solution.
 # News and noteworthy
 
 v0.1.0 - 2026-03-03
-* Initial version targeting Peppol SK pilot draft TDD specs
+* Initial version targeting Peppol SK member review TDD specs
 
 ---
 
