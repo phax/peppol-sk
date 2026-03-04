@@ -3,7 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.helger.peppol/peppol-sk-parent-pom)](https://img.shields.io/maven-central/v/com.helger.peppol/peppol-sk-parent-pom)
 [![javadoc](https://javadoc.io/badge2/com.helger.peppol/peppol-sk-tdd/javadoc.svg)](https://javadoc.io/doc/com.helger.peppol/peppol-sk-tdd)
 
-Special support for Peppol Slovakia (SK).
+A Java library for converting Peppol e-invoices (UBL 2.1 Invoice / CreditNote) into Slovakia Tax Data Documents (TDD) for tax reporting.
 
 **This project is work in progress and does NOT YET contain the final data model for SK!**
 
@@ -19,16 +19,16 @@ The backing specifications are:
 This project consists of the following submodules (in alphabetic order)
 
 * `peppol-sk-tdd` - contains the main logic to create Peppol SK TDD documents based on the Peppol SK pilot documents as well as documentation
-    * Main class to build a complete SK from scratch is `PeppolSKTDD10Builder`
+    * Main class to build a complete SK from scratch is `PeppolSKTDD100Builder`
     * To run the Schematron validation, use class `PeppolSKTDDValidator`
 * `peppol-sk-tdd-datatypes` - contains the JAXB generated Peppol SK TDD data model
-    * Main class to read and write TDD XML is `PeppolSLTDD10Marshaller`
+    * Main class to read and write TDD XML is `PeppolSKTDD100Marshaller`
 * `peppol-sk-testfiles` - contains Peppol SK specific test files as a reusable component
     * Main class is `PeppolSKTestFiles`
 
 # Maven usage
 
-Add the following to your `pom.xml` to use this artifact:, replacing `x.y.z` with the real version number.
+Add the following to your `pom.xml` to use this artifact, replacing `x.y.z` with the real version number.
 
 ```xml
 <dependency>
@@ -36,6 +36,25 @@ Add the following to your `pom.xml` to use this artifact:, replacing `x.y.z` wit
   <artifactId>peppol-sk-tdd</artifactId>
   <version>x.y.z</version>
 </dependency>
+```
+
+# Usage example
+
+```java
+// Convert a UBL Invoice to a TDD document
+TaxDataType tdd = new PeppolSKTDD100Builder ()
+    .taxDataTypeCode (ESKTDDTaxDataTypeCode.SUBMIT)
+    .reportingParty (participantID)
+    .receivingParty (receiverID)
+    .taxAuthorityID ("SK")
+    .reportedTransaction (rt -> rt.initFromInvoice (invoice))
+    .build ();
+
+// Serialize to XML
+String xml = new PeppolSKTDD100Marshaller ().setFormattedOutput (true).getAsString (tdd);
+
+// Validate with Schematron
+ISchematronResource schematron = PeppolSKTDDValidator.getSchematronSK_TDD_100 ();
 ```
 
 # Building

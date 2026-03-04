@@ -33,12 +33,12 @@ Three Maven modules with strict build order (each depends on the previous):
 
 1. **`peppol-sk-testfiles`** — Bundles test XML files as classpath resources. `PeppolSKTestFiles` provides programmatic access to valid UBL invoices, credit notes, and TDD documents.
 
-2. **`peppol-sk-tdd-datatypes`** — JAXB-generated data model from `external/schemas/2026-02-20/sk-tdd-1.0.0.xsd`. Contains `CPeppolSKTDD` (schema constants/resources) and `PeppolSLTDD100Marshaller` (XML serialization).
+2. **`peppol-sk-tdd-datatypes`** — JAXB-generated data model from `external/schemas/2026-03-02/Peppol-Slovak Republic-TDD.xsd`. Contains `CPeppolSKTDD` (schema constants/resources) and `PeppolSKTDD100Marshaller` (XML serialization).
 
 3. **`peppol-sk-tdd`** — Main business logic. Key entry points:
    - `PeppolSKTDD100Builder` — builds TDD documents from scratch or converts from UBL 2.1 invoices/credit notes
-   - `PeppolSKTDDValidator` — Schematron validation using `external/schematron/2026-02-20/Peppol-Slovak Republic-TDD.sch`
-   - `PeppolSLTDD100Marshaller` — read/write TDD XML
+   - `PeppolSKTDDValidator` — Schematron validation using `external/schematron/2026-03-02/Peppol-Slovak Republic-TDD.sch`
+   - `PeppolSKTDD100Marshaller` — read/write TDD XML
 
 ## Architecture
 
@@ -50,7 +50,7 @@ UBL Invoice/CreditNote XML
         ↓
 PeppolSKTDD100Builder.initFromInvoice() / initFromCreditNote()
         ↓
-TaxDataType (JAXB model)  ←→  PeppolSLTDD100Marshaller (XML)
+TaxDataType (JAXB model)  ←→  PeppolSKTDD100Marshaller (XML)
         ↓
 PeppolSKTDDValidator (Schematron)
 ```
@@ -59,7 +59,7 @@ PeppolSKTDDValidator (Schematron)
 ```java
 // Direct construction
 new PeppolSKTDD100Builder()
-    .documentTypeCode(ESKTDDDocumentTypeCode.SUBMIT)
+    .taxDataTypeCode(ESKTDDTaxDataTypeCode.SUBMIT)
     .reportingParty(rp -> rp.partyID("SK1234567890"))
     .build();
 
@@ -76,7 +76,7 @@ This codebase follows the [Helger framework](https://github.com/phax) convention
 - **Annotations:** `@NonNull`/`@Nullable` (JSpecify), `@Immutable` for thread-safe classes
 - **Preconditions:** `ValueEnforcer.notNull()` — not standard Java assertions
 - **Validation:** `_isEveryRequiredFieldSet()` (private check), `isEveryRequiredFieldSet()` (public)
-- **Enums** implement `IHasID<String>` for serialization: `ESKTDDDocumentTypeCode`, `ESKTDDDocumentScope`, `ESKTDDReporterRole`
+- **Enums** implement `IHasID<String>` for serialization: `ESKTDDTaxDataTypeCode`, `ESKTDDDocumentScope`, `ESKTDDReporterRole`
 - **Resources:** `ClassPathResource` for schema/schematron files, accessed via static `_getCL()` method
 - **Logging:** `ConditionalLogger` for optional debug/error messages
 
