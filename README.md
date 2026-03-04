@@ -5,7 +5,7 @@
 
 A Java library for converting Peppol e-invoices (UBL 2.1 Invoice / CreditNote) into Slovakia Tax Data Documents (TDD) for tax reporting.
 
-**This project is work in progress and does NOT YET contain the final data model for SK!**
+**This project is work in progress and contains the version to be send out for member review - there might be future changes for the final data model for SK!**
 
 This contains a set of Java libraries.
 They are licensed under the Apache 2.0 license.
