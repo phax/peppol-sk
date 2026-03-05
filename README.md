@@ -69,8 +69,10 @@ to build the solution.
 # News and noteworthy
 
 v0.1.1 - 2026-03-05
+* Validating all output against all 3 layers of Schematron instead of just one
 * Added the mandatory mapping of Reported Document / buyer name (BT-44)
 * Added the optional mapping for price base quantity (BT-149)
+* The builder class `PeppolSKTDD100TaxSubtotalBuilder` not also correctly uses the nested `PeppolSKTDD100TaxCategoryBuilder` builder class
 
 v0.1.0 - 2026-03-03
 * Initial version targeting Peppol SK member review TDD specs

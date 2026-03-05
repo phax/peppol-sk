@@ -180,7 +180,7 @@ public final class PeppolSKTDD100BuilderTest
     // Serialize
     final String sXML = new PeppolSKTDD100Marshaller ().setFormattedOutput (true).getAsString (aTDD);
     assertNotNull (sXML);
-    if (true)
+    if (false)
       LOGGER.info (sXML);
 
     // Schematron validation
@@ -293,7 +293,7 @@ public final class PeppolSKTDD100BuilderTest
       final String sXML = m.getAsString (aTDD);
       assertNotNull (sXML);
 
-      if (true)
+      if (false)
         LOGGER.info (sXML);
 
       // Schematron validation
@@ -339,7 +339,8 @@ public final class PeppolSKTDD100BuilderTest
       // Schematron validation
       final ValidationResultList aVRL = PeppolSKTDDValidator.validateSK_TDD_100 (new ReadableResourceString (sXML,
                                                                                                              StandardCharsets.UTF_8));
-      assertTrue (aVRL.getOverallValidity ().isValid ());
+      assertTrue (aVRL.getAllErrors ().getAllMapped (IError::getAsStringLocaleIndepdent).toString (),
+                  aVRL.getOverallValidity ().isValid ());
     }
   }
 
@@ -377,7 +378,8 @@ public final class PeppolSKTDD100BuilderTest
     // Schematron validation
     final ValidationResultList aVRL = PeppolSKTDDValidator.validateSK_TDD_100 (new ReadableResourceString (sXML,
                                                                                                            StandardCharsets.UTF_8));
-    assertTrue (aVRL.getOverallValidity ().isValid ());
+    assertTrue (aVRL.getAllErrors ().getAllMapped (IError::getAsStringLocaleIndepdent).toString (),
+                aVRL.getOverallValidity ().isValid ());
   }
 
   @Test
@@ -420,7 +422,8 @@ public final class PeppolSKTDD100BuilderTest
     // Schematron validation
     final ValidationResultList aVRL = PeppolSKTDDValidator.validateSK_TDD_100 (new ReadableResourceString (sXML,
                                                                                                            StandardCharsets.UTF_8));
-    assertTrue (aVRL.getOverallValidity ().isValid ());
+    assertTrue (aVRL.getAllErrors ().getAllMapped (IError::getAsStringLocaleIndepdent).toString (),
+                aVRL.getOverallValidity ().isValid ());
   }
 
   @Test
@@ -444,7 +447,8 @@ public final class PeppolSKTDD100BuilderTest
       // Schematron validation
       final ValidationResultList aVRL = PeppolSKTDDValidator.validateSK_TDD_100 (new ReadableResourceString (sXML,
                                                                                                              StandardCharsets.UTF_8));
-      assertTrue (aVRL.getOverallValidity ().isValid ());
+      assertTrue (aVRL.getAllErrors ().getAllMapped (IError::getAsStringLocaleIndepdent).toString (),
+                  aVRL.getOverallValidity ().isValid ());
     }
   }
 }

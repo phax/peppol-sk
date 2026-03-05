@@ -109,7 +109,7 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
       invoicePeriodStart (aIP.getStartDateValueLocal ());
       invoicePeriodEnd (aIP.getEndDateValueLocal ());
       if (aIP.hasDescriptionCodeEntries ())
-        invoicePeriodDescriptionCode (aIP.getDescriptionAtIndex (0).getValue ());
+        invoicePeriodDescriptionCode (aIP.getDescriptionCodeAtIndex (0).getValue ());
     }
 
     for (final var aAC : aLine.getAllowanceCharge ())
@@ -158,7 +158,7 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
       invoicePeriodStart (aIP.getStartDateValueLocal ());
       invoicePeriodEnd (aIP.getEndDateValueLocal ());
       if (aIP.hasDescriptionCodeEntries ())
-        invoicePeriodDescriptionCode (aIP.getDescriptionAtIndex (0).getValue ());
+        invoicePeriodDescriptionCode (aIP.getDescriptionCodeAtIndex (0).getValue ());
     }
 
     for (final var aAC : aLine.getAllowanceCharge ())
@@ -321,7 +321,7 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
   }
 
   @NonNull
-  public PeppolSKTDD100DocumentLineBuilder addAllowanceCharge (@NonNull final Consumer <PeppolSKTDD100AllowanceChargeBuilder> aBuilderConsumer)
+  public PeppolSKTDD100DocumentLineBuilder addAllowanceCharge (@NonNull final Consumer <? super PeppolSKTDD100AllowanceChargeBuilder> aBuilderConsumer)
   {
     final PeppolSKTDD100AllowanceChargeBuilder aBuilder = new PeppolSKTDD100AllowanceChargeBuilder (m_sDocumentCurrencyCode);
     aBuilderConsumer.accept (aBuilder);
@@ -348,7 +348,7 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
   }
 
   @NonNull
-  public PeppolSKTDD100DocumentLineBuilder item (@NonNull final Consumer <PeppolSKTDD100ItemBuilder> aBuilderConsumer)
+  public PeppolSKTDD100DocumentLineBuilder item (@NonNull final Consumer <? super PeppolSKTDD100ItemBuilder> aBuilderConsumer)
   {
     final PeppolSKTDD100ItemBuilder aBuilder = new PeppolSKTDD100ItemBuilder ();
     aBuilderConsumer.accept (aBuilder);

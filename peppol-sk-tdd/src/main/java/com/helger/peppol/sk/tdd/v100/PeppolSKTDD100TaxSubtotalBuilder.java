@@ -128,7 +128,7 @@ public class PeppolSKTDD100TaxSubtotalBuilder implements IBuilder <TaxSubtotalTy
   }
 
   @NonNull
-  public PeppolSKTDD100TaxSubtotalBuilder taxCategory (@NonNull final Consumer <PeppolSKTDD100TaxCategoryBuilder> aBuilderConsumer)
+  public PeppolSKTDD100TaxSubtotalBuilder taxCategory (@NonNull final Consumer <? super PeppolSKTDD100TaxCategoryBuilder> aBuilderConsumer)
   {
     final PeppolSKTDD100TaxCategoryBuilder aBuilder = new PeppolSKTDD100TaxCategoryBuilder ();
     aBuilderConsumer.accept (aBuilder);

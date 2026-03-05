@@ -134,7 +134,7 @@ public class PeppolSKTDD100ItemBuilder implements IBuilder <ItemType>
   }
 
   @NonNull
-  public PeppolSKTDD100ItemBuilder addCommodityClassification (@NonNull final Consumer <PeppolSKTDD100CommodityClassificationBuilder> aBuilderConsumer)
+  public PeppolSKTDD100ItemBuilder addCommodityClassification (@NonNull final Consumer <? super PeppolSKTDD100CommodityClassificationBuilder> aBuilderConsumer)
   {
     final PeppolSKTDD100CommodityClassificationBuilder aBuilder = new PeppolSKTDD100CommodityClassificationBuilder ();
     aBuilderConsumer.accept (aBuilder);
@@ -161,7 +161,7 @@ public class PeppolSKTDD100ItemBuilder implements IBuilder <ItemType>
   }
 
   @NonNull
-  public PeppolSKTDD100ItemBuilder classifiedTaxCategory (@NonNull final Consumer <PeppolSKTDD100TaxCategoryBuilder> aBuilderConsumer)
+  public PeppolSKTDD100ItemBuilder classifiedTaxCategory (@NonNull final Consumer <? super PeppolSKTDD100TaxCategoryBuilder> aBuilderConsumer)
   {
     final PeppolSKTDD100TaxCategoryBuilder aBuilder = new PeppolSKTDD100TaxCategoryBuilder ();
     aBuilderConsumer.accept (aBuilder);

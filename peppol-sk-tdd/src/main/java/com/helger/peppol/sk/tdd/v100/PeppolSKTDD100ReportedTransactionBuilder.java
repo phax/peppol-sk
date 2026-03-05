@@ -664,7 +664,7 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   }
 
   @NonNull
-  public PeppolSKTDD100ReportedTransactionBuilder addBillingReference (@NonNull final Consumer <PeppolSKTDD100BillingReferenceBuilder> a)
+  public PeppolSKTDD100ReportedTransactionBuilder addBillingReference (@NonNull final Consumer <? super PeppolSKTDD100BillingReferenceBuilder> a)
   {
     final PeppolSKTDD100BillingReferenceBuilder aBuilder = new PeppolSKTDD100BillingReferenceBuilder ();
     a.accept (aBuilder);
@@ -830,7 +830,7 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   }
 
   @NonNull
-  public PeppolSKTDD100ReportedTransactionBuilder addPaymentMeans (@NonNull final Consumer <PeppolSKTDD100PaymentMeansBuilder> a)
+  public PeppolSKTDD100ReportedTransactionBuilder addPaymentMeans (@NonNull final Consumer <? super PeppolSKTDD100PaymentMeansBuilder> a)
   {
     final PeppolSKTDD100PaymentMeansBuilder aBuilder = new PeppolSKTDD100PaymentMeansBuilder ();
     a.accept (aBuilder);
@@ -866,7 +866,7 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   }
 
   @NonNull
-  public PeppolSKTDD100ReportedTransactionBuilder addAllowanceCharge (@NonNull final Consumer <PeppolSKTDD100AllowanceChargeBuilder> a)
+  public PeppolSKTDD100ReportedTransactionBuilder addAllowanceCharge (@NonNull final Consumer <? super PeppolSKTDD100AllowanceChargeBuilder> a)
   {
     final PeppolSKTDD100AllowanceChargeBuilder aBuilder = new PeppolSKTDD100AllowanceChargeBuilder (m_sDocumentCurrencyCode);
     a.accept (aBuilder);
@@ -893,7 +893,7 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   }
 
   @NonNull
-  public PeppolSKTDD100ReportedTransactionBuilder taxTotalDocumentCurrency (@NonNull final Consumer <PeppolSKTDD100TaxTotalBuilder> a)
+  public PeppolSKTDD100ReportedTransactionBuilder taxTotalDocumentCurrency (@NonNull final Consumer <? super PeppolSKTDD100TaxTotalBuilder> a)
   {
     if (StringHelper.isEmpty (m_sDocumentCurrencyCode))
       throw new IllegalStateException ("The TaxTotal can only be built, after the DocumentCurrencyCode is set!");
@@ -922,7 +922,7 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   }
 
   @NonNull
-  public PeppolSKTDD100ReportedTransactionBuilder taxTotalTaxCurrency (@Nullable final Consumer <PeppolSKTDD100TaxTotalBuilder> a)
+  public PeppolSKTDD100ReportedTransactionBuilder taxTotalTaxCurrency (@NonNull final Consumer <? super PeppolSKTDD100TaxTotalBuilder> a)
   {
     if (StringHelper.isEmpty (m_sTaxCurrencyCode))
       throw new IllegalStateException ("The TaxTotal can only be built, after the TaxCurrencyCode is set!");
@@ -1112,7 +1112,7 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   }
 
   @NonNull
-  public PeppolSKTDD100ReportedTransactionBuilder addDocumentLine (@NonNull final Consumer <PeppolSKTDD100DocumentLineBuilder> a)
+  public PeppolSKTDD100ReportedTransactionBuilder addDocumentLine (@NonNull final Consumer <? super PeppolSKTDD100DocumentLineBuilder> a)
   {
     if (StringHelper.isEmpty (m_sDocumentCurrencyCode))
       throw new IllegalStateException ("The DocumentLine can only be built, after the DocumentCurrencyCode is set!");

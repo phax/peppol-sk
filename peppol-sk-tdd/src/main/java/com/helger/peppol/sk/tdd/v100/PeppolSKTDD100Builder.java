@@ -329,7 +329,7 @@ public class PeppolSKTDD100Builder implements IBuilder <TaxDataType>
   }
 
   @NonNull
-  public PeppolSKTDD100Builder reportedTransaction (@NonNull final Consumer <PeppolSKTDD100ReportedTransactionBuilder> aBuilderConsumer)
+  public PeppolSKTDD100Builder reportedTransaction (@NonNull final Consumer <? super PeppolSKTDD100ReportedTransactionBuilder> aBuilderConsumer)
   {
     if (m_eTaxDataTypeCode == null)
       throw new IllegalStateException ("The ReportedTransaction can only be built, after the TaxDataTypeCode is set!");

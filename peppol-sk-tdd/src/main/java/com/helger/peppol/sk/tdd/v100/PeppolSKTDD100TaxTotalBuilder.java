@@ -121,7 +121,7 @@ public class PeppolSKTDD100TaxTotalBuilder implements IBuilder <TaxTotalType>
   }
 
   @NonNull
-  public PeppolSKTDD100TaxTotalBuilder addTaxSubtotal (@NonNull final Consumer <PeppolSKTDD100TaxSubtotalBuilder> aBuilderConsumer)
+  public PeppolSKTDD100TaxTotalBuilder addTaxSubtotal (@NonNull final Consumer <? super PeppolSKTDD100TaxSubtotalBuilder> aBuilderConsumer)
   {
     final PeppolSKTDD100TaxSubtotalBuilder aBuilder = new PeppolSKTDD100TaxSubtotalBuilder (m_sCurrencyCode);
     aBuilderConsumer.accept (aBuilder);

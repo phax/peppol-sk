@@ -87,7 +87,8 @@ public final class PeppolSKTDDValidatorTest
       assertNotNull (tdd);
 
       final var aVRL = PeppolSKTDDValidator.validateSK_TDD_100 (aRes);
-      assertFalse (aVRL.getOverallValidity ().isValid ());
+      assertFalse (aVRL.getAllErrors ().getAllMapped (IError::getAsStringLocaleIndepdent).toString (),
+                   aVRL.getOverallValidity ().isValid ());
 
       final ICommonsList <String> aAllErrorIDs = new CommonsArrayList <> ();
       aVRL.forEachFlattened (x -> {

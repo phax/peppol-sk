@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.helger.base.builder.IBuilder;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.log.ConditionalLogger;
+import com.helger.base.numeric.BigHelper;
 import com.helger.base.numeric.mutable.MutableInt;
 import com.helger.base.string.StringHelper;
 
@@ -128,6 +129,12 @@ public class PeppolSKTDD100AllowanceChargeBuilder implements IBuilder <Allowance
   }
 
   @NonNull
+  public PeppolSKTDD100AllowanceChargeBuilder multiplicationFactor (final long n)
+  {
+    return multiplicationFactor (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
   public PeppolSKTDD100AllowanceChargeBuilder multiplicationFactor (@Nullable final BigDecimal a)
   {
     m_aMultFactor = a;
@@ -141,6 +148,12 @@ public class PeppolSKTDD100AllowanceChargeBuilder implements IBuilder <Allowance
   }
 
   @NonNull
+  public PeppolSKTDD100AllowanceChargeBuilder amount (final long n)
+  {
+    return amount (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
   public PeppolSKTDD100AllowanceChargeBuilder amount (@Nullable final BigDecimal a)
   {
     m_aAmount = a;
@@ -151,6 +164,12 @@ public class PeppolSKTDD100AllowanceChargeBuilder implements IBuilder <Allowance
   public BigDecimal baseAmount ()
   {
     return m_aBaseAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD100AllowanceChargeBuilder baseAmount (final long n)
+  {
+    return baseAmount (BigHelper.toBigDecimal (n));
   }
 
   @NonNull
@@ -180,7 +199,7 @@ public class PeppolSKTDD100AllowanceChargeBuilder implements IBuilder <Allowance
   }
 
   @NonNull
-  public PeppolSKTDD100AllowanceChargeBuilder taxCategory (@NonNull final Consumer <PeppolSKTDD100TaxCategoryBuilder> aBuilderConsumer)
+  public PeppolSKTDD100AllowanceChargeBuilder taxCategory (@NonNull final Consumer <? super PeppolSKTDD100TaxCategoryBuilder> aBuilderConsumer)
   {
     final PeppolSKTDD100TaxCategoryBuilder aBuilder = new PeppolSKTDD100TaxCategoryBuilder ();
     aBuilderConsumer.accept (aBuilder);
