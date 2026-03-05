@@ -41,7 +41,7 @@ public class PeppolSKTDD100Marshaller extends GenericJAXBMarshaller <TaxDataType
 {
   @NonNull
   @ReturnsMutableCopy
-  private static ICommonsList <ClassPathResource> _getAllXSDs ()
+  public static ICommonsList <ClassPathResource> getAllXSDs ()
   {
     final ICommonsList <ClassPathResource> ret = UBL21Marshaller.getAllBaseXSDs ();
     ret.add (CPeppolSKTDD.TDD_XSD_1_0_0);
@@ -63,7 +63,7 @@ public class PeppolSKTDD100Marshaller extends GenericJAXBMarshaller <TaxDataType
    */
   public PeppolSKTDD100Marshaller ()
   {
-    super (TaxDataType.class, _getAllXSDs (), new ObjectFactory ()::createTaxData);
+    super (TaxDataType.class, getAllXSDs (), new ObjectFactory ()::createTaxData);
     setNamespaceContext (createNamespaceContext ());
   }
 }

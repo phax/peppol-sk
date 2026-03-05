@@ -33,6 +33,7 @@ import com.helger.annotation.style.ReturnsMutableObject;
 import com.helger.base.builder.IBuilder;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.log.ConditionalLogger;
+import com.helger.base.numeric.BigHelper;
 import com.helger.base.numeric.mutable.MutableInt;
 import com.helger.base.string.StringHelper;
 import com.helger.base.string.StringImplode;
@@ -56,6 +57,7 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.Cou
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.CustomerPartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.DeliveryType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.DocumentReferenceType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PartyLegalEntityType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PartyTaxSchemeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PaymentMeansType;
@@ -114,6 +116,7 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   private String m_sSellerCountryCode;
   private String m_sBuyerTaxID;
   private String m_sBuyerCountryCode;
+  private String m_sBuyerName;
   private String m_sTaxRepresentativeID;
   private String m_sTaxRepresentativeCountryCode;
   private LocalDate m_aDeliveryDate;
@@ -219,7 +222,17 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
 
         final AddressType aPA = aParty.getPostalAddress ();
         if (aPA != null && aPA.getCountry () != null)
+        {
+          // BT-55
           buyerCountryCode (aPA.getCountry ().getIdentificationCodeValue ());
+        }
+
+        if (aParty.hasPartyLegalEntityEntries ())
+        {
+          final PartyLegalEntityType aPLE = aParty.getPartyLegalEntityAtIndex (0);
+          // BT-44
+          buyerName (aPLE.getRegistrationNameValue ());
+        }
       }
     }
 
@@ -370,7 +383,17 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
 
         final AddressType aPA = aParty.getPostalAddress ();
         if (aPA != null && aPA.getCountry () != null)
+        {
+          // BT-55
           buyerCountryCode (aPA.getCountry ().getIdentificationCodeValue ());
+        }
+
+        if (aParty.hasPartyLegalEntityEntries ())
+        {
+          final PartyLegalEntityType aPLE = aParty.getPartyLegalEntityAtIndex (0);
+          // BT-44
+          buyerName (aPLE.getRegistrationNameValue ());
+        }
       }
     }
 
@@ -727,6 +750,19 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   }
 
   @Nullable
+  public String buyerName ()
+  {
+    return m_sBuyerName;
+  }
+
+  @NonNull
+  public PeppolSKTDD100ReportedTransactionBuilder buyerName (@Nullable final String s)
+  {
+    m_sBuyerName = s;
+    return this;
+  }
+
+  @Nullable
   public String taxRepresentativeID ()
   {
     return m_sTaxRepresentativeID;
@@ -902,6 +938,12 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   }
 
   @NonNull
+  public PeppolSKTDD100ReportedTransactionBuilder lineExtensionAmount (final long n)
+  {
+    return lineExtensionAmount (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
   public PeppolSKTDD100ReportedTransactionBuilder lineExtensionAmount (@Nullable final BigDecimal a)
   {
     m_aLineExtensionAmount = a;
@@ -912,6 +954,12 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   public BigDecimal taxExclusiveTotalAmount ()
   {
     return m_aTaxExclusiveTotalAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD100ReportedTransactionBuilder taxExclusiveTotalAmount (final long n)
+  {
+    return taxExclusiveTotalAmount (BigHelper.toBigDecimal (n));
   }
 
   @NonNull
@@ -928,6 +976,12 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   }
 
   @NonNull
+  public PeppolSKTDD100ReportedTransactionBuilder taxInclusiveTotalAmount (final long n)
+  {
+    return taxInclusiveTotalAmount (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
   public PeppolSKTDD100ReportedTransactionBuilder taxInclusiveTotalAmount (@Nullable final BigDecimal a)
   {
     m_aTaxInclusiveTotalAmount = a;
@@ -938,6 +992,12 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   public BigDecimal allowanceTotalAmount ()
   {
     return m_aAllowanceTotalAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD100ReportedTransactionBuilder allowanceTotalAmount (final long n)
+  {
+    return allowanceTotalAmount (BigHelper.toBigDecimal (n));
   }
 
   @NonNull
@@ -954,6 +1014,12 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   }
 
   @NonNull
+  public PeppolSKTDD100ReportedTransactionBuilder chargeTotalAmount (final long n)
+  {
+    return chargeTotalAmount (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
   public PeppolSKTDD100ReportedTransactionBuilder chargeTotalAmount (@Nullable final BigDecimal a)
   {
     m_aChargeTotalAmount = a;
@@ -964,6 +1030,12 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   public BigDecimal prepaidAmount ()
   {
     return m_aPrepaidAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD100ReportedTransactionBuilder prepaidAmount (final long n)
+  {
+    return prepaidAmount (BigHelper.toBigDecimal (n));
   }
 
   @NonNull
@@ -980,6 +1052,12 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   }
 
   @NonNull
+  public PeppolSKTDD100ReportedTransactionBuilder payableRoundingAmount (final long n)
+  {
+    return payableRoundingAmount (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
   public PeppolSKTDD100ReportedTransactionBuilder payableRoundingAmount (@Nullable final BigDecimal a)
   {
     m_aPayableRoundingAmount = a;
@@ -990,6 +1068,12 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   public BigDecimal payableAmount ()
   {
     return m_aPayableAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD100ReportedTransactionBuilder payableAmount (final long n)
+  {
+    return payableAmount (BigHelper.toBigDecimal (n));
   }
 
   @NonNull
@@ -1085,19 +1169,24 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
 
     if (StringHelper.isEmpty (m_sSellerEndpointIDSchemeID))
     {
-      aCondLog.error (sErrorPrefix + "EndpointID Scheme ID is missing");
+      aCondLog.error (sErrorPrefix + "Seller EndpointID Scheme ID is missing");
       aReportedDocsErrs.inc ();
     }
     if (StringHelper.isEmpty (m_sSellerEndpointID))
     {
-      aCondLog.error (sErrorPrefix + "EndpointID is missing");
+      aCondLog.error (sErrorPrefix + "Seller EndpointID is missing");
       aReportedDocsErrs.inc ();
     }
-    // m_sSellerTaxID is optional
+    // m_sSellerTaxID is optional (needed in all cases except if TaxCategory is "O")
     // m_sSellerCountryCode is optional
 
-    // m_sBuyerTaxID is optional
+    // m_sBuyerTaxID is optional (needed in all cases except if TaxCategory is "O")
     // m_sBuyerCountryCode is optional
+    if (StringHelper.isEmpty (m_sBuyerName))
+    {
+      aCondLog.error (sErrorPrefix + "BuyerName is missing");
+      aReportedDocsErrs.inc ();
+    }
 
     // m_sTaxRepresentativeID is optional
     // m_sTaxRepresentativeCountryCode is optional
@@ -1265,6 +1354,7 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
               aParty.setPostalAddress (aPA);
             }
           }
+          // Party is required in AccountingSupplierParty
           a2.setParty (aParty);
         }
         a.setAccountingSupplierParty (a2);
@@ -1292,6 +1382,11 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
             aPTS.setTaxScheme (aTS);
             aParty.addPartyTaxScheme (aPTS);
           }
+
+          final PartyLegalEntityType aPLE = new PartyLegalEntityType ();
+          aPLE.setRegistrationName (m_sBuyerName);
+          aParty.addPartyLegalEntity (aPLE);
+
           aAccountingCustomer.setParty (aParty);
         }
         a.setAccountingCustomerParty (aAccountingCustomer);

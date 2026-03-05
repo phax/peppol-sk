@@ -28,6 +28,7 @@ import com.helger.annotation.style.ReturnsMutableObject;
 import com.helger.base.builder.IBuilder;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.log.ConditionalLogger;
+import com.helger.base.numeric.BigHelper;
 import com.helger.base.numeric.mutable.MutableInt;
 import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.ICommonsList;
@@ -76,6 +77,12 @@ public class PeppolSKTDD100TaxTotalBuilder implements IBuilder <TaxTotalType>
   public BigDecimal taxAmount ()
   {
     return m_aTaxAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD100TaxTotalBuilder taxAmount (final long n)
+  {
+    return taxAmount (BigHelper.toBigDecimal (n));
   }
 
   @NonNull

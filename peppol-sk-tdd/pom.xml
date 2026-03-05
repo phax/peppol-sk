@@ -53,8 +53,13 @@
       <artifactId>peppol-id</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.helger.phive</groupId>
+      <artifactId>phive-xml</artifactId>
+      <version>${phive.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.helger.schematron</groupId>
-      <artifactId>ph-schematron-xslt</artifactId>
+      <artifactId>ph-schematron-schxslt2</artifactId>
       <version>${ph-schematron.version}</version>
     </dependency>
     <dependency>
@@ -89,4 +94,28 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.helger.maven</groupId>
+        <artifactId>ph-schematron-maven-plugin</artifactId>
+        <executions>
+          <!--
+          <execution>
+            <id>sk</id>
+            <goals>
+              <goal>convert</goal>
+            </goals>
+            <configuration>
+              <schematronDirectory>src/test/resources/external/rule-source/2026-03-02</schematronDirectory>
+              <xsltDirectory>src/main/resources/external/schematron/2026-03-02</xsltDirectory>
+              <schematronEngine>iso-schematron</schematronEngine>
+            </configuration>
+          </execution>
+          -->
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

@@ -29,6 +29,7 @@ import com.helger.annotation.style.ReturnsMutableObject;
 import com.helger.base.builder.IBuilder;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.log.ConditionalLogger;
+import com.helger.base.numeric.BigHelper;
 import com.helger.base.numeric.mutable.MutableInt;
 import com.helger.base.string.StringHelper;
 import com.helger.collection.commons.CommonsArrayList;
@@ -70,6 +71,7 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
   private final ICommonsList <AllowanceChargeType> m_aAllowanceCharges = new CommonsArrayList <> ();
   private ItemType m_aItem;
   private BigDecimal m_aPriceAmount;
+  private BigDecimal m_aPriceBaseQuantity;
 
   public PeppolSKTDD100DocumentLineBuilder (@Nullable final String sDocumentCurrencyCode)
   {
@@ -117,7 +119,10 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
       item (x -> x.initFromUBL (aLine.getItem ()));
 
     if (aLine.getPrice () != null)
+    {
       priceAmount (aLine.getPrice ().getPriceAmountValue ());
+      priceBaseQuantity (aLine.getPrice ().getBaseQuantityValue ());
+    }
 
     return this;
   }
@@ -163,7 +168,10 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
       item (x -> x.initFromUBL (aLine.getItem ()));
 
     if (aLine.getPrice () != null)
+    {
       priceAmount (aLine.getPrice ().getPriceAmountValue ());
+      priceBaseQuantity (aLine.getPrice ().getBaseQuantityValue ());
+    }
 
     return this;
   }
@@ -201,6 +209,12 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
   }
 
   @NonNull
+  public PeppolSKTDD100DocumentLineBuilder quantity (final long n)
+  {
+    return quantity (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
   public PeppolSKTDD100DocumentLineBuilder quantity (@Nullable final BigDecimal a)
   {
     m_aQuantity = a;
@@ -224,6 +238,12 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
   public BigDecimal lineExtensionAmount ()
   {
     return m_aLineExtensionAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD100DocumentLineBuilder lineExtensionAmount (final long n)
+  {
+    return lineExtensionAmount (BigHelper.toBigDecimal (n));
   }
 
   @NonNull
@@ -342,9 +362,34 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
   }
 
   @NonNull
+  public PeppolSKTDD100DocumentLineBuilder priceAmount (final long n)
+  {
+    return priceAmount (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
   public PeppolSKTDD100DocumentLineBuilder priceAmount (@Nullable final BigDecimal a)
   {
     m_aPriceAmount = a;
+    return this;
+  }
+
+  @Nullable
+  public BigDecimal priceBaseQuantity ()
+  {
+    return m_aPriceBaseQuantity;
+  }
+
+  @NonNull
+  public PeppolSKTDD100DocumentLineBuilder priceBaseQuantity (final long n)
+  {
+    return priceBaseQuantity (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
+  public PeppolSKTDD100DocumentLineBuilder priceBaseQuantity (@Nullable final BigDecimal a)
+  {
+    m_aPriceBaseQuantity = a;
     return this;
   }
 
@@ -388,6 +433,7 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
       aCondLog.error (sErrorPrefix + "PriceAmount is missing");
       aReportedDocsErrs.inc ();
     }
+    // m_aPriceBaseQuantity is optional
 
     return aReportedDocsErrs.intValue () == 0;
   }
@@ -443,6 +489,8 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
     {
       final PriceType a = new PriceType ();
       a.setPriceAmount (m_aPriceAmount).setCurrencyID (m_sDocumentCurrencyCode);
+      if (m_aPriceBaseQuantity != null)
+        a.setBaseQuantity (m_aPriceBaseQuantity);
       ret.setPrice (a);
     }
 

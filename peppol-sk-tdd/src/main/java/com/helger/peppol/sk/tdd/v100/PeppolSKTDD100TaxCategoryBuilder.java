@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.helger.base.builder.IBuilder;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.log.ConditionalLogger;
+import com.helger.base.numeric.BigHelper;
 import com.helger.base.numeric.mutable.MutableInt;
 import com.helger.base.string.StringHelper;
 
@@ -89,6 +90,12 @@ public class PeppolSKTDD100TaxCategoryBuilder implements IBuilder <TaxCategoryTy
   }
 
   @NonNull
+  public PeppolSKTDD100TaxCategoryBuilder percentage (final long n)
+  {
+    return percentage (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
   public PeppolSKTDD100TaxCategoryBuilder percentage (@Nullable final BigDecimal a)
   {
     m_aPerc = a;
@@ -99,6 +106,12 @@ public class PeppolSKTDD100TaxCategoryBuilder implements IBuilder <TaxCategoryTy
   public String taxSchemeID ()
   {
     return m_sTaxSchemeID;
+  }
+
+  @NonNull
+  public PeppolSKTDD100TaxCategoryBuilder taxSchemeID_VAT ()
+  {
+    return taxSchemeID ("VAT");
   }
 
   @NonNull

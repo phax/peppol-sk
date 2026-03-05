@@ -16,7 +16,7 @@
  */
 package com.helger.peppol.sk.tdd.validate;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -28,15 +28,15 @@ import org.slf4j.LoggerFactory;
 
 import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.ICommonsList;
+import com.helger.diagnostics.error.IError;
 import com.helger.io.file.FilenameHelper;
 import com.helger.io.resource.IReadableResource;
 import com.helger.peppol.sk.tdd.jaxb.PeppolSKTDD100Marshaller;
 import com.helger.peppol.sk.tdd.testfiles.PeppolSKTestFiles;
 import com.helger.peppol.sk.tdd.v2026_03_02.TaxDataType;
-import com.helger.schematron.ISchematronResource;
-import com.helger.schematron.svrl.SVRLHelper;
-import com.helger.schematron.svrl.SVRLMarshaller;
-import com.helger.schematron.svrl.jaxb.SchematronOutputType;
+import com.helger.phive.api.executor.IValidationExecutor;
+import com.helger.phive.api.executorset.IValidationExecutorSet;
+import com.helger.phive.xml.source.IValidationSourceXML;
 
 /**
  * Test class for class {@link PeppolSKTDDValidator}.
@@ -45,16 +45,22 @@ import com.helger.schematron.svrl.jaxb.SchematronOutputType;
  */
 public final class PeppolSKTDDValidatorTest
 {
-
   private static final Logger LOGGER = LoggerFactory.getLogger (PeppolSKTDDValidatorTest.class);
+
+  @Test
+  public void testFilesExist ()
+  {
+    for (final IValidationExecutorSet <IValidationSourceXML> aVES : PeppolSKTDDValidator.VES_REGISTRY.getAll ())
+      for (final IValidationExecutor <IValidationSourceXML> aVE : aVES)
+      {
+        final IReadableResource aRes = aVE.getValidationArtefact ().getRuleResource ();
+        assertTrue (aRes.toString (), aRes.exists ());
+      }
+  }
 
   @Test
   public void testReadTDD100Good () throws Exception
   {
-    final ISchematronResource aSCHRes = PeppolSKTDDValidator.getSchematronSK_TDD_100 ();
-    assertNotNull (aSCHRes);
-    assertTrue (aSCHRes.getResource ().exists ());
-
     final PeppolSKTDD100Marshaller aMarshaller = new PeppolSKTDD100Marshaller ();
 
     for (final IReadableResource aRes : PeppolSKTestFiles.getAllGoodTDD100Files ())
@@ -63,22 +69,15 @@ public final class PeppolSKTDDValidatorTest
       final TaxDataType tdd = aMarshaller.read (aRes);
       assertNotNull (tdd);
 
-      final SchematronOutputType aSVRL = aSCHRes.applySchematronValidationToSVRL (aRes);
-      assertNotNull (aSVRL);
-
-      if (false)
-        LOGGER.info (new SVRLMarshaller ().setFormattedOutput (true).getAsString (aSVRL));
-
-      assertEquals (new CommonsArrayList <> (), SVRLHelper.getAllFailedAssertions (aSVRL));
+      final var aVRL = PeppolSKTDDValidator.validateSK_TDD_100 (aRes);
+      assertTrue (aVRL.getAllErrors ().getAllMapped (IError::getAsStringLocaleIndepdent).toString (),
+                  aVRL.getOverallValidity ().isValid ());
     }
   }
 
   @Test
   public void testReadTDD100Bad () throws Exception
   {
-    final ISchematronResource aSCHRes = PeppolSKTDDValidator.getSchematronSK_TDD_100 ();
-    assertNotNull (aSCHRes);
-
     final PeppolSKTDD100Marshaller aMarshaller = new PeppolSKTDD100Marshaller ();
 
     for (final IReadableResource aRes : PeppolSKTestFiles.getAllSchematronBadTDD100Files ())
@@ -87,15 +86,15 @@ public final class PeppolSKTDDValidatorTest
       final TaxDataType tdd = aMarshaller.read (aRes);
       assertNotNull (tdd);
 
-      final SchematronOutputType aSVRL = aSCHRes.applySchematronValidationToSVRL (aRes);
-      assertNotNull (aSVRL);
+      final var aVRL = PeppolSKTDDValidator.validateSK_TDD_100 (aRes);
+      assertFalse (aVRL.getOverallValidity ().isValid ());
 
-      if (false)
-        LOGGER.info (new SVRLMarshaller ().setFormattedOutput (true).getAsString (aSVRL));
+      final ICommonsList <String> aAllErrorIDs = new CommonsArrayList <> ();
+      aVRL.forEachFlattened (x -> {
+        if (x.isError ())
+          aAllErrorIDs.add (x.getErrorID ().toLowerCase (Locale.ROOT));
+      });
 
-      final ICommonsList <String> aAllErrorIDs = SVRLHelper.getAllFailedAssertions (aSVRL)
-                                                           .getAllMapped (x -> x.getFlag ().isError (),
-                                                                          x -> x.getID ().toLowerCase (Locale.ROOT));
       LOGGER.info ("Found " + aAllErrorIDs.size () + " errors: " + aAllErrorIDs);
       final String sBaseName = FilenameHelper.getBaseName (aRes.getPath ());
 
