@@ -70,6 +70,9 @@ to build the solution.
 
 # News and noteworthy
 
+v0.1.2 - 2026-03-10
+* Added support for participant identifier scheme `0245`. Thx @vrbyjimmy for forking and fixing locally
+
 v0.1.1 - 2026-03-05
 * Validating all output against all 3 layers of Schematron instead of just one
 * Added the mandatory mapping of Reported Document / buyer name (BT-44)
