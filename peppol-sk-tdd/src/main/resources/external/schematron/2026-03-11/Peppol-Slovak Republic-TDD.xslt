@@ -614,7 +614,7 @@
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
           </xsl:attribute>
-          <svrl:text>[ibr-tdd-25] – The cac:ReportedDocument element MUST NOT contain elements other than cbc:CustomizationID (BT-024), cbc:ProfileID (BT-023), cbc:ID (BT-001), cbc:UUID (BT-017), cbc:IssueDate (BT-002), cbc:IssueTime, pxs:DocumentTypeCode (BT-003), cbc:Note (BT-022), cbc:TaxPointDate (BT-007), cbc:DocumentCurrencyCode (BT-005), cbc:TaxCurrencyCode (BT-006), cac:InvoicePeriod (BG-14), cac:BillingReference (BG-03), cac:AccountingSupplierParty (BG-04), cac:AccountingCustomerParty (BG-07), cac:TaxRepresentativeParty (BG-11), cac:Delivery (BG-13), cac:PaymentMeans (BG-16), cac:AllowanceCharge (BG-20, BG-21), cac:TaxTotal (BT-110, BG-37), pxs:MonetaryTotal (BG-22), and pxs:DocumentLine (BG-25).</svrl:text>
+          <svrl:text>[ibr-tdd-25] – The cac:ReportedDocument element MUST NOT contain elements other than cbc:CustomizationID (BT-024), cbc:ProfileID (BT-023), cbc:ID (BT-001), cbc:UUID (TDT-017), cbc:IssueDate (BT-002), cbc:IssueTime, pxs:DocumentTypeCode (BT-003), cbc:Note (BT-022), cbc:TaxPointDate (BT-007), cbc:DocumentCurrencyCode (BT-005), cbc:TaxCurrencyCode (BT-006), cac:InvoicePeriod (BG-14), cac:BillingReference (BG-03), cac:AccountingSupplierParty (BG-04), cac:AccountingCustomerParty (BG-07), cac:TaxRepresentativeParty (BG-11), cac:Delivery (BG-13), cac:PaymentMeans (BG-16), cac:AllowanceCharge (BG-20, BG-21), cac:TaxTotal (BT-110, BG-37), pxs:MonetaryTotal (BG-22), and pxs:DocumentLine (BG-25).</svrl:text>
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
@@ -1031,7 +1031,7 @@
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
           </xsl:attribute>
-          <svrl:text>[ibr-tdd-44] – The cac:TaxRepresentativeParty (BG-011) element MUST NOT contain elements other than cac:PostalAddress (BG-12) and optionally cac:PartyTaxScheme.</svrl:text>
+          <svrl:text>[ibr-tdd-44] – The cac:TaxRepresentativeParty (BG-11) element MUST NOT contain elements other than cac:PostalAddress (BG-12) and optionally cac:PartyTaxScheme.</svrl:text>
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
@@ -1319,7 +1319,7 @@
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
           </xsl:attribute>
-          <svrl:text>[ibr-tdd-57] – The cac:AllowanceCharge (BG-20, BG-21) element MUST NOT contain elements other than cbc:ChargeIndicator, cbc:AllowanceChargeReasonCode (BT-098, BT-105), cbc:AllowanceChargeReason (BT-097, BT-104), cbc:MultiplierFactorNumeric (BT-094, BT-101), cbc:Amount (BT-092, BT-099), cbc:BaseAmount (BT-093, BT-100), and cac:TaxCategory.</svrl:text>
+          <svrl:text>[ibr-tdd-57] – The cac:AllowanceCharge (Document level: BG-20, BG-21) element MUST NOT contain elements other than cbc:ChargeIndicator, cbc:AllowanceChargeReasonCode (BT-098, BT-105), cbc:AllowanceChargeReason (BT-097, BT-104), cbc:MultiplierFactorNumeric (BT-094, BT-101), cbc:Amount (BT-092, BT-099), cbc:BaseAmount (BT-093, BT-100), and cac:TaxCategory.</svrl:text>
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
@@ -1370,7 +1370,7 @@
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
           </xsl:attribute>
-          <svrl:text>[ibr-tdd-60] – The cac:AllowanceCharge (BG-27, BG-28) element MUST NOT contain elements other than cbc:ChargeIndicator, cbc:AllowanceChargeReasonCode (BT-140, BT-145), cbc:AllowanceChargeReason (BT-139, BT-144), cbc:MultiplierFactorNumeric (BT-138, BT-143), cbc:Amount (BT-136, BT-141), and cbc:BaseAmount (BT-137, BT-142).</svrl:text>
+          <svrl:text>[ibr-tdd-60] – The cac:AllowanceCharge (Document line level: BG-27, BG-28) element MUST NOT contain elements other than cbc:ChargeIndicator, cbc:AllowanceChargeReasonCode (BT-140, BT-145), cbc:AllowanceChargeReason (BT-139, BT-144), cbc:MultiplierFactorNumeric (BT-138, BT-143), cbc:Amount (BT-136, BT-141), and cbc:BaseAmount (BT-137, BT-142).</svrl:text>
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>

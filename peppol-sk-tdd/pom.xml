@@ -108,8 +108,8 @@
               <goal>convert</goal>
             </goals>
             <configuration>
-              <schematronDirectory>src/test/resources/external/rule-source/2026-03-02</schematronDirectory>
-              <xsltDirectory>src/main/resources/external/schematron/2026-03-02</xsltDirectory>
+              <schematronDirectory>src/test/resources/external/rule-source/2026-03-11</schematronDirectory>
+              <xsltDirectory>src/main/resources/external/schematron/2026-03-11</xsltDirectory>
               <schematronEngine>iso-schematron</schematronEngine>
             </configuration>
           </execution>

@@ -93,7 +93,7 @@
 			<assert id="ibr-tdd-24" flag="fatal" test="exists(pxs:ReportedDocument)">[ibr-tdd-24] – The cac:ReportedDocument (TDG-02) element MUST be present.</assert>
 		</rule>
 		<rule context="/pxs:TaxData/pxs:ReportedTransaction/pxs:ReportedDocument">
-			<assert id="ibr-tdd-25" flag="fatal" test="count(*[not(self::cbc:CustomizationID or self::cbc:ProfileID or self::cbc:ID or self::cbc:UUID or self::cbc:IssueDate or self::cbc:IssueTime or self::pxs:DocumentTypeCode or self::cbc:Note or self::cbc:TaxPointDate or self::cbc:DocumentCurrencyCode or self::cbc:TaxCurrencyCode or self::cac:InvoicePeriod or self::cac:BillingReference or self::cac:AccountingSupplierParty or self::cac:AccountingCustomerParty or self::cac:TaxRepresentativeParty or self::cac:Delivery or self::cac:PaymentMeans or self::cac:AllowanceCharge or self::cac:TaxTotal or self::pxs:MonetaryTotal or self::pxs:DocumentLine)]) = 0">[ibr-tdd-25] – The cac:ReportedDocument element MUST NOT contain elements other than cbc:CustomizationID (BT-024), cbc:ProfileID (BT-023), cbc:ID (BT-001), cbc:UUID (BT-017), cbc:IssueDate (BT-002), cbc:IssueTime, pxs:DocumentTypeCode (BT-003), cbc:Note (BT-022), cbc:TaxPointDate (BT-007), cbc:DocumentCurrencyCode (BT-005), cbc:TaxCurrencyCode (BT-006), cac:InvoicePeriod (BG-14), cac:BillingReference (BG-03), cac:AccountingSupplierParty (BG-04), cac:AccountingCustomerParty (BG-07), cac:TaxRepresentativeParty (BG-11), cac:Delivery (BG-13), cac:PaymentMeans (BG-16), cac:AllowanceCharge (BG-20, BG-21), cac:TaxTotal (BT-110, BG-37), pxs:MonetaryTotal (BG-22), and pxs:DocumentLine (BG-25).</assert>
+			<assert id="ibr-tdd-25" flag="fatal" test="count(*[not(self::cbc:CustomizationID or self::cbc:ProfileID or self::cbc:ID or self::cbc:UUID or self::cbc:IssueDate or self::cbc:IssueTime or self::pxs:DocumentTypeCode or self::cbc:Note or self::cbc:TaxPointDate or self::cbc:DocumentCurrencyCode or self::cbc:TaxCurrencyCode or self::cac:InvoicePeriod or self::cac:BillingReference or self::cac:AccountingSupplierParty or self::cac:AccountingCustomerParty or self::cac:TaxRepresentativeParty or self::cac:Delivery or self::cac:PaymentMeans or self::cac:AllowanceCharge or self::cac:TaxTotal or self::pxs:MonetaryTotal or self::pxs:DocumentLine)]) = 0">[ibr-tdd-25] – The cac:ReportedDocument element MUST NOT contain elements other than cbc:CustomizationID (BT-024), cbc:ProfileID (BT-023), cbc:ID (BT-001), cbc:UUID (TDT-017), cbc:IssueDate (BT-002), cbc:IssueTime, pxs:DocumentTypeCode (BT-003), cbc:Note (BT-022), cbc:TaxPointDate (BT-007), cbc:DocumentCurrencyCode (BT-005), cbc:TaxCurrencyCode (BT-006), cac:InvoicePeriod (BG-14), cac:BillingReference (BG-03), cac:AccountingSupplierParty (BG-04), cac:AccountingCustomerParty (BG-07), cac:TaxRepresentativeParty (BG-11), cac:Delivery (BG-13), cac:PaymentMeans (BG-16), cac:AllowanceCharge (BG-20, BG-21), cac:TaxTotal (BT-110, BG-37), pxs:MonetaryTotal (BG-22), and pxs:DocumentLine (BG-25).</assert>
 			<assert id="ibr-tdd-87" flag="fatal" test="exists(cbc:UUID)">[ibr-tdd-87] - The UUID (TDT-017) MUST be present.</assert>
 
 		</rule>
@@ -160,7 +160,7 @@
 		</rule>
 
 		<rule context="/pxs:TaxData/pxs:ReportedTransaction/pxs:ReportedDocument/cac:AccountingCustomerParty/cac:TaxRepresentativeParty">
-			<assert id="ibr-tdd-44" flag="fatal" test="count(*[not(self::cac:PostalAddress or self::cac:PartyTaxScheme)]) = 0">[ibr-tdd-44] – The cac:TaxRepresentativeParty (BG-011) element MUST NOT contain elements other than cac:PostalAddress (BG-12) and optionally cac:PartyTaxScheme.</assert>
+			<assert id="ibr-tdd-44" flag="fatal" test="count(*[not(self::cac:PostalAddress or self::cac:PartyTaxScheme)]) = 0">[ibr-tdd-44] – The cac:TaxRepresentativeParty (BG-11) element MUST NOT contain elements other than cac:PostalAddress (BG-12) and optionally cac:PartyTaxScheme.</assert>
 		</rule>
 
 		<rule context="/pxs:TaxData/pxs:ReportedTransaction/pxs:ReportedDocument/cac:TaxRepresentativeParty/cac:PostalAddress">
@@ -214,7 +214,7 @@
 		</rule>
 
 		<rule context="/pxs:TaxData/pxs:ReportedTransaction/pxs:ReportedDocument/cac:AllowanceCharge">
-			<assert id="ibr-tdd-57" flag="fatal" test="count(*[not(self::cbc:ChargeIndicator or self::cbc:AllowanceChargeReasonCode or self::cbc:AllowanceChargeReason or self::cbc:MultiplierFactorNumeric or self::cbc:Amount or self::cbc:BaseAmount or self::cac:TaxCategory)]) = 0">[ibr-tdd-57] – The cac:AllowanceCharge (BG-20, BG-21) element MUST NOT contain elements other than cbc:ChargeIndicator, cbc:AllowanceChargeReasonCode (BT-098, BT-105), cbc:AllowanceChargeReason (BT-097, BT-104), cbc:MultiplierFactorNumeric (BT-094, BT-101), cbc:Amount (BT-092, BT-099), cbc:BaseAmount (BT-093, BT-100), and cac:TaxCategory.</assert>
+			<assert id="ibr-tdd-57" flag="fatal" test="count(*[not(self::cbc:ChargeIndicator or self::cbc:AllowanceChargeReasonCode or self::cbc:AllowanceChargeReason or self::cbc:MultiplierFactorNumeric or self::cbc:Amount or self::cbc:BaseAmount or self::cac:TaxCategory)]) = 0">[ibr-tdd-57] – The cac:AllowanceCharge (Document level: BG-20, BG-21) element MUST NOT contain elements other than cbc:ChargeIndicator, cbc:AllowanceChargeReasonCode (BT-098, BT-105), cbc:AllowanceChargeReason (BT-097, BT-104), cbc:MultiplierFactorNumeric (BT-094, BT-101), cbc:Amount (BT-092, BT-099), cbc:BaseAmount (BT-093, BT-100), and cac:TaxCategory.</assert>
 
 			<assert id="ibr-tdd-58" flag="fatal" test="count(cbc:Amount/@*[not(local-name() = 'currencyID')]) = 0">[ibr-tdd-58] – The cbc:Amount (BT-092, BT-099) element MUST have the attribute 'currencyID'.</assert>
 
@@ -222,7 +222,7 @@
 		</rule>
 
 		<rule context="/pxs:TaxData/pxs:ReportedTransaction/pxs:ReportedDocument/pxs:DocumentLine/cac:AllowanceCharge">
-			<assert id="ibr-tdd-60" flag="fatal" test="count(*[not(self::cbc:ChargeIndicator or self::cbc:AllowanceChargeReasonCode or self::cbc:AllowanceChargeReason or self::cbc:MultiplierFactorNumeric or self::cbc:Amount or self::cbc:BaseAmount)]) = 0">[ibr-tdd-60] – The cac:AllowanceCharge (BG-27, BG-28) element MUST NOT contain elements other than cbc:ChargeIndicator, cbc:AllowanceChargeReasonCode (BT-140, BT-145), cbc:AllowanceChargeReason (BT-139, BT-144), cbc:MultiplierFactorNumeric (BT-138, BT-143), cbc:Amount (BT-136, BT-141), and cbc:BaseAmount (BT-137, BT-142).</assert>
+			<assert id="ibr-tdd-60" flag="fatal" test="count(*[not(self::cbc:ChargeIndicator or self::cbc:AllowanceChargeReasonCode or self::cbc:AllowanceChargeReason or self::cbc:MultiplierFactorNumeric or self::cbc:Amount or self::cbc:BaseAmount)]) = 0">[ibr-tdd-60] – The cac:AllowanceCharge (Document line level: BG-27, BG-28) element MUST NOT contain elements other than cbc:ChargeIndicator, cbc:AllowanceChargeReasonCode (BT-140, BT-145), cbc:AllowanceChargeReason (BT-139, BT-144), cbc:MultiplierFactorNumeric (BT-138, BT-143), cbc:Amount (BT-136, BT-141), and cbc:BaseAmount (BT-137, BT-142).</assert>
 
 			<assert id="ibr-tdd-61" flag="fatal" test="count(cbc:Amount/@*[not(local-name() = 'currencyID')]) = 0">[ibr-tdd-61] – The cbc:Amount (BT-136, BT-141) element MUST have the attribute 'currencyID'.</assert>
 
@@ -292,7 +292,7 @@
 		</rule>
 
 		<rule context="/pxs:TaxData/pxs:ReportedTransaction/pxs:ReportedDocument/pxs:DocumentLine/cac:Price">
-			<assert id="ibr-tdd-82" flag="fatal" test="count(*[not(self::cbc:PriceAmount)]) = 0">[ibr-tdd-82] – The cac:Price (BG-29) element MUST NOT contain elements other than cbc:PriceAmount (BT-146).</assert>
+			<assert id="ibr-tdd-82" flag="fatal" test="count(*[not(self::cbc:PriceAmount or self::cbc:BaseQuantity)]) = 0">[ibr-tdd-82] – The cac:Price (BG-29) element MUST NOT contain elements other than cbc:PriceAmount (BT-146).</assert>
 
 			<assert id="ibr-tdd-83" flag="fatal" test="count(cbc:PriceAmount/@*[not(local-name() = 'currencyID')]) = 0">[ibr-tdd-83] – The cbc:PriceAmount (BT-146) element MUST have the attribute 'currencyID'.</assert>
 		</rule>
