@@ -70,6 +70,9 @@ to build the solution.
 
 # News and noteworthy
 
+v0.1.3 - 2026-03-11
+* Updated to latest published Schematrons.
+
 v0.1.2 - 2026-03-10
 * Added support for participant identifier scheme `0245`. See [#1](https://github.com/phax/peppol-sk/issues/1) - thx @vrbyjimmy
 
