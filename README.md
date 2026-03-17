@@ -1,7 +1,9 @@
 # peppol-sk
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.helger.peppol/peppol-sk-parent-pom)](https://img.shields.io/maven-central/v/com.helger.peppol/peppol-sk-parent-pom)
-[![javadoc](https://javadoc.io/badge2/com.helger.peppol/peppol-sk-tdd/javadoc.svg)](https://javadoc.io/doc/com.helger.peppol/peppol-sk-tdd)
+<!-- ph-badge-start -->
+[![Sonatype Central](https://maven-badges.sml.io/sonatype-central/com.helger.peppol/peppol-sk-parent-pom/badge.svg)](https://maven-badges.sml.io/sonatype-central/com.helger.peppol/peppol-sk-parent-pom/)
+[![javadoc](https://javadoc.io/badge2/com.helger.peppol/peppol-sk-testfiles/javadoc.svg)](https://javadoc.io/doc/com.helger.peppol/peppol-sk-testfiles)
+<!-- ph-badge-end -->
 
 A Java library for converting Peppol e-invoices (UBL 2.1 Invoice / CreditNote) into Slovakia Tax Data Documents (TDD) for tax reporting.
 
