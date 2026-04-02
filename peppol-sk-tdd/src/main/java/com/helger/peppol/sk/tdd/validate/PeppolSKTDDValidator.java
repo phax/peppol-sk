@@ -30,16 +30,14 @@ import com.helger.peppol.sk.tdd.jaxb.CPeppolSKTDD;
 import com.helger.peppol.sk.tdd.jaxb.PeppolSKTDD100Marshaller;
 import com.helger.phive.api.execute.ValidationExecutionManager;
 import com.helger.phive.api.executorset.IValidationExecutorSet;
-import com.helger.phive.api.executorset.ValidationExecutorSet;
 import com.helger.phive.api.executorset.ValidationExecutorSetRegistry;
-import com.helger.phive.api.executorset.status.ValidationExecutorSetStatus;
 import com.helger.phive.api.result.ValidationResultList;
 import com.helger.phive.api.validity.IValidityDeterminator;
+import com.helger.phive.xml.executorset.VesXmlBuilder;
 import com.helger.phive.xml.schematron.ValidationExecutorSchematron;
 import com.helger.phive.xml.source.IValidationSourceXML;
 import com.helger.phive.xml.source.ValidationSourceXML;
-import com.helger.phive.xml.xsd.ValidationExecutorXSD;
-import com.helger.ubl21.UBL21NamespaceContext;
+import com.helger.xml.namespace.MapBasedNamespaceContext;
 
 /**
  * This class contains the Schematron resources for validating Peppol SK TDD documents.
@@ -72,16 +70,16 @@ public final class PeppolSKTDDValidator
 
   static
   {
-    VES_REGISTRY.registerValidationExecutorSet (ValidationExecutorSet.create (VID_TDD_SK_100,
-                                                                              "Peppol SK TDD 1.0.0",
-                                                                              ValidationExecutorSetStatus.createDeprecatedNow (false),
-                                                                              ValidationExecutorXSD.create (PeppolSKTDD100Marshaller.getAllXSDs ()),
-                                                                              ValidationExecutorSchematron.createXSLT (XSLT_CEN_TDD_100,
-                                                                                                                       UBL21NamespaceContext.getInstance ()),
-                                                                              ValidationExecutorSchematron.createXSLT (XSLT_BILLING_TDD_100,
-                                                                                                                       UBL21NamespaceContext.getInstance ()),
-                                                                              ValidationExecutorSchematron.createXSLT (XSLT_SK_TDD_100,
-                                                                                                                       UBL21NamespaceContext.getInstance ())));
+    final MapBasedNamespaceContext aNsCtx = PeppolSKTDD100Marshaller.createNamespaceContext ();
+    VesXmlBuilder.builder ()
+                 .vesID (VID_TDD_SK_100)
+                 .displayName ("Peppol SK TDD 1.0.0")
+                 .notDeprecated ()
+                 .addXSD (PeppolSKTDD100Marshaller.getAllXSDs ())
+                 .addSchematron (ValidationExecutorSchematron.createXSLT (XSLT_CEN_TDD_100, aNsCtx))
+                 .addSchematron (ValidationExecutorSchematron.createXSLT (XSLT_BILLING_TDD_100, aNsCtx))
+                 .addSchematron (ValidationExecutorSchematron.createXSLT (XSLT_SK_TDD_100, aNsCtx))
+                 .registerInto (VES_REGISTRY);
   }
 
   private PeppolSKTDDValidator ()
