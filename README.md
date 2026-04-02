@@ -72,6 +72,9 @@ to build the solution.
 
 # News and noteworthy
 
+v0.1.4 - work in progress
+* Requires at least phive 12.0.2
+
 v0.1.3 - 2026-03-11
 * Updated to latest published Schematrons.
 
