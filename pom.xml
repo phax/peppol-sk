@@ -68,7 +68,7 @@
     <jaxb-plugin.version>4.0.12</jaxb-plugin.version>
     <ph-jaxb-plugin.version>5.1.2</ph-jaxb-plugin.version>
     
-    <phive.version>12.0.2</phive.version>
+    <phive.version>12.0.3</phive.version>
     <ph-schematron.version>9.1.1</ph-schematron.version>
     <ph-ubl.version>10.1.0</ph-ubl.version>
   </properties>
