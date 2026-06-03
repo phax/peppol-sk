@@ -65,11 +65,11 @@
   <properties>
     <jaxb-plugin.group>org.jvnet.jaxb</jaxb-plugin.group>
     <jaxb-plugin.artifact>jaxb-maven-plugin</jaxb-plugin.artifact>
-    <jaxb-plugin.version>4.0.14</jaxb-plugin.version>
+    <jaxb-plugin.version>4.0.15</jaxb-plugin.version>
     <ph-jaxb-plugin.version>5.1.2</ph-jaxb-plugin.version>
     
     <phive.version>12.0.3</phive.version>
-    <ph-schematron.version>9.1.1</ph-schematron.version>
+    <ph-schematron.version>9.2.0</ph-schematron.version>
     <ph-ubl.version>10.2.0</ph-ubl.version>
   </properties>
 
