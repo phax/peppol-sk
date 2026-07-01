@@ -36,7 +36,7 @@ public final class CPeppolSKTDD
     return CPeppolSKTDD.class.getClassLoader ();
   }
 
-  private static final String PATH_1_0_0 = "/external/schemas/2026-03-02/";
+  private static final String PATH_1_0_0 = "/external/schemas/2026-04-14/";
   /**
    * XML Schema resources for Peppol SK TDD XSD 1.0.0
    */

@@ -10,10 +10,14 @@
   elementFormDefault="qualified"
   attributeFormDefault="unqualified">
 
-  <xs:import namespace="urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2" />
-  <xs:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" />
-  <xs:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" />
-  <xs:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" />
+  <xs:import namespace="urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2" 
+             schemaLocation="https://docs.oasis-open.org/ubl/os-UBL-2.1/xsdrt/common/UBL-UnqualifiedDataTypes-2.1.xsd"/>
+  <xs:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" 
+             schemaLocation="https://docs.oasis-open.org/ubl/os-UBL-2.1/xsdrt/common/UBL-CommonBasicComponents-2.1.xsd"/>
+  <xs:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+             schemaLocation="https://docs.oasis-open.org/ubl/os-UBL-2.1/xsdrt/common/UBL-CommonAggregateComponents-2.1.xsd"/>
+  <xs:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"
+             schemaLocation="https://docs.oasis-open.org/ubl/os-UBL-2.1/xsdrt/common/UBL-CommonExtensionComponents-2.1.xsd"/>
 
   
    <xs:annotation>

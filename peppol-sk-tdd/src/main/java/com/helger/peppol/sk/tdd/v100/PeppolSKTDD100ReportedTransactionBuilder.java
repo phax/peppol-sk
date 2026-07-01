@@ -45,10 +45,10 @@ import com.helger.datetime.xml.XMLOffsetDate;
 import com.helger.datetime.xml.XMLOffsetTime;
 import com.helger.peppol.sk.tdd.CSKTDD;
 import com.helger.peppol.sk.tdd.codelist.ESKTDDTaxDataTypeCode;
-import com.helger.peppol.sk.tdd.v2026_03_02.DocumentLineType;
-import com.helger.peppol.sk.tdd.v2026_03_02.MonetaryTotalType;
-import com.helger.peppol.sk.tdd.v2026_03_02.ReportedDocumentType;
-import com.helger.peppol.sk.tdd.v2026_03_02.ReportedTransactionType;
+import com.helger.peppol.sk.tdd.v2026_04_14.DocumentLineType;
+import com.helger.peppol.sk.tdd.v2026_04_14.MonetaryTotalType;
+import com.helger.peppol.sk.tdd.v2026_04_14.ReportedDocumentType;
+import com.helger.peppol.sk.tdd.v2026_04_14.ReportedTransactionType;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AddressType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AllowanceChargeType;

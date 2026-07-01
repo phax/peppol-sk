@@ -33,11 +33,11 @@ Three Maven modules with strict build order (each depends on the previous):
 
 1. **`peppol-sk-testfiles`** — Bundles test XML files as classpath resources. `PeppolSKTestFiles` provides programmatic access to valid UBL invoices, credit notes, and TDD documents.
 
-2. **`peppol-sk-tdd-datatypes`** — JAXB-generated data model from `external/schemas/2026-03-02/Peppol-Slovak Republic-TDD.xsd`. Contains `CPeppolSKTDD` (schema constants/resources) and `PeppolSKTDD100Marshaller` (XML serialization).
+2. **`peppol-sk-tdd-datatypes`** — JAXB-generated data model from `external/schemas/2026-04-14/Peppol-Slovak Republic-TDD.xsd`. Contains `CPeppolSKTDD` (schema constants/resources) and `PeppolSKTDD100Marshaller` (XML serialization).
 
 3. **`peppol-sk-tdd`** — Main business logic. Key entry points:
    - `PeppolSKTDD100Builder` — builds TDD documents from scratch or converts from UBL 2.1 invoices/credit notes
-   - `PeppolSKTDDValidator` — Schematron validation using `external/schematron/2026-03-02/Peppol-Slovak Republic-TDD.sch`
+   - `PeppolSKTDDValidator` — Schematron validation using `external/schematron/2026-04-14/Peppol-Slovak Republic-TDD.sch`
    - `PeppolSKTDD100Marshaller` — read/write TDD XML
 
 ## Architecture

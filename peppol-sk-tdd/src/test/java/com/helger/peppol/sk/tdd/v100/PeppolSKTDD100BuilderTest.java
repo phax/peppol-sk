@@ -39,7 +39,7 @@ import com.helger.peppol.sk.tdd.codelist.ESKTDDReporterRole;
 import com.helger.peppol.sk.tdd.codelist.ESKTDDTaxDataTypeCode;
 import com.helger.peppol.sk.tdd.jaxb.PeppolSKTDD100Marshaller;
 import com.helger.peppol.sk.tdd.testfiles.PeppolSKTestFiles;
-import com.helger.peppol.sk.tdd.v2026_03_02.TaxDataType;
+import com.helger.peppol.sk.tdd.v2026_04_14.TaxDataType;
 import com.helger.peppol.sk.tdd.validate.PeppolSKTDDValidator;
 import com.helger.peppolid.factory.IIdentifierFactory;
 import com.helger.peppolid.factory.PeppolIdentifierFactory;

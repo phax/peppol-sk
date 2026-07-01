@@ -57,7 +57,7 @@ public final class PeppolSKTDDValidator
   public static final DVRCoordinate VID_TDD_SK_100 = new DVRCoordinate ("org.peppol.taxdata",
                                                                         "sk",
                                                                         DVRVersion.of (new Version (1, 0, 0)));
-  private static final String PREFIX_100 = "external/schematron/2026-03-11/";
+  private static final String PREFIX_100 = "external/schematron/2026-04-14/";
   public static final IReadableResource XSLT_CEN_TDD_100 = new ClassPathResource (PREFIX_100 + "CEN-EN16931-UBL.xslt",
                                                                                   _getCL ());
   public static final IReadableResource XSLT_BILLING_TDD_100 = new ClassPathResource (PREFIX_100 +
