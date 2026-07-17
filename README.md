@@ -74,7 +74,8 @@ to build the solution.
 
 # News and noteworthy
 
-v0.1.4 - work in progress
+v0.2.0 - 2026-07-17
+* Updated to ph-schematron v10.x
 * Requires at least phive 12.0.2
 
 v0.1.3 - 2026-03-11
