@@ -34,7 +34,7 @@ import com.helger.phive.api.executorset.ValidationExecutorSetRegistry;
 import com.helger.phive.api.result.ValidationResultList;
 import com.helger.phive.api.validity.IValidityDeterminator;
 import com.helger.phive.xml.executorset.VesXmlBuilder;
-import com.helger.phive.xml.schematron.ValidationExecutorSchematron;
+import com.helger.phive.xml.schematron.ValidationExecutorSchematronBuilder;
 import com.helger.phive.xml.source.IValidationSourceXML;
 import com.helger.phive.xml.source.ValidationSourceXML;
 import com.helger.xml.namespace.MapBasedNamespaceContext;
@@ -77,9 +77,15 @@ public final class PeppolSKTDDValidator
                  .displayName ("Peppol SK TDD 1.0.0")
                  .notDeprecated ()
                  .addXSD (PeppolSKTDD100Marshaller.getAllXSDs ())
-                 .addSchematron (ValidationExecutorSchematron.createXSLT (XSLT_CEN_TDD_100, aNsCtx))
-                 .addSchematron (ValidationExecutorSchematron.createXSLT (XSLT_BILLING_TDD_100, aNsCtx))
-                 .addSchematron (ValidationExecutorSchematron.createXSLT (XSLT_SK_TDD_100, aNsCtx))
+                 .addSchematron (ValidationExecutorSchematronBuilder.xslt2 (XSLT_CEN_TDD_100)
+                                                                    .namespaceContext (aNsCtx)
+                                                                    .build ())
+                 .addSchematron (ValidationExecutorSchematronBuilder.xslt2 (XSLT_BILLING_TDD_100)
+                                                                    .namespaceContext (aNsCtx)
+                                                                    .build ())
+                 .addSchematron (ValidationExecutorSchematronBuilder.xslt2 (XSLT_SK_TDD_100)
+                                                                    .namespaceContext (aNsCtx)
+                                                                    .build ())
                  .registerInto (VES_REGISTRY);
   }
 
