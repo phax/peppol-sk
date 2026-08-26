@@ -18,7 +18,7 @@ They are licensed under the Apache 2.0 license.
 The minimum requirement is Java 17.
 
 The backing specifications are:
-* SK TDD draft: https://test-docs.peppol.eu/tdd/sk/
+* SK TDD: https://docs.peppol.eu/tdd/sk/
 
 # Submodules
 
