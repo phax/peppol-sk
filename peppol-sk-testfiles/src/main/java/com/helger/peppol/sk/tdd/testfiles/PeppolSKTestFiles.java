@@ -93,7 +93,8 @@ public final class PeppolSKTestFiles
                     "SB-vat-category-E.xml",
                     "SB-vat-category-O.xml",
                     "SB-vat-category-Z.xml",
-                    // SB-WithoutTaxes-example.xml omitted (XSD-invalid: cac:TaxTotal lacks the required cbc:TaxAmount; same issue as WithoutTaxes-example.xml)
+                    // SB-WithoutTaxes-example.xml omitted (XSD-invalid: cac:TaxTotal lacks the
+                    // required cbc:TaxAmount; same issue as WithoutTaxes-example.xml)
                     "vat-category-E.xml",
                     "vat-category-O.xml",
                     "Vat-category-S.xml",
