@@ -74,13 +74,13 @@ to build the solution.
 
 # News and noteworthy
 
-v0.2.2 - work in progress
+v0.2.2 - 2026-09-23
 * The tax exemption reason (BT-120) and tax exemption reason code (BT-121) are no longer copied into the invoice line VAT information (BG-30) and into the document level allowance/charge (BG-20, BG-21), because the SK TDD rules `ibr-tdd-80` and `ibr-tdd-63` forbid them there.
   See [#4](https://github.com/phax/peppol-sk/issues/4) - thx @vrbyjimmy
 * The tax category is no longer copied into the invoice line level allowance/charge (BG-27, BG-28), because the SK TDD rule `ibr-tdd-60` forbids it there
 * Added the new test invoice `invoice/good/vat-category-AE.xml` covering all of the above
 
-v0.2.1 - 2028-08-12
+v0.2.1 - 2026-08-12
 * Added the mapping of tax exemption reason (BT-120) and tax exemption reason code (BT-121) in class `PeppolSKTDD100TaxCategoryBuilder`.
   See [#3](https://github.com/phax/peppol-sk/pull/3) - thx @vrbyjimmy
 
