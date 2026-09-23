@@ -43,6 +43,7 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.Inv
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.ItemType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PeriodType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PriceType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.TaxCategoryType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.CreditedQuantityType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.DescriptionCodeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.IDType;
@@ -113,7 +114,9 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
     }
 
     for (final var aAC : aLine.getAllowanceCharge ())
-      addAllowanceCharge (x -> x.initFromUBL (aAC));
+      addAllowanceCharge (x -> x.initFromUBL (aAC)
+                                // cac:TaxCategory is not allowed here (ibr-tdd-60)
+                                .taxCategory ((TaxCategoryType) null));
 
     if (aLine.getItem () != null)
       item (x -> x.initFromUBL (aLine.getItem ()));
@@ -162,7 +165,9 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
     }
 
     for (final var aAC : aLine.getAllowanceCharge ())
-      addAllowanceCharge (x -> x.initFromUBL (aAC));
+      addAllowanceCharge (x -> x.initFromUBL (aAC)
+                                // cac:TaxCategory is not allowed here (ibr-tdd-60)
+                                .taxCategory ((TaxCategoryType) null));
 
     if (aLine.getItem () != null)
       item (x -> x.initFromUBL (aLine.getItem ()));

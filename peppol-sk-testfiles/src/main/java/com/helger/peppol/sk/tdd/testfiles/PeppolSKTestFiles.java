@@ -61,6 +61,7 @@ public final class PeppolSKTestFiles
                     "base-example.xml",
                     "base-negative-inv-correction.xml",
                     "sales-order-example.xml",
+                    "vat-category-AE.xml",
                     "vat-category-E.xml",
                     "vat-category-O.xml",
                     "Vat-category-S.xml",

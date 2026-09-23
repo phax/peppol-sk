@@ -74,7 +74,10 @@ public class PeppolSKTDD100ItemBuilder implements IBuilder <ItemType>
       addCommodityClassification (x -> x.initFromUBL (aCC));
 
     if (aObj.hasClassifiedTaxCategoryEntries ())
-      classifiedTaxCategory (x -> x.initFromUBL (aObj.getClassifiedTaxCategoryAtIndex (0)));
+      classifiedTaxCategory (x -> x.initFromUBL (aObj.getClassifiedTaxCategoryAtIndex (0))
+                                   // BT-120 and BT-121 are not allowed here (ibr-tdd-80)
+                                   .taxExemptionReason (null)
+                                   .taxExemptionReasonCode (null));
 
     return this;
   }

@@ -79,7 +79,10 @@ public class PeppolSKTDD100AllowanceChargeBuilder implements IBuilder <Allowance
     amount (aObj.getAmountValue ());
     baseAmount (aObj.getBaseAmountValue ());
     if (aObj.hasTaxCategoryEntries ())
-      taxCategory (x -> x.initFromUBL (aObj.getTaxCategoryAtIndex (0)));
+      taxCategory (x -> x.initFromUBL (aObj.getTaxCategoryAtIndex (0))
+                         // BT-120 and BT-121 are not allowed here (ibr-tdd-63)
+                         .taxExemptionReason (null)
+                         .taxExemptionReasonCode (null));
 
     return this;
   }
