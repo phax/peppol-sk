@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -160,7 +161,8 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
   /**
    * Get the company ID of the first cac:PartyTaxScheme of the provided party, that has the
    * TaxScheme ID "VAT". Other tax schemes (e.g. BT-32 - Seller tax registration identifier) must
-   * not be used as VAT identifier.
+   * not be used as VAT identifier. The TaxScheme ID is compared like in the EN 16931 Schematron
+   * (<code>normalize-space(upper-case(cbc:ID)) = 'VAT'</code>), so "vat" or " Vat " also match.
    *
    * @param aParty
    *        The party to search in. May not be <code>null</code>.
@@ -172,8 +174,12 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
     for (final PartyTaxSchemeType aPTS : aParty.getPartyTaxScheme ())
     {
       final TaxSchemeType aTS = aPTS.getTaxScheme ();
-      if (aTS != null && "VAT".equals (aTS.getIDValue ()))
-        return aPTS.getCompanyIDValue ();
+      if (aTS != null)
+      {
+        final String sTaxSchemeID = StringHelper.trim (aTS.getIDValue ());
+        if (sTaxSchemeID != null && "VAT".equals (sTaxSchemeID.toUpperCase (Locale.ROOT)))
+          return aPTS.getCompanyIDValue ();
+      }
     }
     return null;
   }

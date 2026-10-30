@@ -49,7 +49,8 @@ import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
 /**
  * Test that the VAT identifiers (BT-31, BT-48, BT-63) are taken from the
  * cac:PartyTaxScheme with TaxScheme/ID "VAT", independent of the order of the
- * cac:PartyTaxScheme elements.
+ * cac:PartyTaxScheme elements and, as in the EN 16931 Schematron, of the case
+ * and surrounding whitespace of the TaxScheme/ID.
  *
  * @author Philip Helger
  */
@@ -96,6 +97,14 @@ public final class PeppolSKTDD100VATPartyTaxSchemeTest
     _assertVAT ("SK2020000003", aDoc.getTaxRepresentativeParty ());
   }
 
+  private static void _setVATSchemeID (final String sSchemeID, final PartyType... aParties)
+  {
+    for (final PartyType aParty : aParties)
+      for (final PartyTaxSchemeType aPTS : aParty.getPartyTaxScheme ())
+        if ("VAT".equals (aPTS.getTaxScheme ().getIDValue ()))
+          aPTS.getTaxScheme ().setID (sSchemeID);
+  }
+
   @Test
   public void testInvoiceTaxSchemeBeforeVAT () throws Exception
   {
@@ -140,5 +149,67 @@ public final class PeppolSKTDD100VATPartyTaxSchemeTest
     assertNull (aRT.sellerTaxID ());
     assertNull (aRT.buyerTaxID ());
     assertNull (aRT.taxRepresentativeID ());
+  }
+
+  @Test
+  public void testInvoiceLowerCaseVAT () throws Exception
+  {
+    final InvoiceType aInvoice = UBL21Marshaller.invoice ()
+                                                .read (new ClassPathResource ("external/invoice/good/sk-tax-scheme-order.xml"));
+    assertNotNull (aInvoice);
+    _setVATSchemeID ("vat",
+                     aInvoice.getAccountingSupplierParty ().getParty (),
+                     aInvoice.getAccountingCustomerParty ().getParty (),
+                     aInvoice.getTaxRepresentativeParty ());
+
+    _assertAllVAT (_build (rt -> rt.initFromInvoice (aInvoice)));
+  }
+
+  @Test
+  public void testCreditNoteLowerCaseVAT () throws Exception
+  {
+    final CreditNoteType aCreditNote = UBL21Marshaller.creditNote ()
+                                                      .read (new ClassPathResource ("external/creditnote/good/sk-tax-scheme-order.xml"));
+    assertNotNull (aCreditNote);
+    _setVATSchemeID ("vat",
+                     aCreditNote.getAccountingSupplierParty ().getParty (),
+                     aCreditNote.getAccountingCustomerParty ().getParty (),
+                     aCreditNote.getTaxRepresentativeParty ());
+
+    _assertAllVAT (_build (rt -> rt.initFromCreditNote (aCreditNote)));
+  }
+
+  @Test
+  public void testInvoicePaddedMixedCaseVAT () throws Exception
+  {
+    final InvoiceType aInvoice = UBL21Marshaller.invoice ()
+                                                .read (new ClassPathResource ("external/invoice/good/sk-tax-scheme-order.xml"));
+    assertNotNull (aInvoice);
+    // UBL-SR-13 does not normalize the space, so next to BT-32 the padded
+    // entry would count as a second seller tax registration
+    aInvoice.getAccountingSupplierParty ().getParty ().getPartyTaxScheme ().remove (0);
+    _setVATSchemeID (" Vat ",
+                     aInvoice.getAccountingSupplierParty ().getParty (),
+                     aInvoice.getAccountingCustomerParty ().getParty (),
+                     aInvoice.getTaxRepresentativeParty ());
+
+    _assertAllVAT (_build (rt -> rt.initFromInvoice (aInvoice)));
+  }
+
+  @Test
+  public void testCreditNotePaddedMixedCaseVAT () throws Exception
+  {
+    final CreditNoteType aCreditNote = UBL21Marshaller.creditNote ()
+                                                      .read (new ClassPathResource ("external/creditnote/good/sk-tax-scheme-order.xml"));
+    assertNotNull (aCreditNote);
+    // UBL-SR-13 does not normalize the space, so next to BT-32 the padded
+    // entry would count as a second seller tax registration
+    aCreditNote.getAccountingSupplierParty ().getParty ().getPartyTaxScheme ().remove (0);
+    _setVATSchemeID (" Vat ",
+                     aCreditNote.getAccountingSupplierParty ().getParty (),
+                     aCreditNote.getAccountingCustomerParty ().getParty (),
+                     aCreditNote.getTaxRepresentativeParty ());
+
+    _assertAllVAT (_build (rt -> rt.initFromCreditNote (aCreditNote)));
   }
 }
