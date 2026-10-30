@@ -21,7 +21,6 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -174,12 +173,8 @@ public class PeppolSKTDD100ReportedTransactionBuilder implements IBuilder <Repor
     for (final PartyTaxSchemeType aPTS : aParty.getPartyTaxScheme ())
     {
       final TaxSchemeType aTS = aPTS.getTaxScheme ();
-      if (aTS != null)
-      {
-        final String sTaxSchemeID = StringHelper.trim (aTS.getIDValue ());
-        if (sTaxSchemeID != null && "VAT".equals (sTaxSchemeID.toUpperCase (Locale.ROOT)))
-          return aPTS.getCompanyIDValue ();
-      }
+      if (aTS != null && "VAT".equalsIgnoreCase (StringHelper.trim (aTS.getIDValue ())))
+        return aPTS.getCompanyIDValue ();
     }
     return null;
   }

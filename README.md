@@ -79,6 +79,11 @@ to build the solution.
 
 # News and noteworthy
 
+v0.9.2 - work in progress
+* `PeppolSKTDD100ReportedTransactionBuilder.initFromInvoice` and `initFromCreditNote` now find the `cac:PartyTaxScheme` for the VAT identifiers (BT-31, BT-48, BT-63) independent of the case and surrounding whitespace of the `TaxScheme/ID`, as the EN 16931 Schematron does.
+  Previously a BIS3-valid `TaxScheme/ID` like `vat` or ` Vat ` lost the VAT identifiers in the TDD.
+  See [#10](https://github.com/phax/peppol-sk/pull/10) - thx @FilipKovac
+
 v0.9.1 - 2026-10-28
 * Requires ph-commons 12.5.3
 * Added `taxPointDate (LocalDate)` to `PeppolSKTDD100ReportedTransactionBuilder`.
