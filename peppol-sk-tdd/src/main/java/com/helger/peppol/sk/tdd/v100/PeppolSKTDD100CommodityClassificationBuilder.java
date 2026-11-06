@@ -45,7 +45,6 @@ public class PeppolSKTDD100CommodityClassificationBuilder implements IBuilder <C
   private ILogHandler m_aLogHandler = ILogHandler.createForLogger (LOGGER);
   private String m_sItemClassification;
   private String m_sItemClassificationListID;
-  private String m_sItemClassificationListVersionID;
 
   public PeppolSKTDD100CommodityClassificationBuilder ()
   {}
@@ -67,7 +66,7 @@ public class PeppolSKTDD100CommodityClassificationBuilder implements IBuilder <C
     {
       itemClassification (aICC.getValue ());
       itemClassificationListID (aICC.getListID ());
-      itemClassificationListVersionID (aICC.getListVersionID ());
+      // The list version ID (BT-158-2) is not allowed in the TDD (ibr-tdd-79)
     }
     return this;
   }
@@ -95,19 +94,6 @@ public class PeppolSKTDD100CommodityClassificationBuilder implements IBuilder <C
   public PeppolSKTDD100CommodityClassificationBuilder itemClassificationListID (@Nullable final String s)
   {
     m_sItemClassificationListID = s;
-    return this;
-  }
-
-  @Nullable
-  public String itemClassificationListVersionID ()
-  {
-    return m_sItemClassificationListVersionID;
-  }
-
-  @NonNull
-  public PeppolSKTDD100CommodityClassificationBuilder itemClassificationListVersionID (@Nullable final String s)
-  {
-    m_sItemClassificationListVersionID = s;
     return this;
   }
 
@@ -158,7 +144,6 @@ public class PeppolSKTDD100CommodityClassificationBuilder implements IBuilder <C
       aLogHandler.error (sErrorPrefix + "ItemClassificationListID is missing");
       aReportedDocsErrs.inc ();
     }
-    // m_sItemClassificationListVersionID is optional
 
     return aReportedDocsErrs.intValue () == 0;
   }
@@ -185,7 +170,6 @@ public class PeppolSKTDD100CommodityClassificationBuilder implements IBuilder <C
       final ItemClassificationCodeType aIC = new ItemClassificationCodeType ();
       aIC.setValue (m_sItemClassification);
       aIC.setListID (m_sItemClassificationListID);
-      aIC.setListVersionID (m_sItemClassificationListVersionID);
       ret.setItemClassificationCode (aIC);
     }
     return ret;
