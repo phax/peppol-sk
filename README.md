@@ -24,6 +24,7 @@ The backing specifications are:
 
 This project consists of the following submodules (in alphabetic order)
 
+* `peppol-sk-bom` - the Bill of Materials (BOM) with the managed versions of all artifacts of this project (since v0.9.2)
 * `peppol-sk-tdd` - contains the main logic to create Peppol SK TDD documents based on the Peppol SK pilot documents as well as documentation
     * Main class to build a complete SK from scratch is `PeppolSKTDD100Builder`
     * To run the Schematron validation, use class `PeppolSKTDDValidator`
@@ -43,6 +44,20 @@ Add the following to your `pom.xml` to use this artifact, replacing `x.y.z` with
   <version>x.y.z</version>
 </dependency>
 ```
+
+Alternatively use the following code in your `dependencyManagement` section to use it as a BOM:
+
+```xml
+<dependency>
+  <groupId>com.helger.peppol</groupId>
+  <artifactId>peppol-sk-bom</artifactId>
+  <version>x.y.z</version>
+  <type>pom</type>
+  <scope>import</scope>
+</dependency>
+```
+
+Note: prior to v0.9.2 there was no dedicated BOM and `peppol-sk-parent-pom` had to be imported instead, which also carries the build configuration of this project.
 
 # Usage example
 
@@ -79,7 +94,10 @@ to build the solution.
 
 # News and noteworthy
 
-v0.9.2 - work in progress
+v0.9.2 - 2026-11-15
+* Requires ph-commons 12.7.1
+* Added the new module `peppol-sk-bom` as a Maven BOM (Bill of Materials) for all peppol-sk artifacts.
+  Use it instead of `peppol-sk-parent-pom` when importing the managed versions
 * `PeppolSKTDD100ReportedTransactionBuilder.initFromInvoice` and `initFromCreditNote` now find the `cac:PartyTaxScheme` for the VAT identifiers (BT-31, BT-48, BT-63) independent of the case and surrounding whitespace of the `TaxScheme/ID`, as the EN 16931 Schematron does.
   Previously a BIS3-valid `TaxScheme/ID` like `vat` or ` Vat ` lost the VAT identifiers in the TDD.
   See [#10](https://github.com/phax/peppol-sk/pull/10) - thx @FilipKovac

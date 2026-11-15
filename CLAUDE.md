@@ -29,7 +29,9 @@ mvn test -pl peppol-sk-tdd -Dtest=PeppolSKTDD100BuilderTest#testBasicMinimal
 
 ## Module Structure
 
-Three Maven modules with strict build order (each depends on the previous):
+The BOM `peppol-sk-bom` manages the versions of all artifacts below; add every new artifact there as well.
+
+Three code modules with strict build order (each depends on the previous):
 
 1. **`peppol-sk-testfiles`** — Bundles test XML files as classpath resources. `PeppolSKTestFiles` provides programmatic access to valid UBL invoices, credit notes, and TDD documents.
 
