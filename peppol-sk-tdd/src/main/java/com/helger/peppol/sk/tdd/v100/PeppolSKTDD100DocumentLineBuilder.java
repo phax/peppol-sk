@@ -46,6 +46,7 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.Ite
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PeriodType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PriceType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.TaxCategoryType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.BaseQuantityType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.CreditedQuantityType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.DescriptionCodeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.IDType;
@@ -76,6 +77,7 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
   private ItemType m_aItem;
   private BigDecimal m_aPriceAmount;
   private BigDecimal m_aPriceBaseQuantity;
+  private String m_sPriceBaseQuantityUnitCode;
 
   public PeppolSKTDD100DocumentLineBuilder (@Nullable final String sDocumentCurrencyCode)
   {
@@ -127,7 +129,12 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
     if (aLine.getPrice () != null)
     {
       priceAmount (aLine.getPrice ().getPriceAmountValue ());
-      priceBaseQuantity (aLine.getPrice ().getBaseQuantityValue ());
+      final BaseQuantityType aBQ = aLine.getPrice ().getBaseQuantity ();
+      if (aBQ != null)
+      {
+        priceBaseQuantity (aBQ.getValue ());
+        priceBaseQuantityUnitCode (aBQ.getUnitCode ());
+      }
     }
 
     return this;
@@ -178,7 +185,12 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
     if (aLine.getPrice () != null)
     {
       priceAmount (aLine.getPrice ().getPriceAmountValue ());
-      priceBaseQuantity (aLine.getPrice ().getBaseQuantityValue ());
+      final BaseQuantityType aBQ = aLine.getPrice ().getBaseQuantity ();
+      if (aBQ != null)
+      {
+        priceBaseQuantity (aBQ.getValue ());
+        priceBaseQuantityUnitCode (aBQ.getUnitCode ());
+      }
     }
 
     return this;
@@ -403,6 +415,19 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
     return this;
   }
 
+  @Nullable
+  public String priceBaseQuantityUnitCode ()
+  {
+    return m_sPriceBaseQuantityUnitCode;
+  }
+
+  @NonNull
+  public PeppolSKTDD100DocumentLineBuilder priceBaseQuantityUnitCode (@Nullable final String s)
+  {
+    m_sPriceBaseQuantityUnitCode = s;
+    return this;
+  }
+
   /**
    * @return The log handler that receives the messages of the required field checks - errors for
    *         missing or invalid fields. Never <code>null</code>.
@@ -476,6 +501,7 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
       aReportedDocsErrs.inc ();
     }
     // m_aPriceBaseQuantity is optional
+    // m_sPriceBaseQuantityUnitCode is optional
 
     return aReportedDocsErrs.intValue () == 0;
   }
@@ -533,7 +559,12 @@ public class PeppolSKTDD100DocumentLineBuilder implements IBuilder <DocumentLine
       final PriceType a = new PriceType ();
       a.setPriceAmount (m_aPriceAmount).setCurrencyID (m_sDocumentCurrencyCode);
       if (m_aPriceBaseQuantity != null)
-        a.setBaseQuantity (m_aPriceBaseQuantity);
+      {
+        final BaseQuantityType aBQ = new BaseQuantityType ();
+        aBQ.setValue (m_aPriceBaseQuantity);
+        aBQ.setUnitCode (m_sPriceBaseQuantityUnitCode);
+        a.setBaseQuantity (aBQ);
+      }
       ret.setPrice (a);
     }
 
