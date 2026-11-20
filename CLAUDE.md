@@ -35,12 +35,13 @@ Three code modules with strict build order (each depends on the previous):
 
 1. **`peppol-sk-testfiles`** — Bundles test XML files as classpath resources. `PeppolSKTestFiles` provides programmatic access to valid UBL invoices, credit notes, and TDD documents.
 
-2. **`peppol-sk-tdd-datatypes`** — JAXB-generated data model from `external/schemas/2026-04-14/Peppol-Slovak Republic-TDD.xsd`. Contains `CPeppolSKTDD` (schema constants/resources) and `PeppolSKTDD100Marshaller` (XML serialization).
+2. **`peppol-sk-tdd-datatypes`** — JAXB-generated data model from `external/schemas/2026-04-14/Peppol-Slovak Republic-TDD.xsd`. Contains `CPeppolSKTDD` (schema constants/resources) and `PeppolSKTDD100Marshaller` / `PeppolSKTDD110Marshaller` (XML serialization; both use the same XSD).
 
 3. **`peppol-sk-tdd`** — Main business logic. Key entry points:
-   - `PeppolSKTDD100Builder` — builds TDD documents from scratch or converts from UBL 2.1 invoices/credit notes
-   - `PeppolSKTDDValidator` — Schematron validation using `external/schematron/2026-04-14/Peppol-Slovak Republic-TDD.sch`
-   - `PeppolSKTDD100Marshaller` — read/write TDD XML
+   - `PeppolSKTDD100Builder` (package `v100`, spec 1.0.0) and `PeppolSKTDD110Builder` (package `v110`, spec 1.1.0) — build TDD documents from scratch or convert from UBL 2.1 invoices/credit notes. Each spec version has its own full set of `PeppolSKTDD<ver>*Builder` classes (like peppol-vida); never add version switches to an existing package
+   - `PeppolSKTDDValidator` — Schematron validation: `validateSK_TDD_100` (1.0.0, `external/schematron/2026-04-14/`) and `validateSK_TDD_110` (1.1.0, `external/schematron/2026-11-20/`); same XSD and CustomizationID for both
+   - `PeppolSKTDD100Marshaller` / `PeppolSKTDD110Marshaller` — read/write TDD XML
+   - The XSLTs are pre-generated and committed; the (commented out) Schematron convert execution in `peppol-sk-tdd/pom.xml` points to the latest rule sources (`2026-11-20`)
 
 ## Architecture
 
@@ -91,6 +92,7 @@ The classes in `peppol-sk-tdd-datatypes/src/main/java/.../jaxb/` are **auto-gene
 Test XML resources live in `peppol-sk-testfiles/src/main/resources/external/`:
 - `invoice/good/` — Valid UBL 2.1 invoices (VAT categories E, O, S, Z; allowances; corrections)
 - `creditnote/good/` — Valid UBL 2.1 credit notes
-- `tdd/1.0.0/good/` — Valid TDD documents
+- `tdd/1.0.0/good/` — Valid TDD documents (spec 1.0.0)
+- `tdd/1.1.0/good/` — Valid TDD documents (spec 1.1.0); `tdd/1.1.0/bad/bad-<rule-id>.xml` violate exactly that 1.1.0 rule
 
 `PeppolSKTestFiles` exposes these as `IReadableResource` collections.

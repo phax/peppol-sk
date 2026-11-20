@@ -75,8 +75,38 @@ TaxDataType tdd = new PeppolSKTDD100Builder ()
 String xml = new PeppolSKTDD100Marshaller ().setFormattedOutput (true).getAsString (tdd);
 
 // Validate with Schematron
-ISchematronResource schematron = PeppolSKTDDValidator.getSchematronSK_TDD_100 ();
+ValidationResultList vrl = PeppolSKTDDValidator.validateSK_TDD_100 (new ReadableResourceString (xml, StandardCharsets.UTF_8));
 ```
+
+## Specification versions
+
+The TDD specification versions 1.0.0 and 1.1.0 are supported side by side, each with its own set of classes (package `v100` with `PeppolSKTDD100*` and package `v110` with `PeppolSKTDD110*`).
+Both use the same XML Schema and the same CustomizationID `urn:peppol:taxdata:sk-1`, but different Schematron rules:
+
+| Version | Builders | Marshaller | VESID | Validation | Schematrons | Test files |
+|---|---|---|---|---|---|---|
+| 1.0.0 | `v100.PeppolSKTDD100*Builder` | `PeppolSKTDD100Marshaller` | `org.peppol.taxdata:sk:1.0.0` | `validateSK_TDD_100` | `external/schematron/2026-04-14/` | `tdd/1.0.0/` |
+| 1.1.0 | `v110.PeppolSKTDD110*Builder` | `PeppolSKTDD110Marshaller` | `org.peppol.taxdata:sk:1.1.0` | `validateSK_TDD_110` | `external/schematron/2026-11-20/` | `tdd/1.1.0/` |
+
+```java
+TaxDataType tdd = new PeppolSKTDD110Builder ()
+    .taxDataTypeCode (ESKTDDTaxDataTypeCode.SUBMIT)
+    // ...
+    .reportedTransaction (rt -> rt.initFromInvoice (invoice))
+    .build ();
+String xml = new PeppolSKTDD110Marshaller ().setFormattedOutput (true).getAsString (tdd);
+ValidationResultList vrl = PeppolSKTDDValidator.validateSK_TDD_110 (new ReadableResourceString (xml, StandardCharsets.UTF_8));
+```
+
+Differences of the 1.1.0 builders compared to the 1.0.0 builders:
+* `PeppolSKTDD110ReportedTransactionBuilder` has the Buyer legal registration identifier (BT-47) with its scheme identifier, and `initFromInvoice`/`initFromCreditNote` take it over.
+* `PeppolSKTDD110ReportedTransactionBuilder` requires the TAX identifier (BT-63) if a tax representative is provided, as `cac:TaxRepresentativeParty/cac:PartyTaxScheme` is 1..1 since 1.1.0.
+* `PeppolSKTDD110DocumentLineBuilder` has no price base quantity (BT-149), because rule `ibr-tdd-82` of 1.1.0 forbids it. `initFromInvoice`/`initFromCreditNote` report the item net price (BT-146) for one unit instead (price divided by base quantity), as the samples of the specification do.
+* The 1.1.0 warning rule `ibr-tdd-88` (Slovak domestic corrected invoice 384 SHOULD reference the preceding invoice) is not checked by the builder - only by the validation.
+* The VESIDs are DVR coordinates with version 1.0.0 and 1.1.0; their string representation omits trailing zero parts (`org.peppol.taxdata:sk:1` and `org.peppol.taxdata:sk:1.1`).
+* Note: in 1.1.0 several inherited EN 16931 rules are evaluated that never matched a 1.0.0 TDD, e.g. BR-E-10 / BR-O-10 (VAT exemption reason for categories E and O). Documents valid under 1.0.0 may therefore be invalid under 1.1.0.
+
+## Notes
 
 The `ReportedDocument` is created for every `TaxDataTypeCode`, including `D` (DISREGARD), so all of its mandatory fields must be set.
 The `ReportedDocument/UUID` is calculated according to rule `ID-BDID-01` from BT-34-1, BT-34, BT-3, BT-1 and BT-2.
@@ -93,6 +123,15 @@ mvn clean install
 to build the solution.
 
 # News and noteworthy
+
+v0.9.3 - work in progress
+* Added support for the Peppol SK TDD specification version 1.1.0 (released 2026-11-20) next to version 1.0.0, which is unchanged.
+  See https://test-docs.peppol.eu/tdd/sk/2026-Q4-FIN/tdd-sk/trn-tdd/
+* Added the new package `com.helger.peppol.sk.tdd.v110` with the builders `PeppolSKTDD110*Builder` for 1.1.0, and the new `PeppolSKTDD110Marshaller`
+* `PeppolSKTDD110ReportedTransactionBuilder` supports the Buyer legal registration identifier (BT-47), and reports an error if a tax representative has no TAX identifier (BT-63), as its `cac:PartyTaxScheme` is mandatory since 1.1.0
+* `PeppolSKTDD110DocumentLineBuilder` has no price base quantity (BT-149) any more; the item net price is divided by it instead (`getPriceAmountPerUnit`)
+* Added the VESID `PeppolSKTDDValidator.VID_TDD_SK_110` (`org.peppol.taxdata:sk:1.1.0`) with the 1.1.0 Schematrons and `PeppolSKTDDValidator.validateSK_TDD_110`
+* Added the 1.1.0 test files to `PeppolSKTestFiles` (`getAllGoodTDD110Files`, `getAllSchematronBadTDD110Files`, `getAllPayloadBadTDD110Files`)
 
 v0.9.2 - 2026-11-15
 * Requires ph-commons 12.7.1
