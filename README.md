@@ -11,14 +11,15 @@ A Java library for converting Peppol e-invoices (UBL 2.1 Invoice / CreditNote) i
 
 peppol-sk is part of my Peppol solution stack. See https://github.com/phax/peppol for other components and libraries in that area.
 
-**This project is work in progress and contains the version to be send out for member review - there might be future changes for the final data model for SK!**
+The current SK TDD specification version is 1.1.0, mandatory from 25 November 2026. Version 1.0.0 is still supported.
 
 This contains a set of Java libraries.
 They are licensed under the Apache 2.0 license.
 The minimum requirement is Java 17.
 
 The backing specifications are:
-* SK TDD: https://docs.peppol.eu/tdd/sk/
+* SK TDD 1.1.0: https://docs.peppol.eu/tdd/sk/v1.1.0/
+* SK TDD 1.0.0: https://docs.peppol.eu/tdd/sk/
 
 # Submodules
 
@@ -26,10 +27,10 @@ This project consists of the following submodules (in alphabetic order)
 
 * `peppol-sk-bom` - the Bill of Materials (BOM) with the managed versions of all artifacts of this project (since v0.9.2)
 * `peppol-sk-tdd` - contains the main logic to create Peppol SK TDD documents based on the Peppol SK pilot documents as well as documentation
-    * Main class to build a complete SK from scratch is `PeppolSKTDD100Builder`
+    * Main class to build a complete SK from scratch is `PeppolSKTDD110Builder` (1.1.0) or `PeppolSKTDD100Builder` (1.0.0)
     * To run the Schematron validation, use class `PeppolSKTDDValidator`
 * `peppol-sk-tdd-datatypes` - contains the JAXB generated Peppol SK TDD data model
-    * Main class to read and write TDD XML is `PeppolSKTDD100Marshaller`
+    * Main class to read and write TDD XML is `PeppolSKTDD110Marshaller` (1.1.0) or `PeppolSKTDD100Marshaller` (1.0.0)
 * `peppol-sk-testfiles` - contains Peppol SK specific test files as a reusable component
     * Main class is `PeppolSKTestFiles`
 
@@ -124,14 +125,16 @@ to build the solution.
 
 # News and noteworthy
 
-v0.9.3 - work in progress
+v1.0.0 - 2026-11-22
 * Added support for the Peppol SK TDD specification version 1.1.0 (released 2026-11-20) next to version 1.0.0, which is unchanged.
-  See https://test-docs.peppol.eu/tdd/sk/2026-Q4-FIN/tdd-sk/trn-tdd/
+  See https://docs.peppol.eu/tdd/sk/v1.1.0/
 * Added the new package `com.helger.peppol.sk.tdd.v110` with the builders `PeppolSKTDD110*Builder` for 1.1.0, and the new `PeppolSKTDD110Marshaller`
 * `PeppolSKTDD110ReportedTransactionBuilder` supports the Buyer legal registration identifier (BT-47), and reports an error if a tax representative has no TAX identifier (BT-63), as its `cac:PartyTaxScheme` is mandatory since 1.1.0
 * `PeppolSKTDD110DocumentLineBuilder` has no price base quantity (BT-149) any more; the item net price is divided by it instead (`getPriceAmountPerUnit`)
 * Added the VESID `PeppolSKTDDValidator.VID_TDD_SK_110` (`org.peppol.taxdata:sk:1.1.0`) with the 1.1.0 Schematrons and `PeppolSKTDDValidator.validateSK_TDD_110`
 * Added the 1.1.0 test files to `PeppolSKTestFiles` (`getAllGoodTDD110Files`, `getAllSchematronBadTDD110Files`, `getAllPayloadBadTDD110Files`)
+* Deprecated the VESID `PeppolSKTDDValidator.VID_TDD_SK_100` and `PeppolSKTDDValidator.validateSK_TDD_100`, because version 1.1.0 is mandatory from 2026-11-25 (not yet scheduled for removal)
+* `PeppolSKTDD100ReportedTransactionBuilder` and `PeppolSKTDD110ReportedTransactionBuilder` report an error if a tax representative has no country code (BT-69), as required by BR-19 and BR-20
 
 v0.9.2 - 2026-11-15
 * Requires ph-commons 12.7.1

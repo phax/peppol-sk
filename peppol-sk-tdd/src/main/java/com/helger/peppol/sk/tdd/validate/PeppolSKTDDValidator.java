@@ -21,6 +21,7 @@ import java.util.Locale;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.annotation.concurrent.Immutable;
+import com.helger.annotation.misc.DevelopersNote;
 import com.helger.base.version.Version;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.diver.api.coord.DVRCoordinate;
@@ -56,6 +57,13 @@ public final class PeppolSKTDDValidator
   }
 
   // Aligned with phive-rules
+  /**
+   * VESID of Peppol SK TDD 1.0.0.
+   *
+   * @deprecated Use {@link #VID_TDD_SK_110} instead. Peppol SK TDD 1.1.0 is mandatory from 2026-11-25.
+   */
+  @Deprecated (forRemoval = false, since = "0.9.3")
+  @DevelopersNote ("Peppol SK TDD 1.1.0 is mandatory from 2026-11-25")
   public static final DVRCoordinate VID_TDD_SK_100 = new DVRCoordinate ("org.peppol.taxdata",
                                                                         "sk",
                                                                         DVRVersion.of (new Version (1, 0, 0)));
@@ -95,6 +103,7 @@ public final class PeppolSKTDDValidator
 
   private static void _register (@NonNull final DVRCoordinate aVESID,
                                  @NonNull final String sDisplayName,
+                                 final boolean bDeprecated,
                                  @NonNull final ICommonsList <ClassPathResource> aXSDs,
                                  @NonNull final MapBasedNamespaceContext aNsCtx,
                                  @NonNull final IReadableResource aXsltCEN,
@@ -104,7 +113,7 @@ public final class PeppolSKTDDValidator
     VesXmlBuilder.builder ()
                  .vesID (aVESID)
                  .displayName (sDisplayName)
-                 .notDeprecated ()
+                 .deprecated (bDeprecated)
                  .addXSD (aXSDs)
                  .addSchematron (ValidationExecutorSchematronBuilder.xslt2 (aXsltCEN).namespaceContext (aNsCtx).build ())
                  .addSchematron (ValidationExecutorSchematronBuilder.xslt2 (aXsltBilling)
@@ -118,6 +127,7 @@ public final class PeppolSKTDDValidator
   {
     _register (VID_TDD_SK_100,
                "Peppol SK TDD 1.0.0",
+               true,
                PeppolSKTDD100Marshaller.getAllXSDs (),
                PeppolSKTDD100Marshaller.createNamespaceContext (),
                XSLT_CEN_TDD_100,
@@ -125,6 +135,7 @@ public final class PeppolSKTDDValidator
                XSLT_SK_TDD_100);
     _register (VID_TDD_SK_110,
                "Peppol SK TDD 1.1.0",
+               false,
                PeppolSKTDD110Marshaller.getAllXSDs (),
                PeppolSKTDD110Marshaller.createNamespaceContext (),
                XSLT_CEN_TDD_110,
@@ -153,7 +164,10 @@ public final class PeppolSKTDDValidator
    * @param aXmlRes
    *        The XML resource to use. May not be <code>null</code>.
    * @return The Validation result list. Never <code>null</code>.
+   * @deprecated Use {@link #validateSK_TDD_110(IReadableResource)} instead. Peppol SK TDD 1.1.0 is mandatory from 2026-11-25.
    */
+  @Deprecated (forRemoval = false, since = "0.9.3")
+  @DevelopersNote ("Peppol SK TDD 1.1.0 is mandatory from 2026-11-25")
   @NonNull
   public static ValidationResultList validateSK_TDD_100 (@NonNull final IReadableResource aXmlRes)
   {

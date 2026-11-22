@@ -36,6 +36,7 @@ import com.helger.xml.namespace.MapBasedNamespaceContext;
  * {@link GenericJAXBMarshaller}.
  *
  * @author Philip Helger
+ * @since 0.9.3
  */
 @NotThreadSafe
 public class PeppolSKTDD110Marshaller extends GenericJAXBMarshaller <TaxDataType>

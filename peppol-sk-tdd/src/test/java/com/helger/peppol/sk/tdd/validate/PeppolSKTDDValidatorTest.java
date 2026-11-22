@@ -58,7 +58,7 @@ public final class PeppolSKTDDValidatorTest
   {
     final ICommonsList <String> aAllErrorIDs = new CommonsArrayList <> ();
     aVRL.forEachFlattened (x -> {
-      if (x.isError ())
+      if (x.isError () && x.getErrorID () != null)
         aAllErrorIDs.add (x.getErrorID ().toLowerCase (Locale.ROOT));
     });
     return aAllErrorIDs;

@@ -1344,6 +1344,13 @@ public class PeppolSKTDD110ReportedTransactionBuilder implements IBuilder <Repor
       aLogHandler.error (sErrorPrefix + "TaxRepresentativeID (BT-63) is missing for the provided tax representative");
       aReportedDocsErrs.inc ();
     }
+    // If present, the tax representative postal address with its country code (BT-69) is mandatory
+    // (BR-19 and BR-20)
+    if (StringHelper.isNotEmpty (m_sTaxRepresentativeID) && StringHelper.isEmpty (m_sTaxRepresentativeCountryCode))
+    {
+      aLogHandler.error (sErrorPrefix + "TaxRepresentativeCountryCode (BT-69) is missing for the provided tax representative");
+      aReportedDocsErrs.inc ();
+    }
 
     // m_aDeliveryDate is optional
 

@@ -243,6 +243,25 @@ public final class PeppolSKTDD110Changes110Test
   }
 
   @Test
+  public void testTaxRepresentativeWithoutCountryCode () throws Exception
+  {
+    final InvoiceType aInvoice = UBL21Marshaller.invoice ()
+                                                .read (new ClassPathResource ("external/invoice/good/base-example.xml"));
+    assertNotNull (aInvoice);
+
+    final PeppolSKTDD110ReportedTransactionBuilder aRT = new PeppolSKTDD110ReportedTransactionBuilder (ESKTDDTaxDataTypeCode.SUBMIT).initFromInvoice (aInvoice)
+                                                                                                                                     .taxRepresentativeCountryCode (null)
+                                                                                                                                     .taxRepresentativeID ("CHE123456789");
+    // BR-19 and BR-20
+    final ErrorList aErrorList = new ErrorList ();
+    assertFalse (aRT.isEveryRequiredFieldSet (aErrorList));
+    assertEquals (1, aErrorList.size ());
+
+    aRT.taxRepresentativeCountryCode ("CH");
+    assertTrue (aRT.isEveryRequiredFieldSet (new ErrorList ()));
+  }
+
+  @Test
   public void testPriceBaseQuantityCreditNote () throws Exception
   {
     final CreditNoteType aCreditNote = UBL21Marshaller.creditNote ()
