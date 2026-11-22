@@ -27,7 +27,7 @@
   </parent>
   <groupId>com.helger.peppol</groupId>
   <artifactId>peppol-sk-bom</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
   <name>peppol-sk-bom</name>
   <description>Bill of Materials for all peppol-sk artifacts</description>
@@ -71,4 +71,8 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <scm>
+    <tag>peppol-sk-parent-pom-1.0.0</tag>
+  </scm>
 </project>
