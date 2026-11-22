@@ -37,5 +37,8 @@ public final class PeppolSKTestFilesTest
     assertTrue (PeppolSKTestFiles.getAllGoodTDD100Files ().stream ().allMatch (ClassPathResource::exists));
     assertTrue (PeppolSKTestFiles.getAllSchematronBadTDD100Files ().stream ().allMatch (ClassPathResource::exists));
     assertTrue (PeppolSKTestFiles.getAllPayloadBadTDD100Files ().stream ().allMatch (ClassPathResource::exists));
+    assertTrue (PeppolSKTestFiles.getAllGoodTDD110Files ().stream ().allMatch (ClassPathResource::exists));
+    assertTrue (PeppolSKTestFiles.getAllSchematronBadTDD110Files ().stream ().allMatch (ClassPathResource::exists));
+    assertTrue (PeppolSKTestFiles.getAllPayloadBadTDD110Files ().stream ().allMatch (ClassPathResource::exists));
   }
 }

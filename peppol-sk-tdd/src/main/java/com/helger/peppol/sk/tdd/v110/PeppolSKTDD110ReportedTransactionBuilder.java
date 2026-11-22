@@ -1,0 +1,1646 @@
+/*
+ * Copyright (C) 2026 Philip Helger
+ * philip[at]helger[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.helger.peppol.sk.tdd.v110;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+import java.util.function.Consumer;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.helger.annotation.style.ReturnsMutableObject;
+import com.helger.base.builder.IBuilder;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.log.ILogHandler;
+import com.helger.base.numeric.BigHelper;
+import com.helger.base.numeric.mutable.MutableInt;
+import com.helger.base.string.StringHelper;
+import com.helger.base.string.StringImplode;
+import com.helger.base.uuid.UUID5Helper;
+import com.helger.collection.commons.CommonsArrayList;
+import com.helger.collection.commons.ICommonsList;
+import com.helger.datetime.helper.PDTFactory;
+import com.helger.datetime.xml.XMLOffsetDate;
+import com.helger.datetime.xml.XMLOffsetTime;
+import com.helger.diagnostics.error.list.ErrorList;
+import com.helger.diagnostics.log.ErrorListLogHandler;
+import com.helger.peppol.sk.tdd.CSKTDD;
+import com.helger.peppol.sk.tdd.codelist.ESKTDDTaxDataTypeCode;
+import com.helger.peppol.sk.tdd.v2026_04_14.DocumentLineType;
+import com.helger.peppol.sk.tdd.v2026_04_14.MonetaryTotalType;
+import com.helger.peppol.sk.tdd.v2026_04_14.ReportedDocumentType;
+import com.helger.peppol.sk.tdd.v2026_04_14.ReportedTransactionType;
+
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AddressType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.AllowanceChargeType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.BillingReferenceType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.CountryType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.CustomerPartyType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.DeliveryType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.DocumentReferenceType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PartyLegalEntityType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PartyTaxSchemeType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PartyType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PaymentMeansType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.PeriodType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.SupplierPartyType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.TaxSchemeType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.TaxTotalType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.AllowanceTotalAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.ChargeTotalAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.CompanyIDType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.CustomizationIDType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.DescriptionCodeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.DocumentCurrencyCodeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.EndpointIDType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.IDType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.IssueDateType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.IssueTimeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.LineExtensionAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.NoteType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.PayableAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.PayableRoundingAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.PrepaidAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.ProfileIDType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.TaxCurrencyCodeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.TaxExclusiveAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.TaxInclusiveAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.TaxPointDateType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.UUIDType;
+import oasis.names.specification.ubl.schema.xsd.creditnote_21.CreditNoteType;
+import oasis.names.specification.ubl.schema.xsd.invoice_21.InvoiceType;
+
+/**
+ * Builder for Peppol SK TDD 1.1.0 sub element called "ReportedTransaction".
+ *
+ * @author Philip Helger
+ */
+public class PeppolSKTDD110ReportedTransactionBuilder implements IBuilder <ReportedTransactionType>
+{
+  private static final Logger LOGGER = LoggerFactory.getLogger (PeppolSKTDD110ReportedTransactionBuilder.class);
+
+  private ILogHandler m_aLogHandler = ILogHandler.createForLogger (LOGGER);
+  private final ESKTDDTaxDataTypeCode m_eDocumentTypeCode;
+  private String m_sCustomizationID;
+  private String m_sProfileID;
+  private String m_sID;
+  private LocalDate m_aIssueDate;
+  private OffsetTime m_aIssueTime;
+  private String m_sDocumentTypeCode;
+  private String m_sNote;
+  private LocalDate m_aTaxPointDate;
+  private String m_sDocumentCurrencyCode;
+  private String m_sTaxCurrencyCode;
+  private LocalDate m_aInvoicePeriodStart;
+  private LocalDate m_aInvoicePeriodEnd;
+  private String m_sInvoicePeriodDescriptionCode;
+  private final ICommonsList <BillingReferenceType> m_aBillingReferences = new CommonsArrayList <> ();
+  private String m_sSellerEndpointIDSchemeID;
+  private String m_sSellerEndpointID;
+  private String m_sSellerTaxID;
+  private String m_sSellerCountryCode;
+  private String m_sBuyerTaxID;
+  private String m_sBuyerCountryCode;
+  private String m_sBuyerName;
+  private String m_sBuyerLegalRegistrationID;
+  private String m_sBuyerLegalRegistrationIDSchemeID;
+  private String m_sTaxRepresentativeID;
+  private String m_sTaxRepresentativeCountryCode;
+  private LocalDate m_aDeliveryDate;
+  private final ICommonsList <PaymentMeansType> m_aPaymentMeans = new CommonsArrayList <> ();
+  private final ICommonsList <AllowanceChargeType> m_aAllowanceCharges = new CommonsArrayList <> ();
+  private TaxTotalType m_aTaxTotalDocumentCurrency;
+  private TaxTotalType m_aTaxTotalTaxCurrency;
+
+  private BigDecimal m_aLineExtensionAmount;
+  private BigDecimal m_aTaxExclusiveTotalAmount;
+  private BigDecimal m_aTaxInclusiveTotalAmount;
+  private BigDecimal m_aAllowanceTotalAmount;
+  private BigDecimal m_aChargeTotalAmount;
+  private BigDecimal m_aPrepaidAmount;
+  private BigDecimal m_aPayableRoundingAmount;
+  private BigDecimal m_aPayableAmount;
+
+  private final ICommonsList <DocumentLineType> m_aDocumentLines = new CommonsArrayList <> ();
+
+  public PeppolSKTDD110ReportedTransactionBuilder (@NonNull final ESKTDDTaxDataTypeCode eDocumentTypeCode)
+  {
+    ValueEnforcer.notNull (eDocumentTypeCode, "DocumentTypeCode");
+    m_eDocumentTypeCode = eDocumentTypeCode;
+  }
+
+  /**
+   * @return The tax data type code from the constructor. Never <code>null</code>.
+   * @since 0.9.1
+   */
+  @NonNull
+  public final ESKTDDTaxDataTypeCode getDataTypeCode ()
+  {
+    return m_eDocumentTypeCode;
+  }
+
+  /**
+   * Get the company ID of the first cac:PartyTaxScheme of the provided party, that has the
+   * TaxScheme ID "VAT". Other tax schemes (e.g. BT-32 - Seller tax registration identifier) must
+   * not be used as VAT identifier. The TaxScheme ID is compared like in the EN 16931 Schematron
+   * (<code>normalize-space(upper-case(cbc:ID)) = 'VAT'</code>), so "vat" or " Vat " also match.
+   *
+   * @param aParty
+   *        The party to search in. May not be <code>null</code>.
+   * @return <code>null</code> if no such party tax scheme exists.
+   */
+  @Nullable
+  private static String _getVATCompanyID (@NonNull final PartyType aParty)
+  {
+    for (final PartyTaxSchemeType aPTS : aParty.getPartyTaxScheme ())
+    {
+      final TaxSchemeType aTS = aPTS.getTaxScheme ();
+      if (aTS != null && "VAT".equalsIgnoreCase (StringHelper.trim (aTS.getIDValue ())))
+        return aPTS.getCompanyIDValue ();
+    }
+    return null;
+  }
+
+  /**
+   * Take the BT-44 Buyer name and the BT-47 Buyer legal registration identifier (new in 1.1.0)
+   * from the first cac:PartyLegalEntity of the buyer.
+   *
+   * @param aParty
+   *        The buyer party. May not be <code>null</code>.
+   */
+  private void _initBuyerLegalEntity (@NonNull final PartyType aParty)
+  {
+    if (aParty.hasPartyLegalEntityEntries ())
+    {
+      final PartyLegalEntityType aPLE = aParty.getPartyLegalEntityAtIndex (0);
+      // BT-44
+      buyerName (aPLE.getRegistrationNameValue ());
+
+      // BT-47 and BT-47-1 - the scheme only together with an identifier
+      final CompanyIDType aCompanyID = aPLE.getCompanyID ();
+      if (aCompanyID != null && StringHelper.isNotEmpty (aCompanyID.getValue ()))
+      {
+        buyerLegalRegistrationID (aCompanyID.getValue ());
+        buyerLegalRegistrationIDSchemeID (aCompanyID.getSchemeID ());
+      }
+      else
+      {
+        buyerLegalRegistrationID (null);
+        buyerLegalRegistrationIDSchemeID (null);
+      }
+    }
+  }
+
+  /**
+   * Set all fields from the provided UBL 2.1 Invoice
+   *
+   * @param aInv
+   *        The Invoice to read from. May not be <code>null</code>.
+   * @return this for chaining
+   */
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder initFromInvoice (@NonNull final InvoiceType aInv)
+  {
+    ValueEnforcer.notNull (aInv, "Invoice");
+
+    customizationID (aInv.getCustomizationIDValue ());
+    profileID (aInv.getProfileIDValue ());
+    id (aInv.getIDValue ());
+    issueDate (aInv.getIssueDateValueLocal ());
+    issueTime (aInv.getIssueTimeValue ());
+    documentTypeCode (aInv.getInvoiceTypeCodeValue ());
+    if (aInv.hasNoteEntries ())
+      note (aInv.getNoteAtIndex (0).getValue ());
+    taxPointDate (aInv.getTaxPointDateValueLocal ());
+    documentCurrencyCode (aInv.getDocumentCurrencyCodeValue ());
+    taxCurrencyCode (aInv.getTaxCurrencyCodeValue ());
+
+    if (aInv.hasInvoicePeriodEntries ())
+    {
+      final PeriodType aIP = aInv.getInvoicePeriodAtIndex (0);
+      invoicePeriodStart (aIP.getStartDateValueLocal ());
+      invoicePeriodEnd (aIP.getEndDateValueLocal ());
+      if (aIP.hasDescriptionCodeEntries ())
+        invoicePeriodDescriptionCode (aIP.getDescriptionCodeAtIndex (0).getValue ());
+    }
+
+    for (final var aBR : aInv.getBillingReference ())
+    {
+      final DocumentReferenceType aDocRef = aBR.getInvoiceDocumentReference ();
+      final IDType aID = aDocRef.getID ();
+      addBillingReference (x -> x.id (aID == null ? null : aID.getValue ())
+                                 .idScheme (aID == null ? null : aID.getSchemeID ())
+                                 .issueDate (aDocRef.getIssueDateValueLocal ()));
+    }
+
+    final SupplierPartyType aSupplier = aInv.getAccountingSupplierParty ();
+    if (aSupplier != null)
+    {
+      final PartyType aParty = aSupplier.getParty ();
+      if (aParty != null)
+      {
+        final EndpointIDType aEndpoint = aParty.getEndpointID ();
+        if (aEndpoint != null)
+        {
+          sellerEndpointIDSchemeID (aEndpoint.getSchemeID ());
+          sellerEndpointID (aEndpoint.getValue ());
+        }
+
+        sellerTaxID (_getVATCompanyID (aParty));
+
+        final AddressType aPA = aParty.getPostalAddress ();
+        if (aPA != null && aPA.getCountry () != null)
+          sellerCountryCode (aPA.getCountry ().getIdentificationCodeValue ());
+      }
+    }
+
+    final CustomerPartyType aCustomer = aInv.getAccountingCustomerParty ();
+    if (aCustomer != null)
+    {
+      final PartyType aParty = aCustomer.getParty ();
+      if (aParty != null)
+      {
+        buyerTaxID (_getVATCompanyID (aParty));
+
+        final AddressType aPA = aParty.getPostalAddress ();
+        if (aPA != null && aPA.getCountry () != null)
+        {
+          // BT-55
+          buyerCountryCode (aPA.getCountry ().getIdentificationCodeValue ());
+        }
+
+        // BT-44 and BT-47
+        _initBuyerLegalEntity (aParty);
+      }
+    }
+
+    final PartyType aTaxRep = aInv.getTaxRepresentativeParty ();
+    if (aTaxRep != null)
+    {
+      taxRepresentativeID (_getVATCompanyID (aTaxRep));
+
+      final AddressType aPA = aTaxRep.getPostalAddress ();
+      if (aPA != null && aPA.getCountry () != null)
+        taxRepresentativeCountryCode (aPA.getCountry ().getIdentificationCodeValue ());
+    }
+
+    if (aInv.hasDeliveryEntries ())
+    {
+      final DeliveryType aDelivery = aInv.getDeliveryAtIndex (0);
+      deliveryDate (aDelivery.getActualDeliveryDateValueLocal ());
+    }
+
+    for (final var aPM : aInv.getPaymentMeans ())
+      addPaymentMeans (x -> x.initFromUBL (aPM));
+
+    for (final var aAC : aInv.getAllowanceCharge ())
+      addAllowanceCharge (x -> x.initFromUBL (aAC));
+
+    if (m_sDocumentCurrencyCode != null)
+    {
+      final var aTT = aInv.getTaxTotal ()
+                          .stream ()
+                          .filter (x -> m_sDocumentCurrencyCode.equals (x.getTaxAmount ().getCurrencyID ()))
+                          .findFirst ()
+                          .orElse (null);
+      if (aTT != null)
+        taxTotalDocumentCurrency (x -> x.initFromUBL (aTT));
+    }
+
+    if (m_sTaxCurrencyCode != null)
+    {
+      final var aTT = aInv.getTaxTotal ()
+                          .stream ()
+                          .filter (x -> m_sTaxCurrencyCode.equals (x.getTaxAmount ().getCurrencyID ()))
+                          .findFirst ()
+                          .orElse (null);
+      if (aTT != null)
+        taxTotalTaxCurrency (x -> x.initFromUBL (aTT));
+    }
+
+    final oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.MonetaryTotalType aLegalMonetaryTotal = aInv.getLegalMonetaryTotal ();
+    if (aLegalMonetaryTotal != null)
+    {
+      lineExtensionAmount (aLegalMonetaryTotal.getLineExtensionAmountValue ());
+      taxExclusiveTotalAmount (aLegalMonetaryTotal.getTaxExclusiveAmountValue ());
+      taxInclusiveTotalAmount (aLegalMonetaryTotal.getTaxInclusiveAmountValue ());
+      allowanceTotalAmount (aLegalMonetaryTotal.getAllowanceTotalAmountValue ());
+      chargeTotalAmount (aLegalMonetaryTotal.getChargeTotalAmountValue ());
+      prepaidAmount (aLegalMonetaryTotal.getPrepaidAmountValue ());
+      payableRoundingAmount (aLegalMonetaryTotal.getPayableRoundingAmountValue ());
+      payableAmount (aLegalMonetaryTotal.getPayableAmountValue ());
+    }
+
+    for (final var aLine : aInv.getInvoiceLine ())
+      addDocumentLine (x -> x.initFromInvoice (aLine));
+
+    return this;
+  }
+
+  /**
+   * Set all fields from the provided UBL 2.1 CreditNote
+   *
+   * @param aCN
+   *        The CreditNote to read from. May not be <code>null</code>.
+   * @return this for chaining
+   */
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder initFromCreditNote (@NonNull final CreditNoteType aCN)
+  {
+    ValueEnforcer.notNull (aCN, "CreditNote");
+
+    customizationID (aCN.getCustomizationIDValue ());
+    profileID (aCN.getProfileIDValue ());
+    id (aCN.getIDValue ());
+    issueDate (aCN.getIssueDateValueLocal ());
+    issueTime (aCN.getIssueTimeValue ());
+    documentTypeCode (aCN.getCreditNoteTypeCodeValue ());
+    if (aCN.hasNoteEntries ())
+      note (aCN.getNoteAtIndex (0).getValue ());
+    taxPointDate (aCN.getTaxPointDateValueLocal ());
+    documentCurrencyCode (aCN.getDocumentCurrencyCodeValue ());
+    taxCurrencyCode (aCN.getTaxCurrencyCodeValue ());
+
+    if (aCN.hasInvoicePeriodEntries ())
+    {
+      final PeriodType aIP = aCN.getInvoicePeriodAtIndex (0);
+      invoicePeriodStart (aIP.getStartDateValueLocal ());
+      invoicePeriodEnd (aIP.getEndDateValueLocal ());
+      if (aIP.hasDescriptionCodeEntries ())
+        invoicePeriodDescriptionCode (aIP.getDescriptionCodeAtIndex (0).getValue ());
+    }
+
+    for (final var aBR : aCN.getBillingReference ())
+    {
+      final DocumentReferenceType aDocRef = aBR.getInvoiceDocumentReference ();
+      final IDType aID = aDocRef.getID ();
+      addBillingReference (x -> x.id (aID == null ? null : aID.getValue ())
+                                 .idScheme (aID == null ? null : aID.getSchemeID ())
+                                 .issueDate (aDocRef.getIssueDateValueLocal ()));
+    }
+
+    final SupplierPartyType aSupplier = aCN.getAccountingSupplierParty ();
+    if (aSupplier != null)
+    {
+      final PartyType aParty = aSupplier.getParty ();
+      if (aParty != null)
+      {
+        final EndpointIDType aEndpoint = aParty.getEndpointID ();
+        if (aEndpoint != null)
+        {
+          sellerEndpointIDSchemeID (aEndpoint.getSchemeID ());
+          sellerEndpointID (aEndpoint.getValue ());
+        }
+
+        sellerTaxID (_getVATCompanyID (aParty));
+
+        final AddressType aPA = aParty.getPostalAddress ();
+        if (aPA != null && aPA.getCountry () != null)
+          sellerCountryCode (aPA.getCountry ().getIdentificationCodeValue ());
+      }
+    }
+
+    final CustomerPartyType aCustomer = aCN.getAccountingCustomerParty ();
+    if (aCustomer != null)
+    {
+      final PartyType aParty = aCustomer.getParty ();
+      if (aParty != null)
+      {
+        buyerTaxID (_getVATCompanyID (aParty));
+
+        final AddressType aPA = aParty.getPostalAddress ();
+        if (aPA != null && aPA.getCountry () != null)
+        {
+          // BT-55
+          buyerCountryCode (aPA.getCountry ().getIdentificationCodeValue ());
+        }
+
+        // BT-44 and BT-47
+        _initBuyerLegalEntity (aParty);
+      }
+    }
+
+    final PartyType aTaxRep = aCN.getTaxRepresentativeParty ();
+    if (aTaxRep != null)
+    {
+      taxRepresentativeID (_getVATCompanyID (aTaxRep));
+
+      final AddressType aPA = aTaxRep.getPostalAddress ();
+      if (aPA != null && aPA.getCountry () != null)
+        taxRepresentativeCountryCode (aPA.getCountry ().getIdentificationCodeValue ());
+    }
+
+    if (aCN.hasDeliveryEntries ())
+    {
+      final DeliveryType aDelivery = aCN.getDeliveryAtIndex (0);
+      deliveryDate (aDelivery.getActualDeliveryDateValueLocal ());
+    }
+
+    for (final var aPM : aCN.getPaymentMeans ())
+      addPaymentMeans (x -> x.initFromUBL (aPM));
+
+    for (final var aAC : aCN.getAllowanceCharge ())
+      addAllowanceCharge (x -> x.initFromUBL (aAC));
+
+    if (m_sDocumentCurrencyCode != null)
+    {
+      final var aTT = aCN.getTaxTotal ()
+                         .stream ()
+                         .filter (x -> m_sDocumentCurrencyCode.equals (x.getTaxAmount ().getCurrencyID ()))
+                         .findFirst ()
+                         .orElse (null);
+      if (aTT != null)
+        taxTotalDocumentCurrency (x -> x.initFromUBL (aTT));
+    }
+
+    if (m_sTaxCurrencyCode != null)
+    {
+      final var aTT = aCN.getTaxTotal ()
+                         .stream ()
+                         .filter (x -> m_sTaxCurrencyCode.equals (x.getTaxAmount ().getCurrencyID ()))
+                         .findFirst ()
+                         .orElse (null);
+      if (aTT != null)
+        taxTotalTaxCurrency (x -> x.initFromUBL (aTT));
+    }
+
+    final oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_21.MonetaryTotalType aLegalMonetaryTotal = aCN.getLegalMonetaryTotal ();
+    if (aLegalMonetaryTotal != null)
+    {
+      lineExtensionAmount (aLegalMonetaryTotal.getLineExtensionAmountValue ());
+      taxExclusiveTotalAmount (aLegalMonetaryTotal.getTaxExclusiveAmountValue ());
+      taxInclusiveTotalAmount (aLegalMonetaryTotal.getTaxInclusiveAmountValue ());
+      allowanceTotalAmount (aLegalMonetaryTotal.getAllowanceTotalAmountValue ());
+      chargeTotalAmount (aLegalMonetaryTotal.getChargeTotalAmountValue ());
+      prepaidAmount (aLegalMonetaryTotal.getPrepaidAmountValue ());
+      payableRoundingAmount (aLegalMonetaryTotal.getPayableRoundingAmountValue ());
+      payableAmount (aLegalMonetaryTotal.getPayableAmountValue ());
+    }
+
+    for (final var aLine : aCN.getCreditNoteLine ())
+      addDocumentLine (x -> x.initFromCreditNote (aLine));
+
+    return this;
+  }
+
+  @Nullable
+  public String customizationID ()
+  {
+    return m_sCustomizationID;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder customizationID (@Nullable final String s)
+  {
+    m_sCustomizationID = s;
+    return this;
+  }
+
+  @Nullable
+  public String profileID ()
+  {
+    return m_sProfileID;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder profileID (@Nullable final String s)
+  {
+    m_sProfileID = s;
+    return this;
+  }
+
+  @Nullable
+  public String id ()
+  {
+    return m_sID;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder id (@Nullable final String s)
+  {
+    m_sID = s;
+    return this;
+  }
+
+  @Nullable
+  public LocalDate issueDate ()
+  {
+    return m_aIssueDate;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder issueDate (@Nullable final LocalDate a)
+  {
+    m_aIssueDate = a;
+    return this;
+  }
+
+  @Nullable
+  public OffsetTime issueTime ()
+  {
+    return m_aIssueTime;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder issueTime (@Nullable final XMLOffsetTime a)
+  {
+    return issueTime (a == null ? null : a.toOffsetTime ());
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder issueTime (@Nullable final OffsetTime a)
+  {
+    // XSD can only handle milliseconds
+    m_aIssueTime = PDTFactory.getWithMillisOnly (a);
+    return this;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder issueDateTime (@Nullable final OffsetDateTime a)
+  {
+    if (a == null)
+      return issueDate (null).issueTime ((OffsetTime) null);
+    return issueDate (a.toLocalDate ()).issueTime (a.toOffsetTime ());
+  }
+
+  @Nullable
+  public String documentTypeCode ()
+  {
+    return m_sDocumentTypeCode;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder documentTypeCode (@Nullable final String s)
+  {
+    m_sDocumentTypeCode = s;
+    return this;
+  }
+
+  @Nullable
+  public String note ()
+  {
+    return m_sNote;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder note (@Nullable final String s)
+  {
+    m_sNote = s;
+    return this;
+  }
+
+  @Nullable
+  public LocalDate taxPointDate ()
+  {
+    return m_aTaxPointDate;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder taxPointDate (@Nullable final LocalDate a)
+  {
+    m_aTaxPointDate = a;
+    return this;
+  }
+
+  @Nullable
+  public String documentCurrencyCode ()
+  {
+    return m_sDocumentCurrencyCode;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder documentCurrencyCode (@Nullable final String s)
+  {
+    m_sDocumentCurrencyCode = s;
+    return this;
+  }
+
+  @Nullable
+  public String taxCurrencyCode ()
+  {
+    return m_sTaxCurrencyCode;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder taxCurrencyCode (@Nullable final String s)
+  {
+    m_sTaxCurrencyCode = s;
+    return this;
+  }
+
+  @Nullable
+  public LocalDate invoicePeriodStart ()
+  {
+    return m_aInvoicePeriodStart;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder invoicePeriodStart (@Nullable final LocalDate a)
+  {
+    m_aInvoicePeriodStart = a;
+    return this;
+  }
+
+  @Nullable
+  public LocalDate invoicePeriodEnd ()
+  {
+    return m_aInvoicePeriodEnd;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder invoicePeriodEnd (@Nullable final LocalDate a)
+  {
+    m_aInvoicePeriodEnd = a;
+    return this;
+  }
+
+  @Nullable
+  public String invoicePeriodDescriptionCode ()
+  {
+    return m_sInvoicePeriodDescriptionCode;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder invoicePeriodDescriptionCode (@Nullable final String s)
+  {
+    m_sInvoicePeriodDescriptionCode = s;
+    return this;
+  }
+
+  @NonNull
+  @ReturnsMutableObject
+  public ICommonsList <BillingReferenceType> billingReferences ()
+  {
+    return m_aBillingReferences;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder billingReferences (@Nullable final ICommonsList <BillingReferenceType> a)
+  {
+    m_aBillingReferences.setAll (a);
+    return this;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder addBillingReference (@Nullable final BillingReferenceType a)
+  {
+    if (a != null)
+      m_aBillingReferences.add (a);
+    return this;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder addBillingReference (@Nullable final PeppolSKTDD110BillingReferenceBuilder a)
+  {
+    return addBillingReference (a == null ? null : a.build ());
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder addBillingReference (@NonNull final Consumer <? super PeppolSKTDD110BillingReferenceBuilder> a)
+  {
+    final PeppolSKTDD110BillingReferenceBuilder aBuilder = new PeppolSKTDD110BillingReferenceBuilder ();
+    aBuilder.logHandler (m_aLogHandler);
+    a.accept (aBuilder);
+    return addBillingReference (aBuilder);
+  }
+
+  @Nullable
+  public String sellerEndpointIDSchemeID ()
+  {
+    return m_sSellerEndpointIDSchemeID;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder sellerEndpointIDSchemeID (@Nullable final String s)
+  {
+    m_sSellerEndpointIDSchemeID = s;
+    return this;
+  }
+
+  @Nullable
+  public String sellerEndpointID ()
+  {
+    return m_sSellerEndpointID;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder sellerEndpointID (@Nullable final String s)
+  {
+    m_sSellerEndpointID = s;
+    return this;
+  }
+
+  @Nullable
+  public String sellerTaxID ()
+  {
+    return m_sSellerTaxID;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder sellerTaxID (@Nullable final String s)
+  {
+    m_sSellerTaxID = s;
+    return this;
+  }
+
+  @Nullable
+  public String sellerCountryCode ()
+  {
+    return m_sSellerCountryCode;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder sellerCountryCode (@Nullable final String s)
+  {
+    m_sSellerCountryCode = s;
+    return this;
+  }
+
+  @Nullable
+  public String buyerTaxID ()
+  {
+    return m_sBuyerTaxID;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder buyerTaxID (@Nullable final String s)
+  {
+    m_sBuyerTaxID = s;
+    return this;
+  }
+
+  @Nullable
+  public String buyerCountryCode ()
+  {
+    return m_sBuyerCountryCode;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder buyerCountryCode (@Nullable final String s)
+  {
+    m_sBuyerCountryCode = s;
+    return this;
+  }
+
+  @Nullable
+  public String buyerName ()
+  {
+    return m_sBuyerName;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder buyerName (@Nullable final String s)
+  {
+    m_sBuyerName = s;
+    return this;
+  }
+
+  /**
+   * @return The BT-47 Buyer legal registration identifier. May be <code>null</code>.
+   */
+  @Nullable
+  public String buyerLegalRegistrationID ()
+  {
+    return m_sBuyerLegalRegistrationID;
+  }
+
+  /**
+   * Set the optional BT-47 Buyer legal registration identifier.
+   *
+   * @param s
+   *        The identifier. May be <code>null</code>.
+   * @return this for chaining
+   */
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder buyerLegalRegistrationID (@Nullable final String s)
+  {
+    m_sBuyerLegalRegistrationID = s;
+    return this;
+  }
+
+  /**
+   * @return The scheme identifier (BT-47-1) of the Buyer legal registration identifier. May be
+   *         <code>null</code>.
+   */
+  @Nullable
+  public String buyerLegalRegistrationIDSchemeID ()
+  {
+    return m_sBuyerLegalRegistrationIDSchemeID;
+  }
+
+  /**
+   * Set the optional scheme identifier (BT-47-1, ICD code list) of the Buyer legal registration
+   * identifier.
+   *
+   * @param s
+   *        The scheme identifier. May be <code>null</code>.
+   * @return this for chaining
+   */
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder buyerLegalRegistrationIDSchemeID (@Nullable final String s)
+  {
+    m_sBuyerLegalRegistrationIDSchemeID = s;
+    return this;
+  }
+
+  @Nullable
+  public String taxRepresentativeID ()
+  {
+    return m_sTaxRepresentativeID;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder taxRepresentativeID (@Nullable final String s)
+  {
+    m_sTaxRepresentativeID = s;
+    return this;
+  }
+
+  @Nullable
+  public String taxRepresentativeCountryCode ()
+  {
+    return m_sTaxRepresentativeCountryCode;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder taxRepresentativeCountryCode (@Nullable final String s)
+  {
+    m_sTaxRepresentativeCountryCode = s;
+    return this;
+  }
+
+  @Nullable
+  public LocalDate deliveryDate ()
+  {
+    return m_aDeliveryDate;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder deliveryDate (@Nullable final LocalDate a)
+  {
+    m_aDeliveryDate = a;
+    return this;
+  }
+
+  @NonNull
+  @ReturnsMutableObject
+  public ICommonsList <PaymentMeansType> paymentMeans ()
+  {
+    return m_aPaymentMeans;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder paymentMeans (@Nullable final ICommonsList <PaymentMeansType> a)
+  {
+    m_aPaymentMeans.setAll (a);
+    return this;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder addPaymentMeans (@Nullable final PaymentMeansType a)
+  {
+    if (a != null)
+      m_aPaymentMeans.add (a);
+    return this;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder addPaymentMeans (@Nullable final PeppolSKTDD110PaymentMeansBuilder a)
+  {
+    return addPaymentMeans (a == null ? null : a.build ());
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder addPaymentMeans (@NonNull final Consumer <? super PeppolSKTDD110PaymentMeansBuilder> a)
+  {
+    final PeppolSKTDD110PaymentMeansBuilder aBuilder = new PeppolSKTDD110PaymentMeansBuilder ();
+    aBuilder.logHandler (m_aLogHandler);
+    a.accept (aBuilder);
+    return addPaymentMeans (aBuilder);
+  }
+
+  @NonNull
+  @ReturnsMutableObject
+  public ICommonsList <AllowanceChargeType> allowanceCharges ()
+  {
+    return m_aAllowanceCharges;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder allowanceCharges (@Nullable final ICommonsList <AllowanceChargeType> a)
+  {
+    m_aAllowanceCharges.setAll (a);
+    return this;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder addAllowanceCharge (@Nullable final AllowanceChargeType a)
+  {
+    if (a != null)
+      m_aAllowanceCharges.add (a);
+    return this;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder addAllowanceCharge (@Nullable final PeppolSKTDD110AllowanceChargeBuilder a)
+  {
+    return addAllowanceCharge (a == null ? null : a.build ());
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder addAllowanceCharge (@NonNull final Consumer <? super PeppolSKTDD110AllowanceChargeBuilder> a)
+  {
+    final PeppolSKTDD110AllowanceChargeBuilder aBuilder = new PeppolSKTDD110AllowanceChargeBuilder (m_sDocumentCurrencyCode);
+    aBuilder.logHandler (m_aLogHandler);
+    a.accept (aBuilder);
+    return addAllowanceCharge (aBuilder);
+  }
+
+  @Nullable
+  public TaxTotalType taxTotalDocumentCurrency ()
+  {
+    return m_aTaxTotalDocumentCurrency;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder taxTotalDocumentCurrency (@Nullable final TaxTotalType a)
+  {
+    m_aTaxTotalDocumentCurrency = a;
+    return this;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder taxTotalDocumentCurrency (@Nullable final PeppolSKTDD110TaxTotalBuilder a)
+  {
+    return taxTotalDocumentCurrency (a == null ? null : a.build ());
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder taxTotalDocumentCurrency (@NonNull final Consumer <? super PeppolSKTDD110TaxTotalBuilder> a)
+  {
+    if (StringHelper.isEmpty (m_sDocumentCurrencyCode))
+      throw new IllegalStateException ("The TaxTotal can only be built, after the DocumentCurrencyCode is set!");
+    final PeppolSKTDD110TaxTotalBuilder aBuilder = new PeppolSKTDD110TaxTotalBuilder (m_sDocumentCurrencyCode);
+    aBuilder.logHandler (m_aLogHandler);
+    a.accept (aBuilder);
+    return taxTotalDocumentCurrency (aBuilder);
+  }
+
+  @Nullable
+  public TaxTotalType taxTotalTaxCurrency ()
+  {
+    return m_aTaxTotalTaxCurrency;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder taxTotalTaxCurrency (@Nullable final TaxTotalType a)
+  {
+    m_aTaxTotalTaxCurrency = a;
+    return this;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder taxTotalTaxCurrency (@Nullable final PeppolSKTDD110TaxTotalBuilder a)
+  {
+    return taxTotalTaxCurrency (a == null ? null : a.build ());
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder taxTotalTaxCurrency (@NonNull final Consumer <? super PeppolSKTDD110TaxTotalBuilder> a)
+  {
+    if (StringHelper.isEmpty (m_sTaxCurrencyCode))
+      throw new IllegalStateException ("The TaxTotal can only be built, after the TaxCurrencyCode is set!");
+    final PeppolSKTDD110TaxTotalBuilder aBuilder = new PeppolSKTDD110TaxTotalBuilder (m_sTaxCurrencyCode);
+    aBuilder.logHandler (m_aLogHandler);
+    a.accept (aBuilder);
+    return taxTotalTaxCurrency (aBuilder);
+  }
+
+  @Nullable
+  public BigDecimal lineExtensionAmount ()
+  {
+    return m_aLineExtensionAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder lineExtensionAmount (final long n)
+  {
+    return lineExtensionAmount (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder lineExtensionAmount (@Nullable final BigDecimal a)
+  {
+    m_aLineExtensionAmount = a;
+    return this;
+  }
+
+  @Nullable
+  public BigDecimal taxExclusiveTotalAmount ()
+  {
+    return m_aTaxExclusiveTotalAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder taxExclusiveTotalAmount (final long n)
+  {
+    return taxExclusiveTotalAmount (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder taxExclusiveTotalAmount (@Nullable final BigDecimal a)
+  {
+    m_aTaxExclusiveTotalAmount = a;
+    return this;
+  }
+
+  @Nullable
+  public BigDecimal taxInclusiveTotalAmount ()
+  {
+    return m_aTaxInclusiveTotalAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder taxInclusiveTotalAmount (final long n)
+  {
+    return taxInclusiveTotalAmount (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder taxInclusiveTotalAmount (@Nullable final BigDecimal a)
+  {
+    m_aTaxInclusiveTotalAmount = a;
+    return this;
+  }
+
+  @Nullable
+  public BigDecimal allowanceTotalAmount ()
+  {
+    return m_aAllowanceTotalAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder allowanceTotalAmount (final long n)
+  {
+    return allowanceTotalAmount (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder allowanceTotalAmount (@Nullable final BigDecimal a)
+  {
+    m_aAllowanceTotalAmount = a;
+    return this;
+  }
+
+  @Nullable
+  public BigDecimal chargeTotalAmount ()
+  {
+    return m_aChargeTotalAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder chargeTotalAmount (final long n)
+  {
+    return chargeTotalAmount (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder chargeTotalAmount (@Nullable final BigDecimal a)
+  {
+    m_aChargeTotalAmount = a;
+    return this;
+  }
+
+  @Nullable
+  public BigDecimal prepaidAmount ()
+  {
+    return m_aPrepaidAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder prepaidAmount (final long n)
+  {
+    return prepaidAmount (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder prepaidAmount (@Nullable final BigDecimal a)
+  {
+    m_aPrepaidAmount = a;
+    return this;
+  }
+
+  @Nullable
+  public BigDecimal payableRoundingAmount ()
+  {
+    return m_aPayableRoundingAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder payableRoundingAmount (final long n)
+  {
+    return payableRoundingAmount (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder payableRoundingAmount (@Nullable final BigDecimal a)
+  {
+    m_aPayableRoundingAmount = a;
+    return this;
+  }
+
+  @Nullable
+  public BigDecimal payableAmount ()
+  {
+    return m_aPayableAmount;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder payableAmount (final long n)
+  {
+    return payableAmount (BigHelper.toBigDecimal (n));
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder payableAmount (@Nullable final BigDecimal a)
+  {
+    m_aPayableAmount = a;
+    return this;
+  }
+
+  @NonNull
+  @ReturnsMutableObject
+  public ICommonsList <DocumentLineType> documentLines ()
+  {
+    return m_aDocumentLines;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder documentLines (@Nullable final ICommonsList <DocumentLineType> a)
+  {
+    m_aDocumentLines.setAll (a);
+    return this;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder addDocumentLine (@Nullable final DocumentLineType a)
+  {
+    if (a != null)
+      m_aDocumentLines.add (a);
+    return this;
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder addDocumentLine (@Nullable final PeppolSKTDD110DocumentLineBuilder a)
+  {
+    return addDocumentLine (a == null ? null : a.build ());
+  }
+
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder addDocumentLine (@NonNull final Consumer <? super PeppolSKTDD110DocumentLineBuilder> a)
+  {
+    if (StringHelper.isEmpty (m_sDocumentCurrencyCode))
+      throw new IllegalStateException ("The DocumentLine can only be built, after the DocumentCurrencyCode is set!");
+    final PeppolSKTDD110DocumentLineBuilder aBuilder = new PeppolSKTDD110DocumentLineBuilder (m_sDocumentCurrencyCode);
+    aBuilder.logHandler (m_aLogHandler);
+    a.accept (aBuilder);
+    return addDocumentLine (aBuilder);
+  }
+
+  /**
+   * @return The log handler that receives the messages of the required field checks - errors for
+   *         missing or invalid fields. Never <code>null</code>.
+   */
+  @NonNull
+  public ILogHandler logHandler ()
+  {
+    return m_aLogHandler;
+  }
+
+  /**
+   * Set the log handler that receives the messages of the required field checks, when calling
+   * {@link #build()}. It is not used by {@link #isEveryRequiredFieldSet(ErrorList)}. Missing or
+   * invalid required fields are reported as errors. The default handler logs to the logger of this
+   * class, use {@link ILogHandler#createForConsumer(java.util.function.Consumer)} or
+   * {@link ILogHandler#createNoOp()} to redirect or discard them. The handler is passed on to all
+   * sub-builders that are created via a lambda <b>after</b> this call, so call this method before
+   * adding any sub-elements. Sub-builders that are created externally and passed in are not
+   * changed.
+   *
+   * @param aLogHandler
+   *        The log handler to use. May not be <code>null</code>.
+   * @return this for chaining
+   */
+  @NonNull
+  public PeppolSKTDD110ReportedTransactionBuilder logHandler (@NonNull final ILogHandler aLogHandler)
+  {
+    ValueEnforcer.notNull (aLogHandler, "LogHandler");
+    m_aLogHandler = aLogHandler;
+    return this;
+  }
+
+  private boolean _isEveryRequiredFieldSet (@NonNull final ILogHandler aLogHandler,
+                                            @NonNull final MutableInt aReportedDocsErrs)
+  {
+    int nErrs = 0;
+    final String sErrorPrefix = "Error in Peppol SK TDD 1.1.0 ReportedTransaction builder: ";
+
+    // TransportHeaderID is optional
+
+    // Check all ReportedDocument fields
+    if (StringHelper.isEmpty (m_sCustomizationID))
+    {
+      aLogHandler.error (sErrorPrefix + "CustomizationID is missing");
+      aReportedDocsErrs.inc ();
+    }
+    if (StringHelper.isEmpty (m_sProfileID))
+    {
+      aLogHandler.error (sErrorPrefix + "ProfileID is missing");
+      aReportedDocsErrs.inc ();
+    }
+    // Part of the UUID, so whitespace only is as good as missing
+    if (StringHelper.isBlank (m_sID))
+    {
+      aLogHandler.error (sErrorPrefix + "ID is missing");
+      aReportedDocsErrs.inc ();
+    }
+    if (m_aIssueDate == null)
+    {
+      aLogHandler.error (sErrorPrefix + "IssueDate is missing");
+      aReportedDocsErrs.inc ();
+    }
+    // IssueTime is optional
+    // Part of the UUID, so whitespace only is as good as missing
+    if (StringHelper.isBlank (m_sDocumentTypeCode))
+    {
+      aLogHandler.error (sErrorPrefix + "DocumentTypeCode is missing");
+      aReportedDocsErrs.inc ();
+    }
+    // Note is optional
+    // TaxPointDate is optional
+    if (StringHelper.isEmpty (m_sDocumentCurrencyCode))
+    {
+      aLogHandler.error (sErrorPrefix + "DocumentCurrencyCode is missing");
+      aReportedDocsErrs.inc ();
+    }
+    // InvoicePeriod is optional
+
+    // m_aBillingReferences may be empty
+
+    // Both Seller EndpointID parts are part of the UUID, so whitespace only is as good as missing
+    if (StringHelper.isBlank (m_sSellerEndpointIDSchemeID))
+    {
+      aLogHandler.error (sErrorPrefix + "Seller EndpointID Scheme ID is missing");
+      aReportedDocsErrs.inc ();
+    }
+    if (StringHelper.isBlank (m_sSellerEndpointID))
+    {
+      aLogHandler.error (sErrorPrefix + "Seller EndpointID is missing");
+      aReportedDocsErrs.inc ();
+    }
+    // m_sSellerTaxID is optional (needed in all cases except if TaxCategory is "O")
+    // m_sSellerCountryCode is optional
+
+    // m_sBuyerTaxID is optional (needed in all cases except if TaxCategory is "O")
+    // m_sBuyerCountryCode is optional
+    if (StringHelper.isEmpty (m_sBuyerName))
+    {
+      aLogHandler.error (sErrorPrefix + "BuyerName is missing");
+      aReportedDocsErrs.inc ();
+    }
+    // m_sBuyerLegalRegistrationID is optional
+    if (StringHelper.isNotEmpty (m_sBuyerLegalRegistrationIDSchemeID) &&
+        StringHelper.isEmpty (m_sBuyerLegalRegistrationID))
+    {
+      aLogHandler.error (sErrorPrefix + "BuyerLegalRegistrationIDSchemeID is provided without BuyerLegalRegistrationID");
+      aReportedDocsErrs.inc ();
+    }
+
+    // The tax representative is optional, but if present, its TAX identifier (BT-63) is mandatory
+    // (cac:PartyTaxScheme is 1..1 since 1.1.0)
+    if (StringHelper.isNotEmpty (m_sTaxRepresentativeCountryCode) && StringHelper.isEmpty (m_sTaxRepresentativeID))
+    {
+      aLogHandler.error (sErrorPrefix + "TaxRepresentativeID (BT-63) is missing for the provided tax representative");
+      aReportedDocsErrs.inc ();
+    }
+
+    // m_aDeliveryDate is optional
+
+    // m_aAllowanceCharges may be empty
+
+    if (m_aTaxTotalDocumentCurrency == null)
+    {
+      aLogHandler.error (sErrorPrefix + "TaxTotalDocumentCurrency is missing");
+      aReportedDocsErrs.inc ();
+    }
+    if (m_aTaxTotalTaxCurrency != null)
+    {
+      if (StringHelper.isEmpty (m_sTaxCurrencyCode))
+      {
+        aLogHandler.error (sErrorPrefix +
+                           "If TaxTotalAmountTaxCurrency is provided, TaxCurrencyCode must also be provided");
+        aReportedDocsErrs.inc ();
+      }
+    }
+    else
+    {
+      if (StringHelper.isNotEmpty (m_sTaxCurrencyCode))
+      {
+        aLogHandler.error (sErrorPrefix +
+                           "If TaxCurrencyCode is provided, TaxTotalAmountTaxCurrency must also be provided");
+        aReportedDocsErrs.inc ();
+      }
+    }
+    if (m_aLineExtensionAmount == null)
+    {
+      aLogHandler.error (sErrorPrefix + "LineExtensionAmount is missing");
+      aReportedDocsErrs.inc ();
+    }
+    if (m_aTaxExclusiveTotalAmount == null)
+    {
+      aLogHandler.error (sErrorPrefix + "TaxExclusiveTotalAmount is missing");
+      aReportedDocsErrs.inc ();
+    }
+    if (m_aTaxInclusiveTotalAmount == null)
+    {
+      aLogHandler.error (sErrorPrefix + "TaxInclusiveTotalAmount is missing");
+      aReportedDocsErrs.inc ();
+    }
+    // m_aAllowanceTotalAmount is optional
+    // m_aChargeTotalAmount is optional
+    // m_aPrepaidAmount is optional
+    // m_aPayableRoundingAmount is optional
+    if (m_aPayableAmount == null)
+    {
+      aLogHandler.error (sErrorPrefix + "PayableAmount is missing");
+      aReportedDocsErrs.inc ();
+    }
+    if (m_aDocumentLines.isEmpty ())
+    {
+      aLogHandler.error (sErrorPrefix + "At least one DocumentLine is needed");
+      aReportedDocsErrs.inc ();
+    }
+
+    // The ReportedDocument is mandatory for all TaxDataTypeCodes, including DISREGARD
+    nErrs += aReportedDocsErrs.intValue ();
+
+    return nErrs == 0;
+  }
+
+  public boolean isEveryRequiredFieldSet (@NonNull final ErrorList aErrorList)
+  {
+    ValueEnforcer.notNull (aErrorList, "ErrorList");
+    final MutableInt aErrorCount = new MutableInt (0);
+    return _isEveryRequiredFieldSet (new ErrorListLogHandler (aErrorList), aErrorCount);
+  }
+
+  @Nullable
+  public ReportedTransactionType build ()
+  {
+    final MutableInt aErrorCount = new MutableInt (0);
+    if (!_isEveryRequiredFieldSet (m_aLogHandler, aErrorCount))
+    {
+      LOGGER.error ("At least one mandatory field is not set and therefore the TDD ReportedTransaction cannot be build.");
+      return null;
+    }
+
+    final ReportedTransactionType ret = new ReportedTransactionType ();
+
+    // The ReportedDocument is created for all TaxDataTypeCodes
+    // The UUID is calculated based on rule ID-BDID-01: BT-34-1, BT-34, BT-3, BT-1
+    // and BT-2, each without leading and trailing whitespace. All of them are
+    // present, as checked above.
+    final UUID aRepDocUUID = UUID5Helper.fromUTF8 (CSKTDD.PEPPOL_SK_NAMESPACE,
+                                                   StringImplode.imploder ()
+                                                                .separator (' ')
+                                                                .source (StringHelper.trim (m_sSellerEndpointIDSchemeID),
+                                                                         StringHelper.trim (m_sSellerEndpointID),
+                                                                         StringHelper.trim (m_sDocumentTypeCode),
+                                                                         StringHelper.trim (m_sID),
+                                                                         DateTimeFormatter.ISO_LOCAL_DATE.format (m_aIssueDate))
+                                                                .build ());
+
+    final ReportedDocumentType a = new ReportedDocumentType ();
+    if (StringHelper.isNotEmpty (m_sCustomizationID))
+      a.setCustomizationID (new CustomizationIDType (m_sCustomizationID));
+    if (StringHelper.isNotEmpty (m_sProfileID))
+      a.setProfileID (new ProfileIDType (m_sProfileID));
+    a.setID (new IDType (m_sID));
+    a.setUUID (new UUIDType (aRepDocUUID.toString ()));
+    if (m_aIssueDate != null)
+      a.setIssueDate (new IssueDateType (XMLOffsetDate.of (m_aIssueDate)));
+    if (m_aIssueTime != null)
+      a.setIssueTime (new IssueTimeType (XMLOffsetTime.of (m_aIssueTime)));
+    if (StringHelper.isNotEmpty (m_sDocumentTypeCode))
+      a.setDocumentTypeCode (m_sDocumentTypeCode);
+    if (StringHelper.isNotEmpty (m_sNote))
+      a.setNote (new NoteType (m_sNote));
+    if (m_aTaxPointDate != null)
+      a.setTaxPointDate (new TaxPointDateType (XMLOffsetDate.of (m_aTaxPointDate)));
+    if (StringHelper.isNotEmpty (m_sDocumentCurrencyCode))
+      a.setDocumentCurrencyCode (new DocumentCurrencyCodeType (m_sDocumentCurrencyCode));
+    if (StringHelper.isNotEmpty (m_sTaxCurrencyCode))
+      a.setTaxCurrencyCode (new TaxCurrencyCodeType (m_sTaxCurrencyCode));
+
+    if (m_aInvoicePeriodStart != null ||
+        m_aInvoicePeriodEnd != null ||
+        StringHelper.isNotEmpty (m_sInvoicePeriodDescriptionCode))
+    {
+      final PeriodType aIP = new PeriodType ();
+      if (m_aInvoicePeriodStart != null)
+        aIP.setStartDate (XMLOffsetDate.of (m_aInvoicePeriodStart));
+      if (m_aInvoicePeriodEnd != null)
+        aIP.setEndDate (XMLOffsetDate.of (m_aInvoicePeriodEnd));
+      if (StringHelper.isNotEmpty (m_sInvoicePeriodDescriptionCode))
+        aIP.addDescriptionCode (new DescriptionCodeType (m_sInvoicePeriodDescriptionCode));
+      a.setInvoicePeriod (aIP);
+    }
+
+    a.setBillingReference (m_aBillingReferences);
+
+    {
+      final SupplierPartyType a2 = new SupplierPartyType ();
+      {
+        final PartyType aParty = new PartyType ();
+        {
+          // SellerEndpointID does not go into the resulting TDD
+          if (StringHelper.isNotEmpty (m_sSellerTaxID))
+          {
+            final PartyTaxSchemeType aPTS = new PartyTaxSchemeType ();
+            aPTS.setCompanyID (m_sSellerTaxID);
+            final TaxSchemeType aTS = new TaxSchemeType ();
+            aTS.setID ("VAT");
+            aPTS.setTaxScheme (aTS);
+            aParty.addPartyTaxScheme (aPTS);
+          }
+
+          if (StringHelper.isNotEmpty (m_sSellerCountryCode))
+          {
+            final AddressType aPA = new AddressType ();
+            final CountryType aC = new CountryType ();
+            aC.setIdentificationCode (m_sSellerCountryCode);
+            aPA.setCountry (aC);
+            aParty.setPostalAddress (aPA);
+          }
+        }
+        // Party is required in AccountingSupplierParty
+        a2.setParty (aParty);
+      }
+      a.setAccountingSupplierParty (a2);
+    }
+
+    {
+      final CustomerPartyType aAccountingCustomer = new CustomerPartyType ();
+      {
+        final PartyType aParty = new PartyType ();
+        if (StringHelper.isNotEmpty (m_sBuyerCountryCode))
+        {
+          final AddressType aPA = new AddressType ();
+          final CountryType aC = new CountryType ();
+          aC.setIdentificationCode (m_sBuyerCountryCode);
+          aPA.setCountry (aC);
+          aParty.setPostalAddress (aPA);
+        }
+
+        if (StringHelper.isNotEmpty (m_sBuyerTaxID))
+        {
+          final PartyTaxSchemeType aPTS = new PartyTaxSchemeType ();
+          aPTS.setCompanyID (m_sBuyerTaxID);
+          final TaxSchemeType aTS = new TaxSchemeType ();
+          aTS.setID ("VAT");
+          aPTS.setTaxScheme (aTS);
+          aParty.addPartyTaxScheme (aPTS);
+        }
+
+        final PartyLegalEntityType aPLE = new PartyLegalEntityType ();
+        aPLE.setRegistrationName (m_sBuyerName);
+        if (StringHelper.isNotEmpty (m_sBuyerLegalRegistrationID))
+        {
+          // BT-47
+          final CompanyIDType aCompanyID = new CompanyIDType (m_sBuyerLegalRegistrationID);
+          if (StringHelper.isNotEmpty (m_sBuyerLegalRegistrationIDSchemeID))
+            aCompanyID.setSchemeID (m_sBuyerLegalRegistrationIDSchemeID);
+          aPLE.setCompanyID (aCompanyID);
+        }
+        aParty.addPartyLegalEntity (aPLE);
+
+        aAccountingCustomer.setParty (aParty);
+      }
+      a.setAccountingCustomerParty (aAccountingCustomer);
+    }
+
+    if (StringHelper.isNotEmpty (m_sTaxRepresentativeID) || StringHelper.isNotEmpty (m_sTaxRepresentativeCountryCode))
+    {
+      final PartyType aTaxRep = new PartyType ();
+      if (StringHelper.isNotEmpty (m_sTaxRepresentativeCountryCode))
+      {
+        final AddressType aPA = new AddressType ();
+        final CountryType aC = new CountryType ();
+        aC.setIdentificationCode (m_sTaxRepresentativeCountryCode);
+        aPA.setCountry (aC);
+        aTaxRep.setPostalAddress (aPA);
+      }
+
+      if (StringHelper.isNotEmpty (m_sTaxRepresentativeID))
+      {
+        final PartyTaxSchemeType aPTS = new PartyTaxSchemeType ();
+        aPTS.setCompanyID (m_sTaxRepresentativeID);
+        final TaxSchemeType aTS = new TaxSchemeType ();
+        aTS.setID ("VAT");
+        aPTS.setTaxScheme (aTS);
+        aTaxRep.addPartyTaxScheme (aPTS);
+      }
+      a.setTaxRepresentativeParty (aTaxRep);
+    }
+
+    if (m_aDeliveryDate != null)
+    {
+      final DeliveryType aDel = new DeliveryType ();
+      aDel.setActualDeliveryDate (XMLOffsetDate.of (m_aDeliveryDate));
+      a.setDelivery (aDel);
+    }
+
+    a.setPaymentMeans (m_aPaymentMeans);
+
+    a.setAllowanceCharge (m_aAllowanceCharges);
+
+    a.addTaxTotal (m_aTaxTotalDocumentCurrency);
+    if (m_aTaxTotalTaxCurrency != null)
+      a.addTaxTotal (m_aTaxTotalTaxCurrency);
+
+    {
+      final MonetaryTotalType aMonetaryTotal = new MonetaryTotalType ();
+      {
+        final LineExtensionAmountType aAmount = new LineExtensionAmountType (m_aLineExtensionAmount);
+        aAmount.setCurrencyID (m_sDocumentCurrencyCode);
+        aMonetaryTotal.setLineExtensionAmount (aAmount);
+      }
+      {
+        final TaxExclusiveAmountType aAmount = new TaxExclusiveAmountType (m_aTaxExclusiveTotalAmount);
+        aAmount.setCurrencyID (m_sDocumentCurrencyCode);
+        aMonetaryTotal.setTaxExclusiveAmount (aAmount);
+      }
+      {
+        final TaxInclusiveAmountType aAmount = new TaxInclusiveAmountType (m_aTaxInclusiveTotalAmount);
+        aAmount.setCurrencyID (m_sDocumentCurrencyCode);
+        aMonetaryTotal.setTaxInclusiveAmount (aAmount);
+      }
+      if (m_aAllowanceTotalAmount != null)
+      {
+        final AllowanceTotalAmountType aAmount = new AllowanceTotalAmountType (m_aAllowanceTotalAmount);
+        aAmount.setCurrencyID (m_sDocumentCurrencyCode);
+        aMonetaryTotal.setAllowanceTotalAmount (aAmount);
+      }
+      if (m_aChargeTotalAmount != null)
+      {
+        final ChargeTotalAmountType aAmount = new ChargeTotalAmountType (m_aChargeTotalAmount);
+        aAmount.setCurrencyID (m_sDocumentCurrencyCode);
+        aMonetaryTotal.setChargeTotalAmount (aAmount);
+      }
+      if (m_aPrepaidAmount != null)
+      {
+        final PrepaidAmountType aAmount = new PrepaidAmountType (m_aPrepaidAmount);
+        aAmount.setCurrencyID (m_sDocumentCurrencyCode);
+        aMonetaryTotal.setPrepaidAmount (aAmount);
+      }
+      if (m_aPayableRoundingAmount != null)
+      {
+        final PayableRoundingAmountType aAmount = new PayableRoundingAmountType (m_aPayableRoundingAmount);
+        aAmount.setCurrencyID (m_sDocumentCurrencyCode);
+        aMonetaryTotal.setPayableRoundingAmount (aAmount);
+      }
+      {
+        final PayableAmountType aAmount = new PayableAmountType (m_aPayableAmount);
+        aAmount.setCurrencyID (m_sDocumentCurrencyCode);
+        aMonetaryTotal.setPayableAmount (aAmount);
+      }
+      a.setMonetaryTotal (aMonetaryTotal);
+    }
+    // Set all lines
+    a.setDocumentLine (m_aDocumentLines);
+    ret.setReportedDocument (a);
+
+    return ret;
+  }
+}
